@@ -1,0 +1,11 @@
+Utenti pre-inseriti (idutente,username,password,avatar(file/foto))
+
+Gruppo (idgruppo,nome,idOwner,datacreazione)
+
+gruppo_partecipanti (id_gruppo,id_utente,ruolo(inutile))
+
+Post (idPost,idGruppo,data_ora, testo, idWriter)
+
+Post-file (idPost,idGruppo,file,(idWriter))
+
+inviti(idGruppo,idUtente)
