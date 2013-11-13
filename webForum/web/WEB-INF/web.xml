@@ -6,7 +6,15 @@
     </servlet>
     <servlet>
         <servlet-name>loginSrvlt</servlet-name>
-        <servlet-class>myServlet.loginSrvlt</servlet-class>
+        <servlet-class>servlet.loginSrvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>logoutSrvlt</servlet-name>
+        <servlet-class>servlet.logoutSrvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>invitiSrvlt</servlet-name>
+        <servlet-class>servlet.invitiSrvlt</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
@@ -15,6 +23,14 @@
     <servlet-mapping>
         <servlet-name>loginSrvlt</servlet-name>
         <url-pattern>/loginSrvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>logoutSrvlt</servlet-name>
+        <url-pattern>/logoutSrvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>invitiSrvlt</servlet-name>
+        <url-pattern>/invitiSrvlt</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
