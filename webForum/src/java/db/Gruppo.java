@@ -16,7 +16,14 @@ public class Gruppo {
     private String nome;
     private Date dataCreazione;
     private String ownerName;
+    private int idgruppo;
 
+    public int getIdgruppo() {
+        return idgruppo;
+    }
+
+    
+    
     public String getNome() {
         return nome;
     }
@@ -25,10 +32,10 @@ public class Gruppo {
         return dataCreazione;
     }
 
-   /* public String getOwnerName() {
+    public String getOwnerName() {
         return ownerName;
     }
-    */
+    
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -37,10 +44,16 @@ public class Gruppo {
         this.dataCreazione = dataCreazione;
     }
 
-    /*
+    public void setIdgruppo(int idgruppo) {
+        this.idgruppo = idgruppo;
+    }
+
+    
+    
+    
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
-    } */
+    } 
 
     public Gruppo() {
     }

@@ -16,6 +16,12 @@ public class Utente implements Serializable {
     private String avatar;
     private String password;
     private String userName;
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+    
     
     public String getAvatar(){
     return avatar;
@@ -42,4 +48,10 @@ public class Utente implements Serializable {
         this.userName = userName;
         
     }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
+    
 }

@@ -54,6 +54,7 @@ public class DBManager implements Serializable {
      * @param password la password
      * @return null se l'utente non è autenticato, un oggetto User se l'utente
      * esiste ed è autenticato
+     * @throws java.sql.SQLException
      */
     public Utente authenticate(String username, String password) throws SQLException {
 
@@ -70,6 +71,7 @@ public class DBManager implements Serializable {
                     Utente user = new Utente();
                     user.setUserName(username);
                     user.setAvatar(rs.getString("avatar"));
+                    user.setId(rs.getInt("idutente"));
                     return user;
                 } else {
                     return null;
@@ -90,12 +92,12 @@ public class DBManager implements Serializable {
     public List<Gruppo> getGruppiOwner(Utente u) throws SQLException {
 
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
-        String nome = u.getUserName();
+        int id = u.getId();
         PreparedStatement stm
-                = con.prepareStatement("SELECT * FROM gruppo g, utente u where u.idutente = g.idowner and u.username =? ");
+                = con.prepareStatement("SELECT * FROM gruppo g, utente u where u.idutente = g.idowner and u.idutente =? ");
 
         try {
-            stm.setString(1, nome);
+            stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
 
             try {
@@ -104,8 +106,9 @@ public class DBManager implements Serializable {
                     Gruppo p = new Gruppo();
                     p.setNome(rs.getString("nome"));
                     p.setDataCreazione(rs.getDate("datacreazione"));
+                    p.setIdgruppo(rs.getInt("idgruppo"));
+                    p.setOwnerName(u.getUserName());
                     gruppi.add(p);
-
                 }
             } finally {
 
@@ -123,24 +126,25 @@ public class DBManager implements Serializable {
     public List<Gruppo> getGruppiPart(Utente u) throws SQLException {
 
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
-        String nome = u.getUserName();
+      int id = u.getId();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM (gruppo g"
                         + " INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo) as s INNER JOIN utente u"
                         + " ON s.idutente = u.idutente"
-                        + "WHERE u.username = ? ");
+                        + "WHERE u.idutente = ? ");
 
         try {
-            stm.setString(1, nome);
+            stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
 
             try {
 
                 while (rs.next()) {
                     Gruppo p = new Gruppo();
+                    p.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
                     p.setNome(rs.getString("nome"));
                     p.setDataCreazione(rs.getDate("datacreazione"));
-                   
+                    p.setIdgruppo(rs.getInt("idgruppo"));
                     gruppi.add(p);
 
                 }
@@ -154,6 +158,70 @@ public class DBManager implements Serializable {
         }
 
         return gruppi;
+
+    }
+    
+    public Utente getMoreUtente(int id) throws SQLException{
+    
+        PreparedStatement stm = con.prepareStatement("SELECT * FROM utente WHERE idutente = ?");
+        try {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+
+            try {
+                if (rs.next()) {
+                    Utente user = new Utente();
+                    user.setUserName(rs.getString("username"));
+                    user.setAvatar(rs.getString("avatar"));
+                    user.setId(rs.getInt("idutente"));
+                    return user;
+                } else {
+                    return null;
+
+                }
+
+            } finally {
+                // ricordarsi SEMPRE di chiudere i ResultSet in un blocco finally 
+                rs.close();
+            }
+
+        } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
+            stm.close();
+        } 
+    }
+    
+    public List<Post> getPostsGruppo(Gruppo g) throws SQLException {
+
+        List<Post> posts = new ArrayList<Post>();
+        int id = g.getIdgruppo();
+        PreparedStatement stm
+                = con.prepareStatement("SELECT * FROM post "
+                        + "WHERE idgruppo = ?");
+
+        try {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+
+            try {
+                
+                while (rs.next()) {
+                    Post p = new Post();
+                 //   Utente tu = getMoreUtente(rs.getInt("idwriter"));
+                    p.setTesto(rs.getString("testo"));
+                    p.setData_ora(rs.getDate("data_ora"));
+                    //p.setWriter(tu);
+                    posts.add(p);
+                }
+            } finally {
+
+                rs.close();
+            }
+        } finally {
+
+            stm.close();
+        }
+
+        return posts;
 
     }
 }
