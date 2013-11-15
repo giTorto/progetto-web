@@ -5,19 +5,31 @@
  */
 
 package servlet;
+import db.DBManager;
+import db.Utente;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Giulian
  */
 public class loginSrvlt extends HttpServlet {
+     private DBManager manager;
+    
+    @Override
+    public void init(){
+        // inizializza il DBManager dagli attributi di Application
+        this.manager =(DBManager)super.getServletContext().getAttribute("dbmanager");
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -74,6 +86,33 @@ public class loginSrvlt extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+        String username = request.getParameter("username");
+            String password = request.getParameter("password");
+            // controllo nel DB se esiste un utente con lo stesso username + password
+            Utente user;
+ 
+            try {
+                user = manager.authenticate(username, password);
+            } catch (SQLException ex) {
+                throw new ServletException(ex);
+            }
+            
+            if (username == null){
+                //fuck the system
+            }else{
+                // imposto l'utente connesso come attributo di sessione
+                // per adesso e' solo un oggetto String con il nome dell'utente, ma posso metterci anche un oggetto User
+                // con, ad esempio, il timestamp di login
+
+                HttpSession session = request.getSession(true);
+                session.setAttribute("user", user);
+                
+              
+                 // mando un redirect alla servlet che carica i prodotti
+                //response.sendRedirect(response.getContextPath() + "/LoadProductServlet");
+            }
+        
         processRequest(request, response);
     }
 

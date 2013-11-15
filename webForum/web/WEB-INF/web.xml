@@ -37,4 +37,13 @@
             30
         </session-timeout>
     </session-config>
+     <listener>
+        <description> listener </description>
+        <listener-class> ascoltatore.WebAppContextListener</listener-class>
+    </listener>
+    <context-param>
+        <param-name> dburl</param-name>
+        <param-value>jdbc:derby://localhost:1527/webdb;user=utente;password=utente</param-value>
+    </context-param>
+   
 </web-app>
