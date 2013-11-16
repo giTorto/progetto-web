@@ -162,6 +162,44 @@ public class DBManager implements Serializable {
 
     }
     
+    public List<Gruppo> getInvitiGruppi(Utente u) throws SQLException{
+             List<Gruppo> gruppi = new ArrayList<Gruppo>();
+      int id = u.getId();
+        PreparedStatement stm
+                = con.prepareStatement("SELECT * FROM (gruppo g"
+                        + " INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo) as s INNER JOIN utente u"
+                        + " ON s.idutente = u.idutente"
+                        + "WHERE u.idutente = ? "
+                        + "AND gr.invito_acc > 0");
+
+        try {
+            stm.setInt(1, id);
+            ResultSet rs = stm.executeQuery();
+
+            try {
+
+                while (rs.next()) {
+                    Gruppo p = new Gruppo();
+                    p.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
+                    p.setNome(rs.getString("nome"));
+                    p.setDataCreazione(rs.getDate("datacreazione"));
+                    p.setIdgruppo(rs.getInt("idgruppo"));
+                    gruppi.add(p);
+
+                }
+            } finally {
+
+                rs.close();
+            }
+        } finally {
+
+            stm.close();
+        }
+
+        return gruppi;
+        
+    }
+    
     public Utente getMoreUtente(int id) throws SQLException{
     
         PreparedStatement stm = con.prepareStatement("SELECT * FROM utente WHERE idutente = ?");

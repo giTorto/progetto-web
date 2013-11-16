@@ -24,6 +24,7 @@ import javax.servlet.http.HttpSession;
  */
 public class loginSrvlt extends HttpServlet {
      private DBManager manager;
+     Utente user;
     
     @Override
     public void init(){
@@ -53,10 +54,13 @@ public class loginSrvlt extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet loginSrvlt at " + request.getContextPath() + "</h1>");
-            out.println("<form method=\'post\' action=\'logoutSrvlt\' >");
-            out.println("<input type=\"submit\" value=\"LogOut\">");
-            out.println("</form>");
             out.println("<h2> login riuscito piccolo bastardo </h2>");
+            out.println("<form method=\'post\' action=\'logoutSrvlt\' >");
+            out.println("<input name=\"logout\" type=\"submit\" value=\"LogOut\">");
+            out.println("</form>");
+            out.println("<form method=\'post\' action=\'invitiSrvlt\' >");
+            out.println("<input name=\"inviti\" type=\"submit\" value=\"Inviti\"> ");
+            out.println("</form>");
             out.println("</body>");
             out.println("</html>");
         } finally {
@@ -94,7 +98,7 @@ public class loginSrvlt extends HttpServlet {
         String username = request.getParameter("username");
             String password = request.getParameter("password");
             // controllo nel DB se esiste un utente con lo stesso username + password
-            Utente user;
+            
  
             try {
                 user = manager.authenticate(username, password);
