@@ -53,6 +53,9 @@ public class loginSrvlt extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet loginSrvlt at " + request.getContextPath() + "</h1>");
+            out.println("<form method=\'post\' action=\'logoutSrvlt\' >");
+            out.println("<input type=\"submit\" value=\"LogOut\">");
+            out.println("</form>");
             out.println("<h2> login riuscito piccolo bastardo </h2>");
             out.println("</body>");
             out.println("</html>");
