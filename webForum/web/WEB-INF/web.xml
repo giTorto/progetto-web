@@ -16,6 +16,10 @@
         <servlet-name>invitiSrvlt</servlet-name>
         <servlet-class>servlet.invitiSrvlt</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>gruppiSrvlt</servlet-name>
+        <servlet-class>servlet.gruppiSrvlt</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -32,12 +36,16 @@
         <servlet-name>invitiSrvlt</servlet-name>
         <url-pattern>/invitiSrvlt</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>gruppiSrvlt</servlet-name>
+        <url-pattern>/gruppiSrvlt</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
         </session-timeout>
     </session-config>
-     <listener>
+    <listener>
         <description> listener </description>
         <listener-class> ascoltatore.WebAppContextListener</listener-class>
     </listener>
@@ -45,5 +53,4 @@
         <param-name> dburl</param-name>
         <param-value>jdbc:derby://localhost:1527/webdb;user=utente;password=utente</param-value>
     </context-param>
-   
 </web-app>

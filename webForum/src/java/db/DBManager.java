@@ -131,7 +131,8 @@ public class DBManager implements Serializable {
                 = con.prepareStatement("SELECT * FROM (gruppo g"
                         + " INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo) as s INNER JOIN utente u"
                         + " ON s.idutente = u.idutente"
-                        + "WHERE u.idutente = ? ");
+                        + "WHERE u.idutente = ? "
+                        + "AND gr.invito_acc > 0");
 
         try {
             stm.setInt(1, id);
