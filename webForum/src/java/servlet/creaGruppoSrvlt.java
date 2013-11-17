@@ -5,32 +5,22 @@
  */
 
 package servlet;
+
 import db.DBManager;
 import db.Utente;
-
+import db.Gruppo;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Giulian
  */
-public class loginSrvlt extends HttpServlet {
-     private DBManager manager;
-     Utente user;
-    
-    @Override
-    public void init(){
-        // inizializza il DBManager dagli attributi di Application
-        this.manager =(DBManager)super.getServletContext().getAttribute("dbmanager");
-    }
+public class creaGruppoSrvlt extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -50,23 +40,10 @@ public class loginSrvlt extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet loginSrvlt</title>");            
+            out.println("<title>Servlet creaGruppo</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet loginSrvlt at " + request.getContextPath() + "</h1>");
-            out.println("<h2> login riuscito piccolo bastardo </h2>");  
-            out.println("<form method=\'post\' action=\'invitiSrvlt\' >");
-            out.println("<input name=\"inviti\" type=\"submit\" value=\"Inviti\"> ");
-            out.println("</form>");
-            out.println("<form method=\'post\' action=\'gruppiSrvlt\' >");
-            out.println("<input name=\"gruppi\" type=\"submit\" value=\"Gruppi\"> ");
-            out.println("</form>");
-            out.println("<form method=\'post\' action=\'creaGruppoSrvlt\' >");
-            out.println("<input name=\"creagruppo\" type=\"submit\" value=\"Crea Gruppo\"> ");
-            out.println("</form>");
-            out.println("<form method=\'post\' action=\'logoutSrvlt\' >");
-            out.println("<input name=\"logout\" type=\"submit\" value=\"LogOut\">");
-            out.println("</form>");
+            out.println("<h1>Servlet creaGruppo at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         } finally {
@@ -100,33 +77,6 @@ public class loginSrvlt extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            // controllo nel DB se esiste un utente con lo stesso username + password
-            
- 
-            try {
-                user = manager.authenticate(username, password);
-            } catch (SQLException ex) {
-                throw new ServletException(ex);
-            }
-            
-            if (username == null){
-                //fuck the system
-            }else{
-                // imposto l'utente connesso come attributo di sessione
-                // per adesso e' solo un oggetto String con il nome dell'utente, ma posso metterci anche un oggetto User
-                // con, ad esempio, il timestamp di login
-
-                HttpSession session = request.getSession(true);
-                session.setAttribute("user", user);
-                
-              
-                 // mando un redirect alla servlet che carica i prodotti
-                //response.sendRedirect(response.getContextPath() + "/LoadProductServlet");
-            }
-        
         processRequest(request, response);
     }
 

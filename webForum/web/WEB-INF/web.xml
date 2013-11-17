@@ -20,6 +20,10 @@
         <servlet-name>gruppiSrvlt</servlet-name>
         <servlet-class>servlet.gruppiSrvlt</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>creaGruppo</servlet-name>
+        <servlet-class>servlet.creaGruppoSrvlt</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -39,6 +43,10 @@
     <servlet-mapping>
         <servlet-name>gruppiSrvlt</servlet-name>
         <url-pattern>/gruppiSrvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>creaGruppo</servlet-name>
+        <url-pattern>/creaGruppo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
