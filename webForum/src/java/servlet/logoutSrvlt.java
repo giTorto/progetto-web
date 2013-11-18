@@ -3,14 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlet;
 
-import db.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,18 +33,27 @@ public class logoutSrvlt extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-       
-        
+        Cookie[] mycookies = request.getCookies();
+        for (Cookie cookie : mycookies) {
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
+
         try {
-            /* TODO output your page here. You may use following sample code. */
+            /*
+             * TODO output your page here. You may use following sample code.
+             */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet logoutSrvlt</title>");            
+            out.println("<title>Servlet logoutSrvlt</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet Logout effettuato con successo </h1>");
             out.println("<h2> vuoi tornare al login? </h2>");
+            out.println("<form method=\'post\' action=\'" + request.getContextPath() + "\' >");
+            out.println("<input name=\"gohome\" type=\"submit\" value=\"Torna al login!\">");
+            out.println("</form>");
             out.println("</body>");
             out.println("</html>");
         } finally {
@@ -66,9 +73,7 @@ public class logoutSrvlt extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-     
-        
+
         processRequest(request, response);
     }
 
@@ -83,8 +88,8 @@ public class logoutSrvlt extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-           HttpSession session = request.getSession(false);
+
+        HttpSession session = request.getSession(false);
 
         if (session != null) {
             session.removeAttribute("user");
@@ -94,10 +99,8 @@ public class logoutSrvlt extends HttpServlet {
         request.setAttribute("message", "Logout effettuato con successo");
 
         // rimando al login
-       // RequestDispatcher rd = request.getRequestDispatcher("/");
-       // rd.forward(request, response);
-        
-        
+        // RequestDispatcher rd = request.getRequestDispatcher("/");
+        // rd.forward(request, response);
         processRequest(request, response);
     }
 

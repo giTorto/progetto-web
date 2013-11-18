@@ -11,7 +11,10 @@ import db.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,8 +46,30 @@ public class loginSrvlt extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String header = "";
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        /*
+         * logic of cookies
+         */
+        Cookie[] mycookies = request.getCookies();
+        for (Cookie cookie : mycookies) {
+            if (cookie.getName().equals("last_access_cookie")) {
+                header = cookie.getValue();
+            }
+        }
+        if (header == "") {
+            //allora non avevamo il cookike timestamp
+            Date date = Calendar.getInstance().getTime();
+            header = "Benvenuto per la prima volta\n" + date.toString();
+            Cookie timecookie = new Cookie("last_access_cookie", date.toString());
+            response.addCookie(timecookie);
+        }
+
+        /*
+         * end logic of cookies
+         */
         try {
             /*
              * TODO output your page here. You may use following sample code.
@@ -55,6 +80,7 @@ public class loginSrvlt extends HttpServlet {
             out.println("<title>Servlet loginSrvlt</title>");
             out.println("</head>");
             out.println("<body>");
+            out.println("<h1>" + header + "</h1>");
             out.println("<h1>Servlet loginSrvlt at " + request.getContextPath() + "</h1>");
             out.println("<h2> login riuscito piccolo bastardo </h2>");
             out.println("<form method=\'post\' action=\'invitiSrvlt\' >");
