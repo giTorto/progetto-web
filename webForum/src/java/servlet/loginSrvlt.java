@@ -3,15 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlet;
+
 import db.DBManager;
 import db.Utente;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,13 +22,14 @@ import javax.servlet.http.HttpSession;
  * @author Giulian
  */
 public class loginSrvlt extends HttpServlet {
-     private DBManager manager;
-     Utente user;
-    
+
+    private DBManager manager;
+    Utente user;
+
     @Override
-    public void init(){
+    public void init() {
         // inizializza il DBManager dagli attributi di Application
-        this.manager =(DBManager)super.getServletContext().getAttribute("dbmanager");
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
     }
 
     /**
@@ -46,15 +46,17 @@ public class loginSrvlt extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
+            /*
+             * TODO output your page here. You may use following sample code.
+             */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet loginSrvlt</title>");            
+            out.println("<title>Servlet loginSrvlt</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet loginSrvlt at " + request.getContextPath() + "</h1>");
-            out.println("<h2> login riuscito piccolo bastardo </h2>");  
+            out.println("<h2> login riuscito piccolo bastardo </h2>");
             out.println("<form method=\'post\' action=\'invitiSrvlt\' >");
             out.println("<input name=\"inviti\" type=\"submit\" value=\"Inviti\"> ");
             out.println("</form>");
@@ -100,35 +102,48 @@ public class loginSrvlt extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            // controllo nel DB se esiste un utente con lo stesso username + password
-            
- 
-            try {
-                user = manager.authenticate(username, password);
-            } catch (SQLException ex) {
-                throw new ServletException(ex);
-            }
-                       
-            if (user == null){
-              // response.sendRedirect("/errorpage.html");
-                response.sendRedirect(request.getContextPath());
-            }else{
-                // imposto l'utente connesso come attributo di sessione
-                // per adesso e' solo un oggetto String con il nome dell'utente, ma posso metterci anche un oggetto User
-                // con, ad esempio, il timestamp di login
 
-                HttpSession session = request.getSession(true);
-                session.setAttribute("user", user);
-                
-              
-                 // mando un redirect alla servlet che carica i prodotti
-                //response.sendRedirect(response.getContextPath() + "/LoadProductServlet");
-            }
-        
-        processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        // controllo nel DB se esiste un utente con lo stesso username + password
+
+        try {
+            user = manager.authenticate(username, password);
+        } catch (SQLException ex) {
+            throw new ServletException(ex);
+        }
+
+        if (user == null) {
+            PrintWriter out = response.getWriter();
+            String output = "<html>\n"
+                    + "    <head>\n"
+                    + "        <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n"
+                    + "        <title>JSP Page</title>\n"
+                    + "    </head>\n"
+                    + "    <body>\n"
+                    + "        <h2 style=\"color: red\">Login errato, riprova per favore </h2>\n"
+                    + "        <h1>Primo progetto: webForum</h1>\n"
+                    + "        <form method =\"post\" action=\"loginSrvlt\">\n"
+                    + "            <input type=\"text\" name=\"username\">\n"
+                    + "            <input type=\"password\" name=\"password\">\n"
+                    + "            <input type=\"submit\" value=\"submit\">\n"
+                    + "        </form>\n"
+                    + "    </body>\n"
+                    + "</html>";
+            out.println(output);
+        } else {
+            // imposto l'utente connesso come attributo di sessione
+            // per adesso e' solo un oggetto String con il nome dell'utente, ma posso metterci anche un oggetto User
+            // con, ad esempio, il timestamp di login
+
+            HttpSession session = request.getSession(true);
+            session.setAttribute("user", user);
+            processRequest(request, response);
+
+            // mando un redirect alla servlet che carica i prodotti
+            //response.sendRedirect(response.getContextPath() + "/LoadProductServlet");
+        }
+
     }
 
     /**
