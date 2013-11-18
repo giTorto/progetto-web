@@ -24,6 +24,10 @@
         <servlet-name>creaGruppo</servlet-name>
         <servlet-class>servlet.creaGruppoSrvlt</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>BootsrapTry</servlet-name>
+        <servlet-class>servlet.BootsrapTry</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -47,6 +51,10 @@
     <servlet-mapping>
         <servlet-name>creaGruppo</servlet-name>
         <url-pattern>/creaGruppo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BootsrapTry</servlet-name>
+        <url-pattern>/BootsrapTry</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

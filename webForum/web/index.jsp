@@ -17,6 +17,8 @@
             <input type="text" name="username">
             <input type="password" name="password">
             <input type="submit" value="submit">
+        </form><form name="trytoseebootstrap" action="BootsrapTry" method="POST">
+            <input type="submit" value="see bootstrap page" name="button" />
         </form>
     </body>
 </html>
