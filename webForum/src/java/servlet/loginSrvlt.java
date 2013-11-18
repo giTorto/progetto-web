@@ -111,9 +111,10 @@ public class loginSrvlt extends HttpServlet {
             } catch (SQLException ex) {
                 throw new ServletException(ex);
             }
-            
-            if (username == null){
-                //fuck the system
+                       
+            if (user == null){
+              // response.sendRedirect("/errorpage.html");
+                response.sendRedirect(request.getContextPath());
             }else{
                 // imposto l'utente connesso come attributo di sessione
                 // per adesso e' solo un oggetto String con il nome dell'utente, ma posso metterci anche un oggetto User
