@@ -56,7 +56,7 @@ public class gruppiSrvlt extends HttpServlet {
         
        
         try {
-             List<Gruppo> gruppiProp = manager.getGruppiOwner(user);
+            List<Gruppo> gruppiProp = manager.getGruppiOwner(user);
             List<Gruppo> gruppiParte = manager.getGruppiPart(user);
             
             
@@ -72,7 +72,7 @@ public class gruppiSrvlt extends HttpServlet {
             Gruppo grup;
             for(int i=0;i<lung;i++){
                 grup = gruppiParte.get(i);  
-                out.println("<tr> <td> "+ grup.getNome() +" </td> <td> "+grup.getOwnerName()+ "</td> <td>"+grup.getDataCreazione().toString()+ "</td>" );
+                out.println("<tr> <td> "+ grup.getNome() +" </td> <td> "+grup.getOwnerName()+ "</td> <td>"+grup.getDataCreazione().toString()+ "</td> </tr>" );
             }
             out.println("");
             out.println("</body>");

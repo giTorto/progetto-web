@@ -128,10 +128,7 @@ public class DBManager implements Serializable {
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
       int id = u.getId();
         PreparedStatement stm
-                = con.prepareStatement("SELECT * FROM (gruppo g"
-                        + " INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo) as s INNER JOIN utente u"
-                        + " ON s.idutente = u.idutente"
-                        + "WHERE u.idutente = ? "
+                = con.prepareStatement("SELECT * FROM (gruppo g INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo)  INNER JOIN utente u ON gr.idutente = u.idutente WHERE u.idutente = ? "
                         + "AND gr.invito_acc > 0");
 
         try {
