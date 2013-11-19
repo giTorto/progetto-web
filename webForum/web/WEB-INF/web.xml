@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <context-param>
+        <param-name>tempfile.dir</param-name>
+        <param-value>tmpfiles</param-value>
+    </context-param>   
     <servlet>
         <servlet-name>myServlet</servlet-name>
         <servlet-class>myJavaClass.myServlet</servlet-class>
@@ -32,6 +36,14 @@
         <servlet-name>Pdf_generator_servlet</servlet-name>
         <servlet-class>servlet.Pdf_generator_servlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>FileLocationContextListener</servlet-name>
+        <servlet-class>servlet.FileLocationContextListener</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UploadDownloadFileServlet</servlet-name>
+        <servlet-class>servlet.UploadDownloadFileServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -63,6 +75,14 @@
     <servlet-mapping>
         <servlet-name>Pdf_generator_servlet</servlet-name>
         <url-pattern>/dist/pdfservlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileLocationContextListener</servlet-name>
+        <url-pattern>/FileLocationContextListener</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadDownloadFileServlet</servlet-name>
+        <url-pattern>/UploadDownloadFileServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
