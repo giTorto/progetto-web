@@ -44,7 +44,7 @@ public class Pdf_generator_servlet extends HttpServlet {
 
             document.open();
 
-            document.add(new Paragraph("prova pdf"));
+            document.add(new Paragraph("prova pdf ole"));
             document.add(new Paragraph(new Date().toString()));
         } catch (DocumentException de) {
             de.printStackTrace();
