@@ -28,6 +28,10 @@
         <servlet-name>BootsrapTry</servlet-name>
         <servlet-class>servlet.BootsrapTry</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Pdf_generator_servlet</servlet-name>
+        <servlet-class>servlet.Pdf_generator_servlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>BootsrapTry</servlet-name>
         <url-pattern>/BootsrapTry</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Pdf_generator_servlet</servlet-name>
+        <url-pattern>/dist/pdfservlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
