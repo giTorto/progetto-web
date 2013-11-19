@@ -23,6 +23,14 @@ import javax.servlet.http.HttpSession;
  */
 public class creaGruppoSrvlt extends HttpServlet {
 
+    private DBManager manager;
+    
+     @Override
+    public void init() {
+        // inizializza il DBManager dagli attributi di Application
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

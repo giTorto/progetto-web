@@ -6,19 +6,34 @@
 
 package servlet;
 import db.DBManager;
+import db.Gruppo;
+import db.Utente;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Giulian
  */
 public class gruppiSrvlt extends HttpServlet {
+    
+    private DBManager manager;
+    
+     @Override
+    public void init() {
+        // inizializza il DBManager dagli attributi di Application
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -33,7 +48,18 @@ public class gruppiSrvlt extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
+        
+        HttpSession session = request.getSession();
+        Utente user = (Utente) session.getAttribute("user");
+       
+      
+        
+       
         try {
+             List<Gruppo> gruppiProp = manager.getGruppiOwner(user);
+            List<Gruppo> gruppiParte = manager.getGruppiPart(user);
+            
+            
             /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
@@ -41,9 +67,18 @@ public class gruppiSrvlt extends HttpServlet {
             out.println("<title>Servlet gruppiSrvlt</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet gruppiSrvlt at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Lista gruppi</h1>");
+            int lung = gruppiParte.size();
+            Gruppo grup;
+            for(int i=0;i<lung;i++){
+                grup = gruppiParte.get(i);  
+                out.println("<tr> <td> "+ grup.getNome() +" </td> <td> "+grup.getOwnerName()+ "</td> <td>"+grup.getDataCreazione().toString()+ "</td>" );
+            }
+            out.println("");
             out.println("</body>");
             out.println("</html>");
+        } catch (SQLException ex) {
+            Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             out.close();
         }

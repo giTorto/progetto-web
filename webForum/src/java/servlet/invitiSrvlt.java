@@ -5,6 +5,7 @@
  */
 package servlet;
 
+import db.DBManager;
 import db.Utente;
 
 import java.io.IOException;
@@ -21,6 +22,15 @@ import javax.servlet.http.HttpSession;
  */
 public class invitiSrvlt extends HttpServlet {
 
+    private DBManager manager;
+    
+     @Override
+    public void init() {
+        // inizializza il DBManager dagli attributi di Application
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
+    }
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
