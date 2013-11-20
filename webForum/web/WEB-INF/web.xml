@@ -3,7 +3,7 @@
     <context-param>
         <param-name>tempfile.dir</param-name>
         <param-value>tmpfiles</param-value>
-    </context-param>   
+    </context-param>
     <servlet>
         <servlet-name>myServlet</servlet-name>
         <servlet-class>myJavaClass.myServlet</servlet-class>
@@ -89,6 +89,14 @@
             30
         </session-timeout>
     </session-config>
+    <filter>
+        <filter-name>SessionFilter</filter-name>
+        <filter-class>filter.SessionFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>SessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
     <listener>
         <description> listener </description>
         <listener-class> ascoltatore.WebAppContextListener</listener-class>
