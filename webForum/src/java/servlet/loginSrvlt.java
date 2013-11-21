@@ -82,7 +82,7 @@ public class loginSrvlt extends HttpServlet {
             out.println("<body>");
             out.println("<h1>" + header + "</h1>");
             out.println("<h1>Servlet loginSrvlt at " + request.getContextPath() + "</h1>");
-            out.println("<h2> login riuscito piccolo bastardo </h2>");
+            out.println("<h2> Benvenuto"+((Utente)request.getSession().getAttribute("user")).getUserName()+" </h2>");
             out.println("<form method=\'post\' action=\'invitiSrvlt\' >");
             out.println("<input name=\"inviti\" type=\"submit\" value=\"Inviti\"> ");
             out.println("</form>");
@@ -174,8 +174,7 @@ public class loginSrvlt extends HttpServlet {
             session.setAttribute("user", user);
             processRequest(request, response);
 
-            // mando un redirect alla servlet che carica i prodotti
-            //response.sendRedirect(response.getContextPath() + "/LoadProductServlet");
+           
         }
 
     }

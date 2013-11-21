@@ -5,11 +5,11 @@
  */
 package filter;
 
+import db.Utente;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -26,7 +26,6 @@ import javax.servlet.http.HttpSession;
 public class SessionFilter implements Filter {
 
     private static final boolean debug = true;
-    private ArrayList<String> urlList;
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -34,40 +33,6 @@ public class SessionFilter implements Filter {
     private FilterConfig filterConfig = null;
 
     public SessionFilter() {
-    }
-
-    private void doBeforeProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("SessionFilter:DoBeforeProcessing");
-        }
-
-    }
-
-    private void doAfterProcessing(ServletRequest request, ServletResponse response)
-            throws IOException, ServletException {
-        if (debug) {
-            log("SessionFilter:DoAfterProcessing");
-        }
-
-	// Write code here to process the request and/or response after
-        // the rest of the filter chain is invoked.
-        // For example, a logging filter might log the attributes on the
-        // request object after the request has been processed. 
-	/*
-         * for (Enumeration en = request.getAttributeNames();
-         * en.hasMoreElements(); ) { String name = (String)en.nextElement();
-         * Object value = request.getAttribute(name); log("attribute: " + name +
-         * "=" + value.toString());
-         *
-         * }
-         */
-        // For example, a filter might append something to the response.
-	/*
-         * PrintWriter respOut = new PrintWriter(response.getWriter());
-         * respOut.println("<P><B>This has been appended by an intrusive
-         * filter.</B>");
-         */
     }
 
     /**
@@ -83,43 +48,33 @@ public class SessionFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
 
-        if (debug) {
-            log("SessionFilter:doFilter()");
+        boolean authorized = false;
+        if (request instanceof HttpServletRequest) {
+            HttpSession session = ((HttpServletRequest) request).getSession(false);
+            if (session != null) {
+                Utente user = (Utente) session.getAttribute("user");
+                if (user != null) {
+                    authorized = true;
+                }
+            }
         }
-
-        doBeforeProcessing(request, response);
-
-        Throwable problem = null;
-        HttpSession session = ((HttpServletRequest) request).getSession(false);
-        if (null == session) {
-            ((HttpServletRequest) request).getRequestDispatcher("index.jsp");
-            
-//            ((HttpServletResponse) response).sendRedirect("");
-//            return;
+        if (((HttpServletRequest) request).getRequestURI().equals("/webForum/loginSrvlt")) {
+            authorized = true;
         }
-        try {
+        if (authorized) {
             chain.doFilter(request, response);
-        } catch (Throwable t) {
-            // If an exception is thrown somewhere down the filter chain,
-            // we still want to execute our after processing, and then
-            // rethrow the problem after that.
-            problem = t;
-            t.printStackTrace();
-        }
+            return;
+        } else {
+           
 
-        doAfterProcessing(request, response);
+            String login_page = filterConfig.getInitParameter("login_page");
+            
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
 
-        // If there was a problem, we want to rethrow it if it is
-        // a known type, otherwise log it.
-        if (problem != null) {
-            if (problem instanceof ServletException) {
-                throw (ServletException) problem;
-            }
-            if (problem instanceof IOException) {
-                throw (IOException) problem;
-            }
-            sendProcessingError(problem, response);
+            chain.doFilter(request, response);
+
         }
+        throw new ServletException("Unauthorized access, unable to forward to login page");
     }
 
     /**

@@ -33,11 +33,7 @@ public class logoutSrvlt extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        Cookie[] mycookies = request.getCookies();
-        for (Cookie cookie : mycookies) {
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-        }
+        
 
         try {
             /*
@@ -94,6 +90,11 @@ public class logoutSrvlt extends HttpServlet {
         if (session != null) {
             session.removeAttribute("user");
             session.invalidate();
+        }
+        Cookie[] mycookies = request.getCookies();
+        for (Cookie cookie : mycookies) {
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
         }
 
         request.setAttribute("message", "Logout effettuato con successo");
