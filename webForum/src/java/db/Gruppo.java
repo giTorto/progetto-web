@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package db;
 
+import java.io.PrintWriter;
 import java.sql.Date;
 
 /**
@@ -13,6 +13,7 @@ import java.sql.Date;
  * @author Giulian
  */
 public class Gruppo {
+
     private String nome;
     private Date dataCreazione;
     private String ownerName;
@@ -22,8 +23,6 @@ public class Gruppo {
         return idgruppo;
     }
 
-    
-    
     public String getNome() {
         return nome;
     }
@@ -35,7 +34,7 @@ public class Gruppo {
     public String getOwnerName() {
         return ownerName;
     }
-    
+
     public void setNome(String nome) {
         this.nome = nome;
     }
@@ -48,17 +47,25 @@ public class Gruppo {
         this.idgruppo = idgruppo;
     }
 
-    
-    
-    
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
-    } 
+    }
 
     public Gruppo() {
     }
-    
-   
-    
-    
+
+    public void tohtmlrow(PrintWriter out, Utente u) {
+        out.println("                    <tr>");
+        out.println("                        <td>1</td>");
+        out.println("                        <td>" + this.getNome() + "</td>");
+        out.println("                        <td>" + this.getDataCreazione() + "</td>");
+        out.println("                        <td>somelink</td>");
+        out.println("                        <td><button type=\"submit\" class=\"btn btn-default\">Modifica</button></td>");
+        out.println("                        <td> <form name=\"gotopdfwriter\" action=\"pdfservlet\" method=\"POST\">");
+        out.println("                                <button type=\"submit\" class=\"btn btn-default\">PDF</button>");
+        out.println("                            </form>  </td>");
+        out.println("");
+        out.println("                    </tr>");
+    }
+
 }
