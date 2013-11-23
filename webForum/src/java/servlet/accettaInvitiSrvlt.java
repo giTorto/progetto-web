@@ -3,40 +3,22 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package servlet;
 
-import db.DBManager;
-import db.Gruppo;
-import db.Utente;
+package servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.sql.SQLException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Giulian
  */
-public class invitiSrvlt extends HttpServlet {
+public class accettaInvitiSrvlt extends HttpServlet {
 
-    private DBManager manager;
-    List<Gruppo> inviti;
-    
-     @Override
-    public void init() {
-        // inizializza il DBManager dagli attributi di Application
-        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
-    }
-    
-    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -48,40 +30,19 @@ public class invitiSrvlt extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         response.setContentType("text/html;charset=UTF-8");
-        HttpSession session = request.getSession();
-        Utente user = (Utente) session.getAttribute("user");
         PrintWriter out = response.getWriter();
-        
         try {
-            /*
-             * TODO output your page here. You may use following sample code.
-             */
-            
-            inviti = manager.getInvitiGruppi(user);
-            
+            /* TODO output your page here. You may use following sample code. */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet invitiSrvlt</title>");
+            out.println("<title>Servlet accettaInvitiSrvlt</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1> Inviti a " + user.getUserName() + "</h1>");
-            out.println("<h1>Servlet invitiSrvlt at " + request.getContextPath() + "</h1>");
-            out.println("<form>");
-            out.println("<table border=\'1\'> <tr> <th> Owner </th> <th> Nome Gruppo </th> <th>Data creazione</th> <th> Accetti </th> </tr>");
-            int i = 0;
-            for (Gruppo gruppo : inviti){
-                out.println("<tr> <td>"+ inviti.get(i).getOwnerName()+ "</td> <td> "+ inviti.get(i).getNome() + "</td><td>"+
-                        inviti.get(i).getDataCreazione().toString()+"</td><td><input name=\" "
-                        + inviti.get(i).getIdgruppo() +" \" type=\"checkbox\" value=\"Accetto\" checked=\"checked\"/></td>");
-            }
-            out.println("</table> ");
-            out.println("<input type=\"submit\" value=\"Fatto\" action=\"accettaInvitiSrvlt\" > ");
-            out.println("</form> </body> </html>");
-        } catch (SQLException ex) {
-            Logger.getLogger(invitiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
+            out.println("<h1>Servlet accettaInvitiSrvlt at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
         } finally {
             out.close();
         }
@@ -113,7 +74,9 @@ public class invitiSrvlt extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        
+        response.sendRedirect(request.getContextPath()+"logg/main");
     }
 
     /**

@@ -48,6 +48,10 @@
         <servlet-name>main</servlet-name>
         <servlet-class>servlet.main</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>accettaInvitiSrvlt</servlet-name>
+        <servlet-class>servlet.accettaInvitiSrvlt</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -91,6 +95,10 @@
     <servlet-mapping>
         <servlet-name>main</servlet-name>
         <url-pattern>/logg/main</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>accettaInvitiSrvlt</servlet-name>
+        <url-pattern>/logg/accettaInvitiSrvlt</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

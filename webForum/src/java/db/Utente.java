@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @author Giulian
  */
 public class Utente implements Serializable {
-    private String avatar;
+
     private String password;
     private String userName;
     private int id;
@@ -22,14 +22,6 @@ public class Utente implements Serializable {
         return id;
     }
     
-    
-    public String getAvatar(){
-    return avatar;
-    }
-    
-    public void setAvatar(String fullName){
-        this.avatar = fullName;
-    }
     
     public String getPassword(){
         return password;

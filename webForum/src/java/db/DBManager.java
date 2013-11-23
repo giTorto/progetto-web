@@ -70,7 +70,6 @@ public class DBManager implements Serializable {
                 if (rs.next()) {
                     Utente user = new Utente();
                     user.setUserName(username);
-                    user.setAvatar(rs.getString("avatar"));
                     user.setId(rs.getInt("idutente"));
                     return user;
                 } else {
@@ -164,10 +163,10 @@ public class DBManager implements Serializable {
       int id = u.getId();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM (gruppo g"
-                        + " INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo) as s INNER JOIN utente u"
-                        + " ON s.idutente = u.idutente"
-                        + "WHERE u.idutente = ? "
-                        + "AND gr.invito_acc = 0");
+                        + " INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo) INNER JOIN utente u"
+                        + " ON gr.idutente = u.idutente"
+                        + " WHERE u.idutente = ? "
+                        + " AND gr.invito_acc = 0");
 
         try {
             stm.setInt(1, id);
@@ -208,7 +207,7 @@ public class DBManager implements Serializable {
                 if (rs.next()) {
                     Utente user = new Utente();
                     user.setUserName(rs.getString("username"));
-                    user.setAvatar(rs.getString("avatar"));
+                 
                     user.setId(rs.getInt("idutente"));
                     return user;
                 } else {
