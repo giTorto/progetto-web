@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  * @author Giulian
  */
 public class loginSrvlt extends HttpServlet {
-
+    
     private DBManager manager;
     Utente user;
 
@@ -33,6 +33,36 @@ public class loginSrvlt extends HttpServlet {
     public void init() {
         // inizializza il DBManager dagli attributi di Application
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
+    }
+    
+    public void checkESetCookie(HttpServletRequest request, HttpServletResponse response){
+        
+        String header = "";
+
+        HttpSession sessione = request.getSession();
+        Utente u = (Utente)sessione.getAttribute("user");
+        
+        Date date = Calendar.getInstance().getTime();
+        
+        /*
+         * logic of cookies
+         */
+        Cookie[] mycookies = request.getCookies();
+        for (Cookie cookie : mycookies) {
+            if (cookie.getName().equals(u.getUserName())) {
+                header = cookie.getValue();
+               cookie.setMaxAge(0);
+            }
+        }
+        if (header.equals("")) {
+            //allora non avevamo il cookike timestamp
+            header = "Benvenuto per la prima volta\n";
+        }
+            Cookie timecookie = new Cookie(u.getUserName(), date.toString());
+            timecookie.setMaxAge(73000);
+            response.addCookie(timecookie);
+            
+            sessione.setAttribute("LastAccess",header);
     }
 
     /**
@@ -46,26 +76,17 @@ public class loginSrvlt extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String header = "";
+    
 
+        HttpSession sessione = request.getSession();
+        Utente u = (Utente)sessione.getAttribute("user");
+        String header;
+   
+        header = (String)sessione.getAttribute("LastAccess");
+    
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        /*
-         * logic of cookies
-         */
-        Cookie[] mycookies = request.getCookies();
-        for (Cookie cookie : mycookies) {
-            if (cookie.getName().equals("last_access_cookie")) {
-                header = cookie.getValue();
-            }
-        }
-        if (header == "") {
-            //allora non avevamo il cookike timestamp
-            Date date = Calendar.getInstance().getTime();
-            header = "Benvenuto per la prima volta\n" + date.toString();
-            Cookie timecookie = new Cookie("last_access_cookie", date.toString());
-            response.addCookie(timecookie);
-        }
+        
 
         /*
          * end logic of cookies
@@ -172,6 +193,8 @@ public class loginSrvlt extends HttpServlet {
 
             HttpSession session = request.getSession(true);
             session.setAttribute("user", user);
+            checkESetCookie(request,response);
+            
             processRequest(request, response);
 
            

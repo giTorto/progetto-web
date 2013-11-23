@@ -58,12 +58,13 @@ public class SessionFilter implements Filter {
                 }
             }
         }
-        if (((HttpServletRequest) request).getRequestURI().equals("/webForum/loginSrvlt")) {
+        
+        if (((HttpServletRequest) request).getRequestURI().equals("/webForum/logg/loginSrvlt")) {
             authorized = true;
         }
         if (authorized) {
             chain.doFilter(request, response);
-            return;
+            return; 
         } else {
            
 
@@ -75,6 +76,8 @@ public class SessionFilter implements Filter {
 
         }
         throw new ServletException("Unauthorized access, unable to forward to login page");
+        
+        
     }
 
     /**

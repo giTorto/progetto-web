@@ -90,7 +90,6 @@ public class gruppiSrvlt extends HttpServlet {
         out.println("                <table class=\"table\">");
         out.println("                    <thead>");
         out.println("                        <tr>");
-        out.println("                            <th>#</th>");
         out.println("                            <th>Gruppo</th>");
         out.println("                            <th>Data creazione</th>");
         out.println("                            <th>Link</th>");
@@ -100,9 +99,12 @@ public class gruppiSrvlt extends HttpServlet {
         out.println("                        </tr>");
         out.println("                    </thead>");
 
+        
         for (Gruppo gruppo : gruppiProp) {
             gruppo.tohtmlrow(out, user);
         }
+        
+        out.println("<tr> <td colspan=5> <h2>Gruppi a cui partecipi </h2> </td> </tr>");
         for (Gruppo gruppo : gruppiParte) {
             gruppo.tohtmlrow(out, user);
         }

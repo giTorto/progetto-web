@@ -91,14 +91,17 @@ public class logoutSrvlt extends HttpServlet {
             session.removeAttribute("user");
             session.invalidate();
         }
+        
+        /*
         Cookie[] mycookies = request.getCookies();
         for (Cookie cookie : mycookies) {
             cookie.setMaxAge(0);
             response.addCookie(cookie);
-        }
+        }*/
 
         request.setAttribute("message", "Logout effettuato con successo");
-
+        
+        
         // rimando al login
         // RequestDispatcher rd = request.getRequestDispatcher("/");
         // rd.forward(request, response);

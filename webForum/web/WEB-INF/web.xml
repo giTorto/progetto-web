@@ -50,20 +50,19 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>loginSrvlt</servlet-name>
-        <url-pattern>/loginSrvlt</url-pattern>
-        
+        <url-pattern>/logg/loginSrvlt</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>logoutSrvlt</servlet-name>
-        <url-pattern>/logoutSrvlt</url-pattern>
+        <url-pattern>/logg/logoutSrvlt</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>invitiSrvlt</servlet-name>
-        <url-pattern>/invitiSrvlt</url-pattern>
+        <url-pattern>/logg/invitiSrvlt</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>gruppiSrvlt</servlet-name>
-        <url-pattern>/gruppiSrvlt</url-pattern>
+        <url-pattern>/logg/gruppiSrvlt</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>creaGruppo</servlet-name>
@@ -79,11 +78,11 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FileLocationContextListener</servlet-name>
-        <url-pattern>/FileLocationContextListener</url-pattern>
+        <url-pattern>/logg/FileLocationContextListener</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UploadDownloadFileServlet</servlet-name>
-        <url-pattern>/UploadDownloadFileServlet</url-pattern>
+        <url-pattern>/logg/UploadDownloadFileServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -100,7 +99,7 @@
     </filter>
     <filter-mapping>
         <filter-name>SessionFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/logg/*</url-pattern>
     </filter-mapping>
     <listener>
         <description> listener </description>

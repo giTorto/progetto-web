@@ -56,14 +56,15 @@ public class Gruppo {
 
     public void tohtmlrow(PrintWriter out, Utente u) {
         out.println("                    <tr>");
-        out.println("                        <td>1</td>");
         out.println("                        <td>" + this.getNome() + "</td>");
         out.println("                        <td>" + this.getDataCreazione() + "</td>");
         out.println("                        <td>somelink</td>");
+        if (this.getOwnerName().equals(u.getUserName())) {
         out.println("                        <td><button type=\"submit\" class=\"btn btn-default\">Modifica</button></td>");
         out.println("                        <td> <form name=\"gotopdfwriter\" action=\"pdfservlet\" method=\"POST\">");
         out.println("                                <button type=\"submit\" class=\"btn btn-default\">PDF</button>");
         out.println("                            </form>  </td>");
+        }
         out.println("");
         out.println("                    </tr>");
     }
