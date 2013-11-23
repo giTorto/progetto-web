@@ -13,7 +13,7 @@
     </head>
     <body>
         <h1>Primo progetto: webForum</h1>
-        <form method ="post" action="logg/loginSrvlt">
+        <form method ="post" action="loginSrvlt">
             <input type="text" name="username">
             <input type="password" name="password">
             <input type="submit" value="submit">

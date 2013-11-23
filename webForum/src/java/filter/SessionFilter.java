@@ -59,9 +59,6 @@ public class SessionFilter implements Filter {
             }
         }
         
-        if (((HttpServletRequest) request).getRequestURI().equals("/webForum/logg/loginSrvlt")) {
-            authorized = true;
-        }
         if (authorized) {
             chain.doFilter(request, response);
             return; 

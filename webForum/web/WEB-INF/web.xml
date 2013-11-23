@@ -44,13 +44,17 @@
         <servlet-name>UploadDownloadFileServlet</servlet-name>
         <servlet-class>servlet.UploadDownloadFileServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>main</servlet-name>
+        <servlet-class>servlet.main</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>loginSrvlt</servlet-name>
-        <url-pattern>/logg/loginSrvlt</url-pattern>
+        <url-pattern>/loginSrvlt</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>logoutSrvlt</servlet-name>
@@ -83,6 +87,10 @@
     <servlet-mapping>
         <servlet-name>UploadDownloadFileServlet</servlet-name>
         <url-pattern>/logg/UploadDownloadFileServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>main</servlet-name>
+        <url-pattern>/logg/main</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
