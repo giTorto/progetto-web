@@ -7,11 +7,13 @@ package db;
 
 import java.io.Serializable;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -125,7 +127,7 @@ public class DBManager implements Serializable {
     public List<Gruppo> getGruppiPart(Utente u) throws SQLException {
 
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
-      int id = u.getId();
+        int id = u.getId();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM (gruppo g INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo)  INNER JOIN utente u ON gr.idutente = u.idutente WHERE u.idutente = ? "
                         + "AND gr.invito_acc > 0");
@@ -157,10 +159,10 @@ public class DBManager implements Serializable {
         return gruppi;
 
     }
-    
-    public List<Gruppo> getInvitiGruppi(Utente u) throws SQLException{
-             List<Gruppo> gruppi = new ArrayList<Gruppo>();
-      int id = u.getId();
+
+    public List<Gruppo> getInvitiGruppi(Utente u) throws SQLException {
+        List<Gruppo> gruppi = new ArrayList<Gruppo>();
+        int id = u.getId();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM (gruppo g"
                         + " INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo) INNER JOIN utente u"
@@ -193,11 +195,11 @@ public class DBManager implements Serializable {
         }
 
         return gruppi;
-        
+
     }
-    
-    public Utente getMoreUtente(int id) throws SQLException{
-    
+
+    public Utente getMoreUtente(int id) throws SQLException {
+
         PreparedStatement stm = con.prepareStatement("SELECT * FROM utente WHERE idutente = ?");
         try {
             stm.setInt(1, id);
@@ -207,7 +209,7 @@ public class DBManager implements Serializable {
                 if (rs.next()) {
                     Utente user = new Utente();
                     user.setUserName(rs.getString("username"));
-                 
+
                     user.setId(rs.getInt("idutente"));
                     return user;
                 } else {
@@ -222,26 +224,32 @@ public class DBManager implements Serializable {
 
         } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
             stm.close();
-        } 
+        }
     }
-    
+
+    /**
+     *
+     * @param g dai in input il gruppo di cui vuoi vedere i post
+     * @return ricevi la lista dei post in ordine di data inversa
+     * @throws SQLException
+     */
     public List<Post> getPostsGruppo(Gruppo g) throws SQLException {
 
         List<Post> posts = new ArrayList<Post>();
         int id = g.getIdgruppo();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM post "
-                        + "WHERE idgruppo = ?");
+                        + "WHERE idgruppo = ? ORDER BY data_ora DESC");
 
         try {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
 
             try {
-                
+
                 while (rs.next()) {
                     Post p = new Post();
-                 //   Utente tu = getMoreUtente(rs.getInt("idwriter"));
+                    //   Utente tu = getMoreUtente(rs.getInt("idwriter"));
                     p.setTesto(rs.getString("testo"));
                     p.setData_ora(rs.getDate("data_ora"));
                     //p.setWriter(tu);
@@ -259,4 +267,102 @@ public class DBManager implements Serializable {
         return posts;
 
     }
+
+    public void setAccettaInvito(Utente u, int idgruppo) throws SQLException {
+        int idutente = u.getId();
+
+        PreparedStatement stm
+                = con.prepareStatement("UPDATE gruppi_partecipanti SET invito_acc=1 WHERE idutente =? AND idgruppo = ?");
+
+        try {
+            stm.setInt(1, idutente);
+            stm.setInt(2, idgruppo);
+            ResultSet rs = stm.executeQuery();
+        } finally {
+            stm.close();
+        }
+
+    }
+
+    /**
+     *
+     * @param u qui serve dare in input l'utente che sta chiamando la funzione
+     * cioè chi sta creando il gruppo
+     * @param nome qui bisogna mettere il nome che si vuole dare al gruppo La
+     * data la prende appena chiamata. Dopo questa funzione è necessario
+     * chiamare la inviteAllYouDesire passandoli un List<Integer> idInvitati
+     */
+    public void creaGruppo(Utente u, String nome) throws SQLException {
+        int idutente = u.getId();
+        Date data = new Date(Calendar.getInstance().getTimeInMillis());
+
+        PreparedStatement stm
+                = con.prepareStatement("INSERT INTO gruppo (nome,datacreazione,idowner) values(?,?,?) ");
+
+        try {
+            stm.setString(1, nome);
+            stm.setDate(2, data);
+            stm.setInt(3, idutente);
+            ResultSet rs = stm.executeQuery();
+        } finally {
+            stm.close();
+        }
+
+    }
+
+    /**
+     * 
+     * @param idinvitati la List<Integer> di tutti gli id di quelli che vuoi
+     * invitare
+     * @param idgruppo l'id del gruppo a cui stai per invitare i tuoi amichetti
+     * @throws SQLException Se ci sono problemi potrebbe essere la chiusura e la riapertura dello
+     * stm
+     */
+    public void inviteAllYouDesire(List<Integer> idinvitati, int idgruppo) throws SQLException {
+        PreparedStatement stm;
+
+        for (Integer idinvitato : idinvitati) {
+
+            stm = con.prepareStatement("Insert into gruppi_partecipanti (idutente, invito_acc,idgruppo) values (?,0,?)");
+
+            try {
+                stm.setInt(1, idinvitato);
+                stm.setInt(3, idgruppo);
+                ResultSet rs = stm.executeQuery();
+            } finally {
+                stm.close();
+            }
+        }
+
+    }
+
+    /**
+     * 
+     * @param u devi dare in input l'utente della sessione attuale
+     * @param idgruppo devi dare in input l'id del gruppo che stai visualizzando
+     * @param testo qui va il testo che deve essere inserito nel post
+     * @throws SQLException 
+     * Se ti stai chiedendo del file, beh quello non va nel DB, e la data la trova automaticamente
+     */
+    public void aggiungiPost(Utente u, int idgruppo, String testo) throws SQLException {
+        int idutente = u.getId();
+       
+        
+        Date data = new Date(Calendar.getInstance().getTimeInMillis());
+
+        PreparedStatement stm
+                = con.prepareStatement("INSERT INTO gruppo (data_ora,testo,idwriter,idgruppo) values(?,?,?,?) ");
+
+        try {
+            stm.setDate(1, data);
+            stm.setString(2, testo);
+            stm.setInt(3, idutente);
+            stm.setInt(4, idgruppo);
+            ResultSet rs = stm.executeQuery();
+        } finally {
+            stm.close();
+        }
+    }
+    
+    
 }

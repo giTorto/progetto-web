@@ -59,7 +59,7 @@ public class loginSrvlt extends HttpServlet {
             header = "Benvenuto per la prima volta\n";
         }
             Cookie timecookie = new Cookie(u.getUserName(), date.toString());
-            timecookie.setMaxAge(73000);
+            timecookie.setMaxAge(730000);
             response.addCookie(timecookie);
             
             sessione.setAttribute("LastAccess",header);
