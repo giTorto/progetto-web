@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package db;
 
+import java.io.PrintWriter;
 import java.sql.Date;
 
 /**
  *
  * @author Giulian
  */
-class Post {
+public class Post {
+
     private Date data_ora;
     private String testo;
     private Utente writer;
@@ -40,6 +41,11 @@ class Post {
     public void setWriter(Utente writer) {
         this.writer = writer;
     }
-    
-    
+
+    public void tohtmlrow(PrintWriter out, Utente u) {
+        out.println("		<li><label id=\"Label1\">"+this.getTesto()+"</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">"+this.getData_ora().toString()+" ");
+        out.println("		</label>&nbsp;&nbsp;<label id=\"Label1\">"+/*this.getWriter().getUserName()*/""+"</label><br>");
+        out.println("		<br></li>");
+    }
+
 }

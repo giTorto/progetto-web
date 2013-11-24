@@ -3,34 +3,41 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlet;
 
 import db.DBManager;
 import db.Gruppo;
+import db.Post;
+import db.Utente;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author Lorenzo
  */
 public class DisplayGroupSrvlt extends HttpServlet {
-private DBManager manager;
+
+    private DBManager manager;
     Gruppo gruppo;
-    
+    ArrayList<Post> postlist;
+    Utente user;
+
     @Override
     public void init() {
         // inizializza il DBManager dagli attributi di Application
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
     }
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,31 +49,115 @@ private DBManager manager;
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-       try {
-            gruppo = manager.getGruppo(Integer.parseInt(request.getParameter("groupID")));
 
+        try {
+            gruppo = manager.getGruppo(Integer.parseInt(request.getParameter("groupID")));
+            postlist = (ArrayList<Post>) manager.getPostsGruppo(gruppo);
         } catch (SQLException ex) {
             Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
+        HttpSession session = ((HttpServletRequest) request).getSession(false);
+        if (session != null) {
+            user = (Utente) session.getAttribute("user");
+        }
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             /*
              * TODO output your page here. You may use following sample code.
              */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
+            out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+            out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+            out.println("");
             out.println("<head>");
-            out.println("<title>Servlet DisplayGroupSrvlt</title>");            
+            out.println("<meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\" />");
+            out.println("<title>Senza nome 1</title>");
             out.println("</head>");
+            out.println("");
             out.println("<body>");
-            out.println("<h1>Servlet DisplayGroupSrvlt at " + request.getContextPath() + "</h1>");
-           out.println("<h1>" + gruppo.getNome() + "</h1>");
-            
+            out.println("");
+            out.println("<div>");
+            out.println("	<p></p>");
+            out.println("	<h1>" + gruppo.getNome() + "<br></br>" + gruppo.getIdgruppo() + "</h1>");
+            out.println("	<p></p>");
+            out.println("</div>");
+            out.println("<div>");
+            out.println("	<ul>");
+            for (Post post : postlist) {
+                post.tohtmlrow(out, user);
+
+            }
+            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
+            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
+            out.println("		<br></li>");
+            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
+            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
+            out.println("		<br></li>");
+            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
+            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
+            out.println("		<br></li>");
+            out.println("	</ul>");
+            out.println("</div>");
+            out.println("<div>");
+            out.println("	<h2>File del gruppo</h2>");
+            out.println("&nbsp;&nbsp;&nbsp;&nbsp;<input name=\"Button1\" type=\"button\" value=\"upload file\" />");
+            out.println("	<ul>");
+            out.println("		<li><a href=\"link%20per%20scaricare%20il%20file\">Download nome file</a>");
+            out.println("		</li>");
+            out.println("		<li><a href=\"link%20per%20scaricare%20il%20file\">Download nome file</a>");
+            out.println("		</li>");
+            out.println("	</ul>");
+            out.println("</div>");
+            out.println("");
             out.println("</body>");
+            out.println("");
             out.println("</html>");
+            out.println("");
+
+//            out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+//            out.println("");
+//            out.println("<head>");
+//            out.println("<meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\" />");
+//            out.println("<title>Senza nome 1</title>");
+//            out.println("</head>");
+//            out.println("");
+//            out.println("<body>");
+//            out.println("");
+//            out.println("<div>");
+//            out.println("	<p></p>");
+//            out.println("	<h1>Nome gruppo</h1>");
+//            out.println("	<p></p>");
+//            out.println("</div>");
+//            out.println("<div>");
+//            out.println("	<ul>");
+//            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
+//            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
+//            out.println("		<br></li>");
+//            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
+//            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
+//            out.println("		<br></li>");
+//            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
+//            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
+//            out.println("		<br></li>");
+//            out.println("	</ul>");
+//            out.println("</div>");
+//            out.println("<div>");
+//            out.println("	<h2>File del gruppo</h2>");
+//            out.println("&nbsp;&nbsp;&nbsp;&nbsp;<input name=\"Button1\" type=\"button\" value=\"upload file\" />");
+//            out.println("	<ul>");
+//            out.println("		<li><a href=\"link%20per%20scaricare%20il%20file\">Download nome file</a>");
+//            out.println("		</li>");
+//            out.println("		<li><a href=\"link%20per%20scaricare%20il%20file\">Download nome file</a>");
+//            out.println("		</li>");
+//            out.println("	</ul>");
+//            out.println("</div>");
+//            out.println("");
+//            out.println("</body>");
+//            out.println("");
+//            out.println("</html>");
+//            out.println("");
         } finally {
             out.close();
         }

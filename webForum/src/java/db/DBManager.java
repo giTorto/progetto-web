@@ -250,7 +250,7 @@ public class DBManager implements Serializable {
 
                 while (rs.next()) {
                     Post p = new Post();
-                    //   Utente tu = getMoreUtente(rs.getInt("idwriter"));
+                    //Utente tu = getMoreUtente(rs.getInt("idwriter"));
                     p.setTesto(rs.getString("testo"));
                     p.setData_ora(rs.getDate("data_ora"));
                     //p.setWriter(tu);
