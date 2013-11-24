@@ -82,7 +82,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>Pdf_generator_servlet</servlet-name>
-        <url-pattern>/dist/pdfservlet</url-pattern>
+        <url-pattern>/logg/pdfservlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>FileLocationContextListener</servlet-name>

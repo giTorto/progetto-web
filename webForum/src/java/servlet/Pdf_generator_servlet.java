@@ -9,8 +9,13 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import db.DBManager;
+import db.Gruppo;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +26,15 @@ import javax.servlet.http.HttpServletResponse;
  * @author Lorenzo
  */
 public class Pdf_generator_servlet extends HttpServlet {
+
+    private DBManager manager;
+    Gruppo gruppo;
+
+    @Override
+    public void init() {
+        // inizializza il DBManager dagli attributi di Application
+        this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -34,6 +48,13 @@ public class Pdf_generator_servlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        try {
+            gruppo = manager.getGruppo(Integer.parseInt(request.getParameter("groupID")));
+
+        } catch (SQLException ex) {
+            Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         response.setContentType("application/pdf");
 
         Document document = new Document();
@@ -44,7 +65,9 @@ public class Pdf_generator_servlet extends HttpServlet {
 
             document.open();
 
-            document.add(new Paragraph("prova pdf ole"));
+            document.add(new Paragraph(gruppo.getNome()));
+            document.add(new Paragraph(gruppo.getOwnerName()));
+            document.add(new Paragraph("#######"));
             document.add(new Paragraph(new Date().toString()));
         } catch (DocumentException de) {
             de.printStackTrace();

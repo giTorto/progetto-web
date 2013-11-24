@@ -229,6 +229,7 @@ public class DBManager implements Serializable {
 
     /**
      * Permette di ottenere facilmente la lista di tutti i post di un gruppo
+     *
      * @param g dai in input il gruppo di cui vuoi vedere i post
      * @return ricevi la lista dei post in ordine di data inversa
      * @throws SQLException
@@ -267,16 +268,19 @@ public class DBManager implements Serializable {
         return posts;
 
     }
-    
+
     /**
-     *  Va chiamata per impostare nel db, la conferma di appartenenza ad un gruppo da parte dell'utente
-     * Intuitivamente, la funzione dovrà essere chiamata per ogni checkbox selezionata
+     * Va chiamata per impostare nel db, la conferma di appartenenza ad un
+     * gruppo da parte dell'utente Intuitivamente, la funzione dovrà essere
+     * chiamata per ogni checkbox selezionata
+     *
      * @param u l'utente che sta accettando l'invito
      * @param idgruppo qui devi passare l'idgruppo di cui hai accettato l'invito
-     * @throws SQLException 
-     * 
-     * @nota puoi anche decidere di fare che nella inviti c'è una form per ogni riga e poi una volta
-     * premuto devi aggiornare la pagina con gli inviti ancora non accettati
+     * @throws SQLException
+     *
+     * @nota puoi anche decidere di fare che nella inviti c'è una form per ogni
+     * riga e poi una volta premuto devi aggiornare la pagina con gli inviti
+     * ancora non accettati
      */
     public void setAccettaInvito(Utente u, int idgruppo) throws SQLException {
         int idutente = u.getId();
@@ -296,6 +300,7 @@ public class DBManager implements Serializable {
 
     /**
      * Creazione di un gruppo dando in input utente e nome del gruppo
+     *
      * @param u qui serve dare in input l'utente che sta chiamando la funzione
      * cioè chi sta creando il gruppo
      * @param nome qui bisogna mettere il nome che si vuole dare al gruppo La
@@ -321,14 +326,16 @@ public class DBManager implements Serializable {
     }
 
     /**
-     * Funzione complementare alla creazione gruppo questa si occupa di mandare gli inviti per il nuovo
-     * gruppo, ovviamente bisogna darli la List<integer> degli id, in caso di problemi la
-     * funzione può essere facilmente sistemata su un id alla volta
+     * Funzione complementare alla creazione gruppo questa si occupa di mandare
+     * gli inviti per il nuovo gruppo, ovviamente bisogna darli la List<integer>
+     * degli id, in caso di problemi la funzione può essere facilmente sistemata
+     * su un id alla volta
+     *
      * @param idinvitati la List<Integer> di tutti gli id di quelli che vuoi
      * invitare
      * @param idgruppo l'id del gruppo a cui stai per invitare i tuoi amichetti
-     * @throws SQLException Se ci sono problemi potrebbe essere la chiusura e la riapertura dello
-     * stm
+     * @throws SQLException Se ci sono problemi potrebbe essere la chiusura e la
+     * riapertura dello stm
      */
     public void inviteAllYouDesire(List<Integer> idinvitati, int idgruppo) throws SQLException {
         PreparedStatement stm;
@@ -350,16 +357,16 @@ public class DBManager implements Serializable {
 
     /**
      * Permette l'inserimento di un post nel database
+     *
      * @param u devi dare in input l'utente della sessione attuale
      * @param idgruppo devi dare in input l'id del gruppo che stai visualizzando
      * @param testo qui va il testo che deve essere inserito nel post
-     * @throws SQLException 
-     * Se ti stai chiedendo del file, beh quello non va nel DB, e la data la trova automaticamente
+     * @throws SQLException Se ti stai chiedendo del file, beh quello non va nel
+     * DB, e la data la trova automaticamente
      */
     public void aggiungiPost(Utente u, int idgruppo, String testo) throws SQLException {
         int idutente = u.getId();
-       
-        
+
         Date data = new Date(Calendar.getInstance().getTimeInMillis());
 
         PreparedStatement stm
@@ -375,6 +382,33 @@ public class DBManager implements Serializable {
             stm.close();
         }
     }
-    
-    
+
+    public Gruppo getGruppo(int Idgruppo) throws SQLException {
+
+        List<Gruppo> gruppi = new ArrayList<Gruppo>();
+        PreparedStatement stm = con.prepareStatement("SELECT * FROM gruppo g where g.idgruppo=?");
+
+        try {
+            stm.setInt(1, Idgruppo);
+            ResultSet rs = stm.executeQuery();
+
+            try {
+                while (rs.next()) {
+                    Gruppo group = new Gruppo();
+                    group.setNome(rs.getString("nome"));
+                    group.setDataCreazione(rs.getDate("datacreazione"));
+                    group.setIdgruppo(rs.getInt("idgruppo"));
+                    group.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
+                    gruppi.add(group);
+                }
+            } finally {
+                rs.close();
+            }
+        } finally {
+            stm.close();
+        }
+
+        return gruppi.get(0);
+    }
+
 }

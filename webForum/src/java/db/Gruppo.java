@@ -58,15 +58,26 @@ public class Gruppo {
         out.println("                    <tr>");
         out.println("                        <td>" + this.getNome() + "</td>");
         out.println("                        <td>" + this.getDataCreazione() + "</td>");
-        out.println("                        <td>somelink</td>");
+        out.println("			<td><a href=\"" + "/webForum/logg/displaygroup?"
+                + "groupID=" + getIdgruppo() +"\">vai al gruppo</a> </td>");
+        out.println("			<td>");
         if (this.getOwnerName().equals(u.getUserName())) {
-        out.println("                        <td><button type=\"submit\" class=\"btn btn-default\">Modifica</button></td>");
-        out.println("                        <td> <form name=\"gotopdfwriter\" action=\"pdfservlet\" method=\"POST\">");
-        out.println("                                <button type=\"submit\" class=\"btn btn-default\">PDF</button>");
-        out.println("                            </form>  </td>");
+            
+            out.println("			<form action=\"modificaGruppo\" method=\"GET\" name=\"altergroup\">");
+            out.println("				<button class=\"btn btn-default\" type=\"submit\">Modifica</button>");
+            out.println("				<input name=\"groupID\" type=\"hidden\" value=\"" + getIdgruppo() + "\" />");
+            out.println("			</form>");
+            out.println("			</td>");
+            out.println("			<td>");
+            out.println("			<form action=\"pdfservlet\" method=\"POST\" name=\"gotopdfwriter\">");
+            out.println("				<button class=\"btn btn-default\" type=\"submit\">PDF</button>");
+            out.println("				<input name=\"groupID\" type=\"hidden\" value=\"" + getIdgruppo() + "\" />");
+            out.println("			</form>");
+            out.println("			</td>");
         }
         out.println("");
         out.println("                    </tr>");
+
     }
 
 }
