@@ -267,7 +267,17 @@ public class DBManager implements Serializable {
         return posts;
 
     }
-
+    
+    /**
+     *  Va chiamata per impostare nel db, la conferma di appartenenza ad un gruppo da parte dell'utente
+     * Intuitivamente, la funzione dovrà essere chiamata per ogni checkbox selezionata
+     * @param u l'utente che sta accettando l'invito
+     * @param idgruppo qui devi passare l'idgruppo di cui hai accettato l'invito
+     * @throws SQLException 
+     * 
+     * @nota puoi anche decidere di fare che nella inviti c'è una form per ogni riga e poi una volta
+     * premuto devi aggiornare la pagina con gli inviti ancora non accettati
+     */
     public void setAccettaInvito(Utente u, int idgruppo) throws SQLException {
         int idutente = u.getId();
 
@@ -285,12 +295,12 @@ public class DBManager implements Serializable {
     }
 
     /**
-     *
+     * Creazione di un gruppo dando in input utente e nome del gruppo
      * @param u qui serve dare in input l'utente che sta chiamando la funzione
      * cioè chi sta creando il gruppo
      * @param nome qui bisogna mettere il nome che si vuole dare al gruppo La
      * data la prende appena chiamata. Dopo questa funzione è necessario
-     * chiamare la inviteAllYouDesire passandoli un List<Integer> idInvitati
+     * @see inviteAllYouDesire passandoli un List<Integer> idInvitati
      */
     public void creaGruppo(Utente u, String nome) throws SQLException {
         int idutente = u.getId();
@@ -311,7 +321,9 @@ public class DBManager implements Serializable {
     }
 
     /**
-     * 
+     * Funzione complementare alla creazione gruppo questa si occupa di mandare gli inviti per il nuovo
+     * gruppo, ovviamente bisogna darli la List<integer> degli id, in caso di problemi la
+     * funzione può essere facilmente sistemata su un id alla volta
      * @param idinvitati la List<Integer> di tutti gli id di quelli che vuoi
      * invitare
      * @param idgruppo l'id del gruppo a cui stai per invitare i tuoi amichetti
