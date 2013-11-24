@@ -68,6 +68,8 @@ public class SessionFilter implements Filter {
             String login_page = filterConfig.getInitParameter("login_page");
             
             request.getRequestDispatcher("/index.jsp").forward(request, response);
+            
+            
 
             chain.doFilter(request, response);
 
