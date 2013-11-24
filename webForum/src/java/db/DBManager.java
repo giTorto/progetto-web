@@ -228,7 +228,7 @@ public class DBManager implements Serializable {
     }
 
     /**
-     *
+     * Permette di ottenere facilmente la lista di tutti i post di un gruppo
      * @param g dai in input il gruppo di cui vuoi vedere i post
      * @return ricevi la lista dei post in ordine di data inversa
      * @throws SQLException
@@ -349,7 +349,7 @@ public class DBManager implements Serializable {
     }
 
     /**
-     * 
+     * Permette l'inserimento di un post nel database
      * @param u devi dare in input l'utente della sessione attuale
      * @param idgruppo devi dare in input l'id del gruppo che stai visualizzando
      * @param testo qui va il testo che deve essere inserito nel post
