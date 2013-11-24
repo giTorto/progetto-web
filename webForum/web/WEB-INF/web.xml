@@ -52,6 +52,14 @@
         <servlet-name>accettaInvitiSrvlt</servlet-name>
         <servlet-class>servlet.accettaInvitiSrvlt</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>DisplayGroupSrvlt</servlet-name>
+        <servlet-class>servlet.DisplayGroupSrvlt</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ModificaGruppoSrvlt</servlet-name>
+        <servlet-class>servlet.ModificaGruppoSrvlt</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -99,6 +107,14 @@
     <servlet-mapping>
         <servlet-name>accettaInvitiSrvlt</servlet-name>
         <url-pattern>/logg/accettaInvitiSrvlt</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DisplayGroupSrvlt</servlet-name>
+        <url-pattern>/logg/displaygroup</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ModificaGruppoSrvlt</servlet-name>
+        <url-pattern>/logg/modificaGruppo</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

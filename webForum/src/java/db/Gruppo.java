@@ -63,7 +63,7 @@ public class Gruppo {
         out.println("			<td>");
         if (this.getOwnerName().equals(u.getUserName())) {
             
-            out.println("			<form action=\"modificaGruppo\" method=\"GET\" name=\"altergroup\">");
+            out.println("			<form action=\"modificaGruppo\" method=\"POST\" name=\"altergroup\">");
             out.println("				<button class=\"btn btn-default\" type=\"submit\">Modifica</button>");
             out.println("				<input name=\"groupID\" type=\"hidden\" value=\"" + getIdgruppo() + "\" />");
             out.println("			</form>");
