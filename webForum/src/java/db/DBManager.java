@@ -228,7 +228,8 @@ public class DBManager implements Serializable {
     }
 
     /**
-     * Permette di ottenere facilmente la lista di tutti i post di un gruppo
+     * Permette di ottenere facilmente la lista di tutti i post di un gruppo ora
+     * perfezionata, in ogni post c'è un oggetto Utente che è il writer
      *
      * @param g dai in input il gruppo di cui vuoi vedere i post
      * @return ricevi la lista dei post in ordine di data inversa
@@ -253,7 +254,7 @@ public class DBManager implements Serializable {
                     //Utente tu = getMoreUtente(rs.getInt("idwriter"));
                     p.setTesto(rs.getString("testo"));
                     p.setData_ora(rs.getDate("data_ora"));
-                    //p.setWriter(tu);
+                    p.setWriter(getMoreUtente(rs.getInt("idwriter")));
                     posts.add(p);
                 }
             } finally {
@@ -382,10 +383,16 @@ public class DBManager implements Serializable {
             stm.close();
         }
     }
-
+    
+    /**
+     * Dato un idgruppo restituisce un oggetto contenente tutte le sue info
+     * @param Idgruppo
+     * @return oggetto
+     * @throws SQLException 
+     */
     public Gruppo getGruppo(int Idgruppo) throws SQLException {
 
-        List<Gruppo> gruppi = new ArrayList<Gruppo>();
+        Gruppo gruppetto = new Gruppo();
         PreparedStatement stm = con.prepareStatement("SELECT * FROM gruppo g where g.idgruppo=?");
 
         try {
@@ -393,14 +400,12 @@ public class DBManager implements Serializable {
             ResultSet rs = stm.executeQuery();
 
             try {
-                while (rs.next()) {
-                    Gruppo group = new Gruppo();
-                    group.setNome(rs.getString("nome"));
-                    group.setDataCreazione(rs.getDate("datacreazione"));
-                    group.setIdgruppo(rs.getInt("idgruppo"));
-                    group.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
-                    gruppi.add(group);
-                }
+                                   
+                    gruppetto.setNome(rs.getString("nome"));
+                    gruppetto.setDataCreazione(rs.getDate("datacreazione"));
+                    gruppetto.setIdgruppo(rs.getInt("idgruppo"));
+                    gruppetto.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
+                 
             } finally {
                 rs.close();
             }
@@ -408,7 +413,142 @@ public class DBManager implements Serializable {
             stm.close();
         }
 
-        return gruppi.get(0);
+        return gruppetto;
     }
 
+    /**
+     * GeneraPDF: prima delle funzioni, prende dal db le informazioni necessarie
+     * per restituire la lista utenti in ordine alfabetico
+     *
+     * @param idgruppo è il campo necessario per riconoscere in modo univoco il
+     * gruppo
+     * @return restituisce la lista degli id degli utenti che partecipano al
+     * gruppo
+     * @NotaBENE non restituisce l'owner del gruppo, gli id restituiti sono in
+     * ordine alfabetico
+     * @throws SQLException
+     */
+    public List<Integer> getUtenti(int idgruppo) throws SQLException {
+
+        List<Integer> allUsers = new ArrayList<Integer>();
+        PreparedStatement stm
+                = con.prepareStatement("SELECT * FROM gruppi_partecipanti "
+                        + "WHERE idgruppo = ? ORDER BY username ");
+
+        try {
+            stm.setInt(1, idgruppo);
+            ResultSet rs = stm.executeQuery();
+
+            try {
+
+                while (rs.next()) {
+                    Integer ut;
+                    ut = rs.getInt("idutente");
+
+                    allUsers.add(ut);
+                }
+            } finally {
+
+                rs.close();
+            }
+        } finally {
+
+            stm.close();
+        }
+
+        return allUsers;
+    }
+
+    /**
+     * Funzione accessoria di generaPDF Dato un idgruppo e un idutente dice
+     * quanti post ha effettuato
+     *
+     * @param idgruppo l'identificatore del grupp
+     * @param idutente l'identificatore dell'utente
+     * @return restituisce il numero degli utenti
+     * @throws SQLException
+     * @NOTABENE se usata sulla lista degli id restituita da getUtenti permette
+     * di sapere quanti post ha fatto ogni utente
+     */
+    public int getPostPerUtente(int idgruppo, int idutente) throws SQLException {
+        int postPerUtente = 0;
+
+        PreparedStatement stm
+                = con.prepareStatement("SELECT COUNT(p.idwriter) "
+                        + "FROM post p  "
+                        + "WHERE g.idgruppo = ? "
+                        + "AND p.idwriter = ?");
+
+        try {
+            stm.setInt(1, idgruppo);
+            stm.setInt(2, idutente);
+            ResultSet rs = stm.executeQuery();
+
+            postPerUtente = rs.getInt(1);
+            rs.close();
+
+        } finally {
+
+            stm.close();
+        }
+
+        return postPerUtente;
+
+    }
+
+    /**
+     * Generapdf: seconda funz, Restituisce il numero di post totali effettuati nel gruppo
+     * @param idgruppo l'identificatore del gruppo 
+     * @return restituisce un numero intero con tutti i post effettuati
+     * @throws SQLException
+     */
+    public int getNumPostPerGruppo(int idgruppo) throws SQLException {
+        int posTot = 0;
+
+        PreparedStatement stm
+                = con.prepareStatement("SELECT COUNT(p.idgruppo) "
+                        + "FROM post p  "
+                        + "WHERE g.idgruppo = ? ");
+
+        try {
+            stm.setInt(1, idgruppo);
+
+            ResultSet rs = stm.executeQuery();
+
+            posTot = rs.getInt(1);
+
+            rs.close();
+        } finally {
+            stm.close();
+        }
+
+        return posTot;
+    }
+
+    /**
+     * Generapdf: Permette di trovare qual'è la data dell'ultimo post di un certo gruppo
+     * @param idgruppo di quale gruppo si vuole sapere la data dell'ultimo post
+     * @return restituisce null in caso non ci sia mai stato nessun post
+     * @throws SQLException 
+     */
+    public Date getDataUltimoPost(int idgruppo) throws SQLException{
+        Date data = null;
+        
+        PreparedStatement stm = con.prepareStatement("SELECT max(data_ora) from post where idgruppo = ? ");
+        
+        try{
+            stm.setInt(1,idgruppo);
+            ResultSet rs = stm.executeQuery();
+            data = rs.getDate(1);
+            rs.close();
+            
+        }finally{
+            stm.close();
+        }
+        
+        return data;
+        
+    }
+    
+    
 }
