@@ -70,9 +70,9 @@ public class gruppiSrvlt extends HttpServlet {
         out.println("    <html xmlns=\"http://www.w3.org/1999/xhtml\">");
         out.println("");
         out.println("        <head>");
-        out.println("<link href=\"dist/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
+        out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
         out.println("                <script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
-        out.println("                <script src=\"dist/js/bootstrap.min.js\"></script>");
+        out.println("                <script src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js\"></script>");
         out.println("                <meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\" />");
         out.println("                <title>Senza nome 1</title>");
         out.println("        </head>");

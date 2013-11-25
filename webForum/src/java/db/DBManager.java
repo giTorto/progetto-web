@@ -390,30 +390,28 @@ public class DBManager implements Serializable {
      * @return oggetto
      * @throws SQLException 
      */
-    public Gruppo getGruppo(int Idgruppo) throws SQLException {
-
-        Gruppo gruppetto = new Gruppo();
+public Gruppo getGruppo(int Idgruppo) throws SQLException {
+        List<Gruppo> gruppi = new ArrayList<Gruppo>();
         PreparedStatement stm = con.prepareStatement("SELECT * FROM gruppo g where g.idgruppo=?");
-
         try {
             stm.setInt(1, Idgruppo);
             ResultSet rs = stm.executeQuery();
-
             try {
-                                   
-                    gruppetto.setNome(rs.getString("nome"));
-                    gruppetto.setDataCreazione(rs.getDate("datacreazione"));
-                    gruppetto.setIdgruppo(rs.getInt("idgruppo"));
-                    gruppetto.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
-                 
+                while (rs.next()) {
+                    Gruppo group = new Gruppo();
+                    group.setNome(rs.getString("nome"));
+                    group.setDataCreazione(rs.getDate("datacreazione"));
+                    group.setIdgruppo(rs.getInt("idgruppo"));
+                    group.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
+                    gruppi.add(group);
+                }
             } finally {
                 rs.close();
             }
         } finally {
             stm.close();
         }
-
-        return gruppetto;
+        return gruppi.get(0);
     }
 
     /**

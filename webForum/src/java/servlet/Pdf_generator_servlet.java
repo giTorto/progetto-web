@@ -8,6 +8,7 @@ package servlet;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import db.DBManager;
 import db.Gruppo;
@@ -29,6 +30,8 @@ public class Pdf_generator_servlet extends HttpServlet {
 
     private DBManager manager;
     Gruppo gruppo;
+    int numpost=-1;
+    Date datalastpost;
 
     @Override
     public void init() {
@@ -50,7 +53,8 @@ public class Pdf_generator_servlet extends HttpServlet {
 
         try {
             gruppo = manager.getGruppo(Integer.parseInt(request.getParameter("groupID")));
-
+            numpost = manager.getNumPostPerGruppo(Integer.parseInt(request.getParameter("groupID")));
+            datalastpost = manager.getDataUltimoPost(Integer.parseInt(request.getParameter("groupID")));
         } catch (SQLException ex) {
             Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -64,11 +68,36 @@ public class Pdf_generator_servlet extends HttpServlet {
             PdfWriter.getInstance(document, response.getOutputStream());
 
             document.open();
-
-            document.add(new Paragraph(gruppo.getNome()));
-            document.add(new Paragraph(gruppo.getOwnerName()));
+            if (gruppo != null) {
+                document.add(new Paragraph("Nome del gruppo: " + gruppo.getNome()));
+                document.add(new Paragraph("Proprietario gruppo: " + gruppo.getOwnerName()));
+            } else {
+                document.add(new Paragraph("gruppo era null"));
+            }
             document.add(new Paragraph("#######"));
-            document.add(new Paragraph(new Date().toString()));
+            PdfPTable table = new PdfPTable(1); // Code 1
+
+            // Code 2
+            table.addCell("Nomi degli utenti partecipanti");
+            table.addCell("2");
+
+            // Code 3
+            table.addCell("3");
+            table.addCell("4");
+
+            // Code 4
+            table.addCell("5");
+            table.addCell("6");
+
+            // Code 5
+            document.add(table);
+            if (datalastpost == null || numpost == -1) {
+                document.add(new Paragraph("something null"));
+            } else {
+                document.add(new Paragraph("Data ultimo post: " + datalastpost.toString()));
+                document.add(new Paragraph("Numero di post inseriti in questo gruppo: " + numpost));
+            }
+
         } catch (DocumentException de) {
             de.printStackTrace();
             System.err.println("document: " + de.getMessage());
