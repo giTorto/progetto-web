@@ -70,12 +70,8 @@ public class main extends HttpServlet {
             out.println("<form method=\'post\' action=\'logoutSrvlt\' >");
             out.println("<input name=\"logout\" type=\"submit\" value=\"LogOut\">");
             out.println("</form>");
-            out.write("<html>");
-            out.write("<form action=\"UploadDownloadFileServlet\" method=\"post\" enctype=\"multipart/form-data\">");
-            out.write("Select File to Upload:<input type=\"file\" name=\"fileName\">");
-            out.write("<br>");
-            out.write("<input type=\"submit\" value=\"Upload\">");
-            out.write("</form>");
+          
+
             out.write("</body>");
             out.write("</html>");
             out.println("</body>");

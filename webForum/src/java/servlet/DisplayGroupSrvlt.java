@@ -31,6 +31,7 @@ public class DisplayGroupSrvlt extends HttpServlet {
     Gruppo gruppo;
     ArrayList<Post> postlist;
     Utente user;
+    String nuovopost = "";
 
     @Override
     public void init() {
@@ -49,31 +50,29 @@ public class DisplayGroupSrvlt extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String message = request.getParameter("messaggio");
-        if (message!=null || message.equals("") == false ) {
-            int groupid = Integer.parseInt(request.getParameter("groupID"));
-            HttpSession session = ((HttpServletRequest) request).getSession(false);
-            if (session != null) {
-                user = (Utente) session.getAttribute("user");
-            }
+
+        int idgruppo = Integer.parseInt(request.getParameter("groupID"));
+        HttpSession session = ((HttpServletRequest) request).getSession(false);
+        if (session != null) {
+            user = (Utente) session.getAttribute("user");
+        }
+
+        nuovopost = request.getParameter("messaggio");
+        if (nuovopost != null) {
             try {
-                manager.aggiungiPost(user, groupid, message);
+                manager.aggiungiPost(user, idgruppo, nuovopost);
             } catch (SQLException ex) {
                 Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
+                ((HttpServletResponse) response).sendRedirect("errorpage.html");
             }
         }
 
         try {
-            gruppo = manager.getGruppo(Integer.parseInt(request.getParameter("groupID")));
+            gruppo = manager.getGruppo(idgruppo);
             postlist = (ArrayList<Post>) manager.getPostsGruppo(gruppo);
         } catch (SQLException ex) {
             Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        HttpSession session = ((HttpServletRequest) request).getSession(false);
-        if (session != null) {
-            user = (Utente) session.getAttribute("user");
+            //((HttpServletResponse)response).sendRedirect("errorpage.html");
         }
 
         response.setContentType("text/html;charset=UTF-8");
@@ -96,11 +95,22 @@ public class DisplayGroupSrvlt extends HttpServlet {
 
             out.println("<div>");
             out.println("");
-            out.println("	<h1>" + gruppo.getNome() + "<br>1&nbsp;&nbsp;File del gruppo&nbsp;&nbsp;&nbsp;&nbsp;<input name=\"Button1\" type=\"button\" value=\"gestione file\">");
+            out.println("<h1>" + gruppo.getNome() + "</h1><br>");
+            out.write("<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "/gestionefile\" method=\"post\" enctype=\"multipart/form-data\">");
+            out.write("Select File to Upload:<input type=\"file\" name=\"fileName1\">");
+            out.write("<br>");
+            out.write("Select File to Upload:<input type=\"file\" name=\"fileName2\">");
+            out.write("<br>");
+            out.write("Select File to Upload:<input type=\"file\" name=\"fileName3\">");
+            out.write("<br>");
+            out.write("<input type=\"submit\" value=\"Upload\">");
+            out.write("</form>");
+
             out.println("	</h1>");
+
             out.println("	<p></p>");
-            out.println("	<form action=\"\" method=\"post\">");
-            out.println("		<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name=\"Submit1\" type=\"submit\" value=\"send\" /></form>");
+            out.println("	<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "\" method=\"post\">");
+            out.println("	<input name=\"groupID\" type=\"hidden\" value=\"" + gruppo.getIdgruppo() + "\" />	<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name=\"Submit1\" type=\"submit\" value=\"send\" /></form>");
             out.println("	<p></p>");
             out.println("</div>");
             out.println("<div>");
@@ -117,53 +127,6 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.println("</html>");
             out.println("");
 
-//            out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
-//            out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
-//            out.println("");
-//            out.println("<head>");
-//            out.println("<meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\" />");
-//            out.println("<title>Senza nome 1</title>");
-//            out.println("</head>");
-//            out.println("");
-//            out.println("<body>");
-//            out.println("");
-//            out.println("<div>");
-//            out.println("	<p></p>");
-//            out.println("	<h1>" + gruppo.getNome() + "<br></br>" + gruppo.getIdgruppo() + "</h1>");
-//            out.println("	<p></p>");
-//            out.println("</div>");
-//            out.println("<div>");
-//            out.println("	<ul>");
-//            for (Post post : postlist) {
-//                post.tohtmlrow(out, user);
-//
-//            }
-//            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
-//            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
-//            out.println("		<br></li>");
-//            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
-//            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
-//            out.println("		<br></li>");
-//            out.println("		<li><label id=\"Label1\">contenuto post</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">ora ");
-//            out.println("		del post</label>&nbsp;&nbsp;<label id=\"Label1\">nome autore</label><br>");
-//            out.println("		<br></li>");
-//            out.println("	</ul>");
-//            out.println("</div>");
-//            out.println("<div>");
-//            out.println("	<h2>File del gruppo</h2>");
-//            out.println("&nbsp;&nbsp;&nbsp;&nbsp;<input name=\"Button1\" type=\"button\" value=\"upload file\" />");
-//            out.println("	<ul>");
-//            out.println("		<li><a href=\"link%20per%20scaricare%20il%20file\">Download nome file</a>");
-//            out.println("		</li>");
-//            out.println("		<li><a href=\"link%20per%20scaricare%20il%20file\">Download nome file</a>");
-//            out.println("		</li>");
-//            out.println("	</ul>");
-//            out.println("</div>");
-//            out.println("");
-//            out.println("</body>");
-//            out.println("");
-//            out.println("</html>");
-//            out.println("");
         } finally {
             out.close();
         }
@@ -195,9 +158,6 @@ public class DisplayGroupSrvlt extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        
-        
 
         processRequest(request, response);
     }

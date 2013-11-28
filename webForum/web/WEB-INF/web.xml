@@ -60,6 +60,18 @@
         <servlet-name>ModificaGruppoSrvlt</servlet-name>
         <servlet-class>servlet.ModificaGruppoSrvlt</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GestioneFile</servlet-name>
+        <servlet-class>servlet.GestioneFile</servlet-class>
+        <init-param>
+            <param-name>
+                uploadDir
+</param-name>
+            <param-value>
+                /tmp
+</param-value>
+        </init-param>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -98,7 +110,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>UploadDownloadFileServlet</servlet-name>
-        <url-pattern>/logg/UploadDownloadFileServlet</url-pattern>
+        <url-pattern>/logg/main/UploadDownloadFileServlet</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>main</servlet-name>
@@ -115,6 +127,10 @@
     <servlet-mapping>
         <servlet-name>ModificaGruppoSrvlt</servlet-name>
         <url-pattern>/logg/modificaGruppo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GestioneFile</servlet-name>
+        <url-pattern>/logg/displaygroup/gestionefile</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

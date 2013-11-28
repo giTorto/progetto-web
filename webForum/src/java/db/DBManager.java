@@ -8,6 +8,7 @@ package db;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.Date;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,6 +16,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+
 import java.util.logging.Logger;
 
 /**
@@ -378,19 +380,22 @@ public class DBManager implements Serializable {
             stm.setString(2, testo);
             stm.setInt(3, idutente);
             stm.setInt(4, idgruppo);
-            ResultSet rs = stm.executeQuery();
+            int executeUpdate = stm.executeUpdate();
+        } catch (SQLException ex) {
+
         } finally {
             stm.close();
         }
     }
-    
+
     /**
      * Dato un idgruppo restituisce un oggetto contenente tutte le sue info
+     *
      * @param Idgruppo
      * @return oggetto
-     * @throws SQLException 
+     * @throws SQLException
      */
-public Gruppo getGruppo(int Idgruppo) throws SQLException {
+    public Gruppo getGruppo(int Idgruppo) throws SQLException {
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
         PreparedStatement stm = con.prepareStatement("SELECT * FROM gruppo g where g.idgruppo=?");
         try {
@@ -495,8 +500,10 @@ public Gruppo getGruppo(int Idgruppo) throws SQLException {
     }
 
     /**
-     * Generapdf: seconda funz, Restituisce il numero di post totali effettuati nel gruppo
-     * @param idgruppo l'identificatore del gruppo 
+     * Generapdf: seconda funz, Restituisce il numero di post totali effettuati
+     * nel gruppo
+     *
+     * @param idgruppo l'identificatore del gruppo
      * @return restituisce un numero intero con tutti i post effettuati
      * @throws SQLException
      */
@@ -524,29 +531,30 @@ public Gruppo getGruppo(int Idgruppo) throws SQLException {
     }
 
     /**
-     * Generapdf: Permette di trovare qual'è la data dell'ultimo post di un certo gruppo
+     * Generapdf: Permette di trovare qual'è la data dell'ultimo post di un
+     * certo gruppo
+     *
      * @param idgruppo di quale gruppo si vuole sapere la data dell'ultimo post
      * @return restituisce null in caso non ci sia mai stato nessun post
-     * @throws SQLException 
+     * @throws SQLException
      */
-    public Date getDataUltimoPost(int idgruppo) throws SQLException{
+    public Date getDataUltimoPost(int idgruppo) throws SQLException {
         Date data = null;
-        
+
         PreparedStatement stm = con.prepareStatement("SELECT max(data_ora) from post where idgruppo = ? ");
-        
-        try{
-            stm.setInt(1,idgruppo);
+
+        try {
+            stm.setInt(1, idgruppo);
             ResultSet rs = stm.executeQuery();
             data = rs.getDate(1);
             rs.close();
-            
-        }finally{
+
+        } finally {
             stm.close();
         }
-        
+
         return data;
-        
+
     }
-    
-    
+
 }
