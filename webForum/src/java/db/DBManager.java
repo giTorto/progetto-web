@@ -371,7 +371,7 @@ public class DBManager implements Serializable {
         Date data = new Date(Calendar.getInstance().getTimeInMillis());
 
         PreparedStatement stm
-                = con.prepareStatement("INSERT INTO gruppo (data_ora,testo,idwriter,idgruppo) values(?,?,?,?) ");
+                = con.prepareStatement("INSERT INTO POST (data_ora,testo,idwriter,idgruppo) values(?,?,?,?) ");
 
         try {
             stm.setDate(1, data);
