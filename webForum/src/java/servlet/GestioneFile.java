@@ -87,6 +87,25 @@ public class GestioneFile extends HttpServlet {
         out.write("<br>");
         out.write("<input type=\"submit\" value=\"Upload\">");
         out.write("</form>");
+         /*
+         *
+         */
+        File folder = new File(request.getServletContext().getAttribute("FILES_DIR") + File.separator);
+        File[] listOfFiles = folder.listFiles();
+
+        String filesname = "placeholder";
+
+        for (int i = 0; i < listOfFiles.length; i++) {
+
+            if (listOfFiles[i].isFile()) {
+                filesname = listOfFiles[i].getName();
+                out.write("<a href=\"gestione file?fileName=" + filesname + "\">Download " + filesname + "</a><br><br>");
+
+            }
+        }
+        /*
+         *
+         */
         try {
             fileItemsList = uploader.parseRequest(request);
             Iterator<FileItem> fileItemsIterator = fileItemsList.iterator();
@@ -102,7 +121,7 @@ public class GestioneFile extends HttpServlet {
                 fileItem.write(file);
                 out.write("File " + fileItem.getName() + " uploaded successfully.");
                 out.write("<br>");
-                out.write("<a href=\"UploadDownloadFileServlet?fileName=" + fileItem.getName() + "\">Download " + fileItem.getName() + "</a><br><br>");
+                out.write("<a href=\"gestionefile?fileName=" + fileItem.getName() + "\">Download " + fileItem.getName() + "</a><br><br>");
             }
 
         } catch (FileUploadException e) {
@@ -116,25 +135,7 @@ public class GestioneFile extends HttpServlet {
             out.write("");
         }
 
-        /*
-         *
-         */
-        File folder = new File(request.getServletContext().getAttribute("FILES_DIR") + File.separator);
-        File[] listOfFiles = folder.listFiles();
-
-        String filesname = "placeholder";
-
-        for (int i = 0; i < listOfFiles.length; i++) {
-
-            if (listOfFiles[i].isFile()) {
-                filesname = listOfFiles[i].getName();
-                out.write("<a href=\"UploadDownloadFileServlet?fileName=" + filesname + "\">Download " + filesname + "</a><br><br>");
-
-            }
-        }
-        /*
-         *
-         */
+       
         out.write("</body></html>");
     }
 

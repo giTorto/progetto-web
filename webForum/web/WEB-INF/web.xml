@@ -40,10 +40,7 @@
         <servlet-name>FileLocationContextListener</servlet-name>
         <servlet-class>servlet.FileLocationContextListener</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>UploadDownloadFileServlet</servlet-name>
-        <servlet-class>servlet.UploadDownloadFileServlet</servlet-class>
-    </servlet>
+    
     <servlet>
         <servlet-name>main</servlet-name>
         <servlet-class>servlet.main</servlet-class>
@@ -108,10 +105,7 @@
         <servlet-name>FileLocationContextListener</servlet-name>
         <url-pattern>/logg/FileLocationContextListener</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UploadDownloadFileServlet</servlet-name>
-        <url-pattern>/logg/main/UploadDownloadFileServlet</url-pattern>
-    </servlet-mapping>
+    
     <servlet-mapping>
         <servlet-name>main</servlet-name>
         <url-pattern>/logg/main</url-pattern>
