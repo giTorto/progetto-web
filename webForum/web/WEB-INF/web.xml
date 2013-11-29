@@ -40,7 +40,6 @@
         <servlet-name>FileLocationContextListener</servlet-name>
         <servlet-class>servlet.FileLocationContextListener</servlet-class>
     </servlet>
-    
     <servlet>
         <servlet-name>main</servlet-name>
         <servlet-class>servlet.main</servlet-class>
@@ -105,7 +104,6 @@
         <servlet-name>FileLocationContextListener</servlet-name>
         <url-pattern>/logg/FileLocationContextListener</url-pattern>
     </servlet-mapping>
-    
     <servlet-mapping>
         <servlet-name>main</servlet-name>
         <url-pattern>/logg/main</url-pattern>
@@ -139,6 +137,14 @@
             <param-value>/index.jsp</param-value>
         </init-param>
     </filter>
+    <filter>
+        <filter-name>GroupChangeName</filter-name>
+        <filter-class>filter.GroupChangeName</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>GroupChangeName</filter-name>
+        <url-pattern>/logg/gruppiSrvlt</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>SessionFilter</filter-name>
         <url-pattern>/logg/*</url-pattern>

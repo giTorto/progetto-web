@@ -557,4 +557,19 @@ public class DBManager implements Serializable {
 
     }
 
+    public void updateGroupName(int idgroup, String nuovo_nome) throws SQLException {
+
+        PreparedStatement stm = con.prepareStatement("UPDATE GRUPPO   SET NOME = ?  WHERE IDGRUPPO = ?");
+        try {
+            stm.setString(1, nuovo_nome);
+            stm.setInt(2, idgroup);
+
+            int executeUpdate = stm.executeUpdate();
+        } catch (SQLException ex) {
+            System.err.println("Errore nell'aggiornare il gruppo con id:" + idgroup);
+        } finally {
+            stm.close();
+        }
+    }
+
 }

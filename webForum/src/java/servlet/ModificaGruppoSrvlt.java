@@ -71,14 +71,14 @@ public class ModificaGruppoSrvlt extends HttpServlet {
             out.println("<body>");
             out.println("");
             out.println("<h2>Nome gruppo:</h2>");
-            out.println("			<form action=\"\" method=\"post\" name=\"\">");
+            out.println("			<form action=\"" + request.getContextPath() + "/logg/gruppiSrvlt\" method=\"post\" name=\"\">");
             out.println("<div class=\"row\">");
             out.println("	<div class=\"col-lg-6\">");
             out.println("		<div class=\"input-group\">");
-
-            out.println("				<input class=\"form-control\" type=\"text\">");
+            out.println("				<input name=\"groupID\" type=\"hidden\" value=\"" + gruppo.getIdgruppo() + "\" />");
+            out.println("				<input class=\"form-control\" name=\"nuovo_nome_gruppo\" type=\"text\" value=\"" + gruppo.getNome() + "\">");
             out.println("				<span class=\"input-group-btn\">");
-            out.println("				<button class=\"btn btn-default\" type=\"button\">Salva modifche");
+            out.println("				<button class=\"btn btn-default\" type=\"submit\">Salva modifche");
             out.println("				</button></span>");
 
             out.println("		</div>");
@@ -93,10 +93,10 @@ public class ModificaGruppoSrvlt extends HttpServlet {
             out.println("<div class=\"row\">");
             out.println("	<div class=\"col-lg-6\">");
             out.println("		<div class=\"input-group\">");
-
-            out.println("				<input class=\"form-control\" name=\"areainviti\" size=\"50\" type=\"text\" value=\"username1,username2\">");
+            out.println("				<input name=\"groupID\" type=\"hidden\" value=\"" + gruppo.getIdgruppo() + "\" />");
+            out.println("				<input class=\"form-control\" name=\"areainviti\" size=\"50\" type=\"text\" value=\"ad es: username1,username2\">");
             out.println("				<span class=\"input-group-btn\">");
-            out.println("				<button class=\"btn btn-default\" type=\"button\">Salva modifche");
+            out.println("				<button class=\"btn btn-default\" type=\"submit\">Salva modifche");
             out.println("				</button>");
 
             out.println("			</span></div>");
