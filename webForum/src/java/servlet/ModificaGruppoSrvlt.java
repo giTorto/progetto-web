@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlet;
 
 import db.DBManager;
@@ -23,14 +22,16 @@ import javax.servlet.http.HttpServletResponse;
  * @author Lorenzo
  */
 public class ModificaGruppoSrvlt extends HttpServlet {
-private DBManager manager;
+
+    private DBManager manager;
     Gruppo gruppo;
-    
+
     @Override
     public void init() {
         // inizializza il DBManager dagli attributi di Application
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
     }
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -42,32 +43,76 @@ private DBManager manager;
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         try {
             gruppo = manager.getGruppo(Integer.parseInt(request.getParameter("groupID")));
 
         } catch (SQLException ex) {
             Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             /*
              * TODO output your page here. You may use following sample code.
              */
-             out.println("<!DOCTYPE html>");
-            out.println("<html>");
+            out.println("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
+            out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+            out.println("");
             out.println("<head>");
-            out.println("<title>Servlet DisplayGroupSrvlt</title>");            
+            out.println("<meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\" />");
+            out.println("<title>Senza nome 1</title>");
+            out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\">");
+            out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
+            out.println("<script src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js\"></script>");
             out.println("</head>");
+            out.println("");
             out.println("<body>");
-            out.println("<h1>Servlet DisplayGroupSrvlt at " + request.getContextPath() + "</h1>");
-           out.println("<h1>" + gruppo.getNome() + "</h1>");
-            
+            out.println("");
+            out.println("<h2>Nome gruppo:</h2>");
+            out.println("			<form action=\"\" method=\"post\" name=\"\">");
+            out.println("<div class=\"row\">");
+            out.println("	<div class=\"col-lg-6\">");
+            out.println("		<div class=\"input-group\">");
+
+            out.println("				<input class=\"form-control\" type=\"text\">");
+            out.println("				<span class=\"input-group-btn\">");
+            out.println("				<button class=\"btn btn-default\" type=\"button\">Salva modifche");
+            out.println("				</button></span>");
+
+            out.println("		</div>");
+            out.println("		<!-- /input-group --></div>");
+            out.println("	<!-- /.col-lg-6 --></div>");
+            out.println("<!-- /.row -->");
+            out.println("			</form><br><br>");
+            out.println("<h2>Inviti:</h2>");
+            out.println("<p>Inserisci gli username degli utenti che vuoi invitare separati da una virgola</p>");
+
+            out.println("			<form action=\"\" method=\"post\" name=\"\">");
+            out.println("<div class=\"row\">");
+            out.println("	<div class=\"col-lg-6\">");
+            out.println("		<div class=\"input-group\">");
+
+            out.println("				<input class=\"form-control\" name=\"areainviti\" size=\"50\" type=\"text\" value=\"username1,username2\">");
+            out.println("				<span class=\"input-group-btn\">");
+            out.println("				<button class=\"btn btn-default\" type=\"button\">Salva modifche");
+            out.println("				</button>");
+
+            out.println("			</span></div>");
+            out.println("		<!-- /input-group --></div>");
+            out.println("	<!-- /.col-lg-6 --></div>");
+            out.println("<!-- /.row -->");
+            out.println("			</form>");
+            out.println("");
             out.println("</body>");
+            out.println("");
             out.println("</html>");
+            out.println("");
+            out.println("");
+            out.println("");
+            out.println("");
+
         } finally {
             out.close();
         }
