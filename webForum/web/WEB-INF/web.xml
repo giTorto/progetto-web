@@ -68,6 +68,10 @@
 </param-value>
         </init-param>
     </servlet>
+    <servlet>
+        <servlet-name>aggiungiPost</servlet-name>
+        <servlet-class>servlet.aggiungiPost</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -123,6 +127,10 @@
     <servlet-mapping>
         <servlet-name>GestioneFile</servlet-name>
         <url-pattern>/logg/displaygroup/gestionefile</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>aggiungiPost</servlet-name>
+        <url-pattern>/logg/aggiungiPost</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

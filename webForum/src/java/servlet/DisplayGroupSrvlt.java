@@ -96,21 +96,20 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.println("<div>");
             out.println("");
             out.println("<h1>" + gruppo.getNome() + "</h1><br>");
-            out.write("<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "/gestionefile\" method=\"post\" enctype=\"multipart/form-data\">");
-            out.write("Select File to Upload:<input type=\"file\" name=\"fileName1\">");
-            out.write("<br>");
-            out.write("Select File to Upload:<input type=\"file\" name=\"fileName2\">");
-            out.write("<br>");
-            out.write("Select File to Upload:<input type=\"file\" name=\"fileName3\">");
+            //out.write("<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "/gestionefile\" method=\"post\" enctype=\"multipart/form-data\">");
+            out.write("<form action=\"aggiungiPost\" method =\"post\" ");
+            out.write("Select File to Upload:<input type=\"file\" name=\"file\">");
             out.write("<br>");
             out.write("<input type=\"submit\" value=\"Upload\">");
-            out.write("</form>");
+            //out.write("</form>");
 
             out.println("	</h1>");
 
             out.println("	<p></p>");
-            out.println("	<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "\" method=\"post\">");
-            out.println("	<input name=\"groupID\" type=\"hidden\" value=\"" + gruppo.getIdgruppo() + "\" />	<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input name=\"Submit1\" type=\"submit\" value=\"send\" /></form>");
+           // out.println("	<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "\" method=\"post\">");
+            out.println("	<input name=\"groupID\" type=\"hidden\" value=\"" + gruppo.getIdgruppo() + "\" />	"
+                    + "<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                    + "<input name=\"Submit1\" type=\"submit\" value=\"send\" /></form>");
             out.println("	<p></p>");
             out.println("</div>");
             out.println("<div>");

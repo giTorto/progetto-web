@@ -396,19 +396,19 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public Gruppo getGruppo(int Idgruppo) throws SQLException {
-        List<Gruppo> gruppi = new ArrayList<Gruppo>();
+       Gruppo group = new Gruppo();
         PreparedStatement stm = con.prepareStatement("SELECT * FROM gruppo g where g.idgruppo=?");
         try {
             stm.setInt(1, Idgruppo);
             ResultSet rs = stm.executeQuery();
             try {
                 while (rs.next()) {
-                    Gruppo group = new Gruppo();
+                   
                     group.setNome(rs.getString("nome"));
                     group.setDataCreazione(rs.getDate("datacreazione"));
                     group.setIdgruppo(rs.getInt("idgruppo"));
                     group.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
-                    gruppi.add(group);
+                
                 }
             } finally {
                 rs.close();
@@ -416,7 +416,7 @@ public class DBManager implements Serializable {
         } finally {
             stm.close();
         }
-        return gruppi.get(0);
+        return group;
     }
 
     /**
