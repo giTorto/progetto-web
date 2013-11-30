@@ -69,16 +69,16 @@ public class invitiSrvlt extends HttpServlet {
             out.println("<body>");
             out.println("<h1> Inviti a " + user.getUserName() + "</h1>");
             out.println("<h1>Servlet invitiSrvlt at " + request.getContextPath() + "</h1>");
-            out.println("<form>");
-            out.println("<table border=\'1\'> <tr> <th> Owner </th> <th> Nome Gruppo </th> <th>Data creazione</th> <th> Accetti </th> </tr>");
-            int i = 0;
+            out.println("<form action=\"accettaInvitiSrvlt\" method=\"GET\">");
+            out.println("<table border=\'1\'> <tr> <th> Owner </th> <th> Nome Gruppo </th> <th>Data creazione</th> <th> Sei stato invitato<br>spunta la casella per accettare l'invito </th> </tr>");
+           
             for (Gruppo gruppo : inviti){
-                out.println("<tr> <td>"+ inviti.get(i).getOwnerName()+ "</td> <td> "+ inviti.get(i).getNome() + "</td><td>"+
-                        inviti.get(i).getDataCreazione().toString()+"</td><td><input name=\" "
-                        + inviti.get(i).getIdgruppo() +" \" type=\"checkbox\" value=\"Accetto\" checked=\"checked\"/></td>");
+                out.println("<tr> <td>"+ gruppo.getOwnerName()+ "</td> <td> "+ gruppo.getNome() + "</td><td>"+
+                       gruppo.getDataCreazione().toString()+"</td><td><input name=\""
+                        +gruppo.getIdgruppo() +"\" type=\"checkbox\" value=\"Accetto\" checked=\"checked\"/></td>");
             }
             out.println("</table> ");
-            out.println("<input type=\"submit\" value=\"Fatto\" action=\"accettaInvitiSrvlt\" > ");
+            out.println("<input type=\"submit\" value=\"Fatto\"  > ");
             out.println("</form> </body> </html>");
         } catch (SQLException ex) {
             Logger.getLogger(invitiSrvlt.class.getName()).log(Level.SEVERE, null, ex);

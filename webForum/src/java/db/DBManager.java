@@ -166,11 +166,9 @@ public class DBManager implements Serializable {
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
         int id = u.getId();
         PreparedStatement stm
-                = con.prepareStatement("SELECT * FROM (gruppo g"
-                        + " INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo) INNER JOIN utente u"
-                        + " ON gr.idutente = u.idutente"
-                        + " WHERE u.idutente = ? "
-                        + " AND gr.invito_acc = 0");
+                = con.prepareStatement("SELECT g.idgruppo,g.nome,g.idowner,g.datacreazione,grp.idutente,u.username,grp.invito_acc \n"
+                        + "FROM (gruppo g INNER JOIN gruppi_partecipanti grp ON grp.idgruppo = g.idgruppo) INNER JOIN utente u on grp.idutente=u.idutente\n"
+                        + "WHERE grp.idutente=? AND grp.invito_acc=0");
 
         try {
             stm.setInt(1, id);
@@ -396,19 +394,19 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public Gruppo getGruppo(int Idgruppo) throws SQLException {
-       Gruppo group = new Gruppo();
+        Gruppo group = new Gruppo();
         PreparedStatement stm = con.prepareStatement("SELECT * FROM gruppo g where g.idgruppo=?");
         try {
             stm.setInt(1, Idgruppo);
             ResultSet rs = stm.executeQuery();
             try {
                 while (rs.next()) {
-                   
+
                     group.setNome(rs.getString("nome"));
                     group.setDataCreazione(rs.getDate("datacreazione"));
                     group.setIdgruppo(rs.getInt("idgruppo"));
                     group.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
-                
+
                 }
             } finally {
                 rs.close();
@@ -567,6 +565,19 @@ public class DBManager implements Serializable {
             int executeUpdate = stm.executeUpdate();
         } catch (SQLException ex) {
             System.err.println("Errore nell'aggiornare il gruppo con id:" + idgroup);
+        } finally {
+            stm.close();
+        }
+    }
+
+    public void updatePartecipanti(int idutente, int id_gruppo_accettato) throws SQLException {
+        PreparedStatement stm = con.prepareStatement("UPDATE GRUPPI_PARTECIPANTI   SET INVITO_ACC = 1  WHERE IDUTENTE=? AND idgruppo=?");
+         try {
+           stm.setInt(1, idutente);
+           stm.setInt(2, id_gruppo_accettato);
+            int executeUpdate = stm.executeUpdate();
+        } catch (SQLException ex) {
+            System.err.println("Errore nell'aggiornare i partecipanti");
         } finally {
             stm.close();
         }
