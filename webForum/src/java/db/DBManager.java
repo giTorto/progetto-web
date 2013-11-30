@@ -506,26 +506,30 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public int getNumPostPerGruppo(int idgruppo) throws SQLException {
-        int posTot = 0;
 
         PreparedStatement stm
-                = con.prepareStatement("SELECT COUNT(p.idgruppo) "
+                = con.prepareStatement("SELECT COUNT (p.idgruppo) AS count "
                         + "FROM post p  "
-                        + "WHERE g.idgruppo = ? ");
+                        + "WHERE p.idgruppo = ?");
 
         try {
             stm.setInt(1, idgruppo);
+            ResultSet resultSet = stm.executeQuery();
 
-            ResultSet rs = stm.executeQuery();
+            try {
+                if (resultSet.next()) {
+                    return resultSet.getInt("count");
+                } else {
+                    return 0;
+                }
 
-            posTot = rs.getInt(1);
-
-            rs.close();
+            } finally {
+                resultSet.close();
+            }
         } finally {
             stm.close();
         }
 
-        return posTot;
     }
 
     /**
@@ -539,19 +543,26 @@ public class DBManager implements Serializable {
     public Date getDataUltimoPost(int idgruppo) throws SQLException {
         Date data = null;
 
-        PreparedStatement stm = con.prepareStatement("SELECT max(data_ora) from post where idgruppo = ? ");
+        PreparedStatement stm = con.prepareStatement("SELECT max(data_ora) as maxdata from post where idgruppo = ? ");
 
         try {
             stm.setInt(1, idgruppo);
-            ResultSet rs = stm.executeQuery();
-            data = rs.getDate(1);
-            rs.close();
+            ResultSet resultSet = stm.executeQuery();
 
+            try {
+                if (resultSet.next()) {
+                    return resultSet.getDate("maxdata");
+                } else {
+                    return null;
+                }
+
+            } finally {
+                resultSet.close();
+            }
         } finally {
             stm.close();
         }
 
-        return data;
 
     }
 
@@ -572,9 +583,9 @@ public class DBManager implements Serializable {
 
     public void updatePartecipanti(int idutente, int id_gruppo_accettato) throws SQLException {
         PreparedStatement stm = con.prepareStatement("UPDATE GRUPPI_PARTECIPANTI   SET INVITO_ACC = 1  WHERE IDUTENTE=? AND idgruppo=?");
-         try {
-           stm.setInt(1, idutente);
-           stm.setInt(2, id_gruppo_accettato);
+        try {
+            stm.setInt(1, idutente);
+            stm.setInt(2, id_gruppo_accettato);
             int executeUpdate = stm.executeUpdate();
         } catch (SQLException ex) {
             System.err.println("Errore nell'aggiornare i partecipanti");
