@@ -108,7 +108,7 @@ public class aggiungiPost extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
          // = (request.getParameter("idgruppo"));
-        int idgruppo=0 ;//= Integer.parseInt(ingruppo);
+        Integer idgruppo=0 ;//= Integer.parseInt(ingruppo);
         String messaggio="";// = (request.getParameter("messaggio"));
         String fileName,relPath;
         String path;
@@ -180,7 +180,7 @@ public class aggiungiPost extends HttpServlet {
             Logger.getLogger(aggiungiPost.class.getName()).log(Level.SEVERE, null, ex);
         }
          
-         processRequest(request,response);
+         response.sendRedirect(request.getContextPath()+ "/logg/DisplayGroupSrvlt?groupID="+idgruppo);
     }
 
     /**
@@ -317,7 +317,8 @@ public class aggiungiPost extends HttpServlet {
      * @return anchor tag aggiustata oppure il testo in input
      */
     public String createLink(String text, String name,String id){
-        String tmp;
+        int idt = Integer.parseInt(id);
+        int tmp;
         if("-1".equals(id)){
             if(!"".equals(name)){
                 tmp=manager.getLinkByName(text, name);
@@ -325,7 +326,7 @@ public class aggiungiPost extends HttpServlet {
             tmp=manager.getLRULink(text);
             }
         }else{
-            tmp=id;
+            tmp=idt;
         }
         if("".equals(tmp)){return text;}
         return "<a href='fileDownload?fileId="+tmp+"'>"+text+"<a>";

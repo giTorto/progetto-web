@@ -358,7 +358,7 @@ public class DBManager implements Serializable {
 
     }
 
-   /**
+    /**
      * Permette l'inserimento di un post nel database
      *
      * @param u devi dare in input l'utente della sessione attuale
@@ -387,7 +387,6 @@ public class DBManager implements Serializable {
             stm.close();
         }
     }
-
 
     /**
      * Dato un idgruppo restituisce un oggetto contenente tutte le sue info
@@ -637,43 +636,83 @@ public class DBManager implements Serializable {
      * @param userName Nome dell'utente da linkare
      * @return Url del file associato al nome Utente o stringa vuota
      */
-    public String getLinkByName(String fileName, String userName) {
-        String retVal = "";
-        ResultSet rs;
-        /*
-         * String query="SELECT FILEID FROM USERS.FILES WHERE
-         * realname='"+fileName+"' AND
-         * USERID=("+GET_ID_BY_NAME_QUERY+userName+"')"; rs=this.queryDB(query);
-         * try { if(rs.next()){ retVal=rs.getString("FILEID"); query="UPDATE
-         * USERS.FILES SET LASTUSED=CURRENT_TIMESTAMP WHERE FILEID="+retVal;
-         * conn.createStatement().executeUpdate(query); } } catch (SQLException
-         * ex) { Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE,
-         * null, ex);
+    public int getLinkByName(String fileName, String user) {
+        int retVal = 0;
+        try {
+            int id = (getMoreByUserName(user).getId());
+            ResultSet rs;
+
+            PreparedStatement stm
+                    = con.prepareStatement("SELECT * FROM POST WHERE idwriter = ? AND realname=?");
+            stm.setInt(1, id);
+            stm.setString(2,fileName);
+            
+            rs = stm.executeQuery();
+            retVal = rs.getInt("idpost");
+            
+            stm.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-         */
+
         return retVal;
     }
 
     /**
      * Ricerca l'ID del file basandosi sul nome. Il file ricercato è quello
-     * utilizzato più recentemente
+     * aggiunto per ultimo
      *
      * @param fileName Nome del FIlE da cercare
      * @return ID del file o stringa vuota
      */
-    public String getLRULink(String fileName) {
-        String retVal = "";
-        ResultSet rs;
-        String query = "SELECT FILEID FROM USERS.FILES WHERE realname='" + fileName + "' ORDER BY LASTUSED DESC FETCH FIRST 1 ROWS ONLY";
-    //    rs=this.queryDB(query);
+    public int getLRULink(String fileName) {
+       
+       int retVal = 0;
+        try {
+            
+            ResultSet rs;
 
-        /*
-         * try { if(rs.next()){ retVal=rs.getString("FILEID"); } } catch
-         * (SQLException ex) {
-         * Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null,
-         * ex);
-            }
-         */
+            PreparedStatement stm
+                    = con.prepareStatement("SELECT idpost FROM POST WHERE realname=? ORDER BY data_ora DESC FETCH FIRST 1 ROWS ONLY");
+            stm.setString(1,fileName);
+            
+            rs = stm.executeQuery();
+            retVal = rs.getInt("idpost");
+            
+            stm.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
         return retVal;
+    }
+
+    public Utente getMoreByUserName(String nome) throws SQLException {
+
+        PreparedStatement stm = con.prepareStatement("SELECT * FROM utente WHERE username = ?");
+        try {
+            stm.setString(1, nome);
+            ResultSet rs = stm.executeQuery();
+
+            try {
+                if (rs.next()) {
+                    Utente user = new Utente();
+                    user.setUserName(rs.getString("username"));
+
+                    user.setId(rs.getInt("idutente"));
+                    return user;
+                } else {
+                    return null;
+
+                }
+
+            } finally {
+                // ricordarsi SEMPRE di chiudere i ResultSet in un blocco finally 
+                rs.close();
+            }
+
+        } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
+            stm.close();
+        }
     }
 }
