@@ -97,10 +97,10 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.println("");
             out.println("<h1>" + gruppo.getNome() + "</h1><br>");
             //out.write("<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "/gestionefile\" method=\"post\" enctype=\"multipart/form-data\">");
-            out.write("<form action=\"aggiungiPost\" method =\"post\" ");
+            out.write("<form action=\"aggiungiPost\" method =\"post\"  enctype=\"multipart/form-data\" >");
             out.write("Select File to Upload:<input type=\"file\" name=\"file\">");
             out.write("<br>");
-            out.write("<input type=\"submit\" value=\"Upload\">");
+            //out.write("<input type=\"submit\" value=\"Upload\">");
             //out.write("</form>");
 
             out.println("	</h1>");

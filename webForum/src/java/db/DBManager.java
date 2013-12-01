@@ -13,9 +13,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
 
 import java.util.logging.Logger;
 
@@ -594,4 +596,37 @@ public class DBManager implements Serializable {
         }
     }
 
+        /**Aggiunge un nuovo file al DB
+     *
+     * @param user l'utente che ha aggiunto il post
+     * @param idgruppo ID del gruppo in cui è stato posto
+     * @param realname nome del file secondo l'utente
+     * @param dbname nome univoco del file generato automaticamente
+     * @param testo il testo del post
+     */
+    public void addPostFile(Utente user,int idgruppo,String realname,String dbname, String testo) throws SQLException{
+          int idutente = user.getId();
+
+        Date data = new Date(Calendar.getInstance().getTimeInMillis());
+
+        PreparedStatement stm
+                = con.prepareStatement("INSERT INTO POST (data_ora,testo,idwriter,idgruppo,realname,dbname) values(?,?,?,?,?,?) ");
+
+        try {
+            stm.setDate(1, data);
+            stm.setString(2, testo);
+            stm.setInt(3, idutente);
+            stm.setInt(4, idgruppo);
+            stm.setString(5, realname);
+            stm.setString(6,dbname);
+            int executeUpdate = stm.executeUpdate();
+        } catch (SQLException ex) {
+
+        } finally {
+            stm.close();
+        }
+       
+        
+        
+    }
 }

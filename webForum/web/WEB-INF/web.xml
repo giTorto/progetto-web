@@ -62,15 +62,19 @@
         <init-param>
             <param-name>
                 uploadDir
-</param-name>
+            </param-name>
             <param-value>
                 /tmp
-</param-value>
+            </param-value>
         </init-param>
     </servlet>
     <servlet>
         <servlet-name>aggiungiPost</servlet-name>
         <servlet-class>servlet.aggiungiPost</servlet-class>
+           <init-param>
+            <param-name> media </param-name>
+            <param-value> /logg/media </param-value>
+        </init-param>
     </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
@@ -165,4 +169,5 @@
         <param-name> dburl</param-name>
         <param-value>jdbc:derby://localhost:1527/webdb;user=utente;password=utente</param-value>
     </context-param>
+    
 </web-app>

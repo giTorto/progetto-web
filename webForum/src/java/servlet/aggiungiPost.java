@@ -8,10 +8,17 @@ package servlet;
 
 import db.DBManager;
 import db.Utente;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +27,11 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import java.io.FileOutputStream;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Timestamp;
+import org.apache.commons.fileupload.FileItemStream;
 
 /**
  *
@@ -27,6 +39,8 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
  */
 public class aggiungiPost extends HttpServlet {
     private DBManager manager;
+    MessageDigest messageDigest=null;
+     final String dollars="$$";
     
     @Override
     public void init() {
@@ -93,16 +107,58 @@ public class aggiungiPost extends HttpServlet {
             throws ServletException, IOException {
         int idgruppo = Integer.parseInt(request.getParameter("groupID"));
         String messaggio = (request.getParameter("messaggio"));
+        String fileName,relPath;
+        fileName = request.getParameter("file");
+        InputStream inStream; 
        
         HttpSession sessione = request.getSession();
-        Utente io = (Utente) sessione.getAttribute("user");
+        Utente user = (Utente) sessione.getAttribute("user");
         
-        ServletFileUpload file = new ServletFileUpload();
-        try {
-            FileItemIterator item = file.getItemIterator(request);
+       
+         try {
+            ServletFileUpload fileUpload = new ServletFileUpload();
+            FileItemIterator items = fileUpload.getItemIterator(request);
             
-            //processRequest(request, response);
-        } catch (FileUploadException ex) {
+            while (items.hasNext()) {
+                FileItemStream item = items.next();
+                if (!item.isFormField()) {
+                    InputStream is = new BufferedInputStream(item.openStream());
+                    if(is.available()>0){
+                        BufferedOutputStream output = null;
+                        try {
+                            ServletContext scx=getServletContext();
+                            String path=scx.getRealPath("")+"\\media";
+                            relPath = "media";
+                            path+="\\"+idgruppo;
+                            makeDir(path);
+                            fileName=formatName(item.getName());
+                            //seed è il seme per l'algoritmo di hashing, per renderlo unico è composto dal nome del file, l'id utente e il tempo preciso al millisecondo (che garantisce)
+                            
+                            String seed=fileName+user.getId()+new Timestamp(new java.util.Date().getTime()).toString();
+                            String tmp=md5(seed);
+                            tmp=tmp+getExtension(fileName);
+                            path+="\\"+tmp;
+                            relPath+="\\"+(idgruppo+"\\"+tmp);
+                            manager.addPostFile(user,idgruppo, fileName, tmp,messaggio);
+                            output = new BufferedOutputStream(new FileOutputStream(path, false));
+                            int data = -1;
+                            while ((data = is.read()) != -1) {
+                                output.write(data);
+                            }
+                            
+                        } catch(IOException ioe){
+                            throw new ServletException(ioe.getMessage());
+                        } catch (SQLException ex) {
+                            Logger.getLogger(aggiungiPost.class.getName()).log(Level.SEVERE, null, ex);
+                        }finally {
+                            is.close();
+                            if(output!=null){
+                                output.close();}
+                        }
+                    }
+                }
+            }
+        }catch (FileUploadException ex) {
             Logger.getLogger(aggiungiPost.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -116,5 +172,56 @@ public class aggiungiPost extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
+    
+    public void makeDir(String path) throws ServletException{
+        File theDir = new File(path);
+        if (!theDir.exists()) {
+            boolean result = theDir.mkdir();
+            if(!result) {
+                throw new ServletException("Cannot create a DIR");
+            }
+        }
+                 
+    }
+    
+      public String md5(String gen){
+        if(messageDigest==null){
+            try {
+                messageDigest = MessageDigest.getInstance("MD5");
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(aggiungiPost.class.getName()).log(Level.SEVERE, "Non va il cypher", ex);
+            }
+        }
+        byte[] mdbytes = messageDigest.digest(gen.getBytes());
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < mdbytes.length; i++) {
+            sb.append(Integer.toString((mdbytes[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        
+        return sb.toString();
+    }
+      
+         /**
+     *Su alcuni browser (IE) il file viene caricato con il path assoluto, quindi bisogna recuperare il solo nome del file 
+     * @param fileName
+     * @return vero nome del file
+     */
+    public String formatName(String fileName){
+        int index=fileName.lastIndexOf("\\");
+        if(index>0){
+            return fileName.substring(index+1);
+        }
+        return fileName;
+    }
 
+    
+      /**
+     *Dato un file, trova la sua estensione
+     * @param fileName nome del file da controllare
+     * @return estensione del file in input
+     */
+    public String getExtension(String fileName){
+        int index=fileName.lastIndexOf(".");
+        return (index>=0)?fileName.substring(index):"";
+    }
 }
