@@ -238,9 +238,9 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public List<Post> getPostsGruppo(Gruppo g) throws SQLException {
-        int id = g.getIdgruppo();
+
         List<Post> posts = new ArrayList<Post>();
-       
+        int id = g.getIdgruppo();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM post "
                         + "WHERE idgruppo = ? ORDER BY data_ora DESC");
@@ -358,7 +358,7 @@ public class DBManager implements Serializable {
 
     }
 
-    /**
+   /**
      * Permette l'inserimento di un post nel database
      *
      * @param u devi dare in input l'utente della sessione attuale
@@ -387,6 +387,7 @@ public class DBManager implements Serializable {
             stm.close();
         }
     }
+
 
     /**
      * Dato un idgruppo restituisce un oggetto contenente tutte le sue info
@@ -436,7 +437,7 @@ public class DBManager implements Serializable {
         List<Integer> allUsers = new ArrayList<Integer>();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM gruppi_partecipanti "
-                        + "WHERE idgruppo = ? ORDER BY username ");
+                        + "                        WHERE idgruppo = ? and invito_acc=1");
 
         try {
             stm.setInt(1, idgruppo);
@@ -445,7 +446,7 @@ public class DBManager implements Serializable {
             try {
 
                 while (rs.next()) {
-                    Integer ut;
+                    Integer ut = new Integer(0);
                     ut = rs.getInt("idutente");
 
                     allUsers.add(ut);
@@ -565,7 +566,6 @@ public class DBManager implements Serializable {
             stm.close();
         }
 
-
     }
 
     public void updateGroupName(int idgroup, String nuovo_nome) throws SQLException {
@@ -596,7 +596,8 @@ public class DBManager implements Serializable {
         }
     }
 
-        /**Aggiunge un nuovo file al DB
+    /**
+     * Aggiunge un nuovo file al DB
      *
      * @param user l'utente che ha aggiunto il post
      * @param idgruppo ID del gruppo in cui è stato posto
@@ -604,8 +605,8 @@ public class DBManager implements Serializable {
      * @param dbname nome univoco del file generato automaticamente
      * @param testo il testo del post
      */
-    public void addPostFile(Utente user,int idgruppo,String realname,String dbname, String testo) throws SQLException{
-          int idutente = user.getId();
+    public void addPostFile(Utente user, int idgruppo, String realname, String dbname, String testo) throws SQLException {
+        int idutente = user.getId();
 
         Date data = new Date(Calendar.getInstance().getTimeInMillis());
 
@@ -618,57 +619,61 @@ public class DBManager implements Serializable {
             stm.setInt(3, idutente);
             stm.setInt(4, idgruppo);
             stm.setString(5, realname);
-            stm.setString(6,dbname);
+            stm.setString(6, dbname);
             int executeUpdate = stm.executeUpdate();
         } catch (SQLException ex) {
 
         } finally {
             stm.close();
         }
-        
+
     }
-    
+
     /**
-     *Ricerca l'ID del file basandosi sul nome. Se il file viene trovato, viene impostato un campo per indicarlo come recente
+     * Ricerca l'ID del file basandosi sul nome. Se il file viene trovato, viene
+     * impostato un campo per indicarlo come recente
+     *
      * @param fileName Nome del file
      * @param userName Nome dell'utente da linkare
      * @return Url del file associato al nome Utente o stringa vuota
      */
-    public String getLinkByName(String fileName, String userName){
-        String retVal="";
+    public String getLinkByName(String fileName, String userName) {
+        String retVal = "";
         ResultSet rs;
-      /*  String query="SELECT FILEID FROM USERS.FILES WHERE realname='"+fileName+"' AND USERID=("+GET_ID_BY_NAME_QUERY+userName+"')";
-        rs=this.queryDB(query);
-        try {
-            if(rs.next()){
-                retVal=rs.getString("FILEID");
-                query="UPDATE USERS.FILES SET LASTUSED=CURRENT_TIMESTAMP WHERE FILEID="+retVal;
-                conn.createStatement().executeUpdate(query);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }*/
+        /*
+         * String query="SELECT FILEID FROM USERS.FILES WHERE
+         * realname='"+fileName+"' AND
+         * USERID=("+GET_ID_BY_NAME_QUERY+userName+"')"; rs=this.queryDB(query);
+         * try { if(rs.next()){ retVal=rs.getString("FILEID"); query="UPDATE
+         * USERS.FILES SET LASTUSED=CURRENT_TIMESTAMP WHERE FILEID="+retVal;
+         * conn.createStatement().executeUpdate(query); } } catch (SQLException
+         * ex) { Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE,
+         * null, ex);
+        }
+         */
         return retVal;
     }
-    
+
     /**
-     * Ricerca l'ID del file basandosi sul nome. Il file ricercato è quello utilizzato più recentemente
+     * Ricerca l'ID del file basandosi sul nome. Il file ricercato è quello
+     * utilizzato più recentemente
+     *
      * @param fileName Nome del FIlE da cercare
      * @return ID del file o stringa vuota
      */
-    public String getLRULink(String fileName){
-        String retVal="";
-        ResultSet rs ;
-        String query="SELECT FILEID FROM USERS.FILES WHERE realname='"+fileName+"' ORDER BY LASTUSED DESC FETCH FIRST 1 ROWS ONLY";
+    public String getLRULink(String fileName) {
+        String retVal = "";
+        ResultSet rs;
+        String query = "SELECT FILEID FROM USERS.FILES WHERE realname='" + fileName + "' ORDER BY LASTUSED DESC FETCH FIRST 1 ROWS ONLY";
     //    rs=this.queryDB(query);
-        
-       /* try {
-            if(rs.next()){
-                retVal=rs.getString("FILEID");
-            }   } catch (SQLException ex) {
-                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
-            }*/
-        
+
+        /*
+         * try { if(rs.next()){ retVal=rs.getString("FILEID"); } } catch
+         * (SQLException ex) {
+         * Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null,
+         * ex);
+            }
+         */
         return retVal;
     }
 }

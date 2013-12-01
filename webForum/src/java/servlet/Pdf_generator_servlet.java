@@ -12,9 +12,12 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import db.DBManager;
 import db.Gruppo;
+import db.Utente;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -30,8 +33,9 @@ public class Pdf_generator_servlet extends HttpServlet {
 
     private DBManager manager;
     Gruppo gruppo;
-    int numpost=-1;
+    int numpost = -1;
     Date datalastpost;
+    ArrayList<Utente> utenti_gruppo = new ArrayList<Utente>();
 
     @Override
     public void init() {
@@ -59,6 +63,17 @@ public class Pdf_generator_servlet extends HttpServlet {
             Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+        try {
+            List<Integer> users_ids = manager.getUtenti(gruppo.getIdgruppo());
+            for (Integer user_id : users_ids) {
+                Utente u = new Utente();
+                u = manager.getMoreUtente(user_id);
+                utenti_gruppo.add(u);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+
         response.setContentType("application/pdf");
 
         Document document = new Document();
@@ -79,17 +94,11 @@ public class Pdf_generator_servlet extends HttpServlet {
 
             // Code 2
             table.addCell("Nomi degli utenti partecipanti");
-            table.addCell("2");
-
-            // Code 3
-            table.addCell("3");
-            table.addCell("4");
-
-            // Code 4
-            table.addCell("5");
-            table.addCell("6");
-
-            // Code 5
+            
+             for (Utente utente : utenti_gruppo) {
+                table.addCell(utente.getUserName());
+            }
+           
             document.add(table);
             if (datalastpost == null || numpost == -1) {
                 document.add(new Paragraph("something null"));
