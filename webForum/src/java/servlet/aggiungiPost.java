@@ -31,7 +31,9 @@ import java.io.FileOutputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import org.apache.commons.fileupload.FileItemStream;
+import org.apache.commons.fileupload.util.Streams;
 
 /**
  *
@@ -61,7 +63,7 @@ public class aggiungiPost extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         
-        response.sendRedirect("");
+       // response.sendRedirect("");
         PrintWriter out = response.getWriter();
         try {
             /* TODO output your page here. You may use following sample code. */
@@ -105,10 +107,13 @@ public class aggiungiPost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int idgruppo = Integer.parseInt(request.getParameter("groupID"));
-        String messaggio = (request.getParameter("messaggio"));
+         // = (request.getParameter("idgruppo"));
+        int idgruppo=0 ;//= Integer.parseInt(ingruppo);
+        String messaggio="";// = (request.getParameter("messaggio"));
         String fileName,relPath;
-        fileName = request.getParameter("file");
+        String path;
+        String tmp = null;
+        fileName = null;
         InputStream inStream; 
        
         HttpSession sessione = request.getSession();
@@ -127,19 +132,20 @@ public class aggiungiPost extends HttpServlet {
                         BufferedOutputStream output = null;
                         try {
                             ServletContext scx=getServletContext();
-                            String path=scx.getRealPath("")+"\\media";
+                            path=scx.getRealPath("")+"\\media";
                             relPath = "media";
+                            makeDir(path);
                             path+="\\"+idgruppo;
                             makeDir(path);
                             fileName=formatName(item.getName());
                             //seed è il seme per l'algoritmo di hashing, per renderlo unico è composto dal nome del file, l'id utente e il tempo preciso al millisecondo (che garantisce)
                             
                             String seed=fileName+user.getId()+new Timestamp(new java.util.Date().getTime()).toString();
-                            String tmp=md5(seed);
+                            tmp=md5(seed);
                             tmp=tmp+getExtension(fileName);
                             path+="\\"+tmp;
                             relPath+="\\"+(idgruppo+"\\"+tmp);
-                            manager.addPostFile(user,idgruppo, fileName, tmp,messaggio);
+                            
                             output = new BufferedOutputStream(new FileOutputStream(path, false));
                             int data = -1;
                             while ((data = is.read()) != -1) {
@@ -148,19 +154,33 @@ public class aggiungiPost extends HttpServlet {
                             
                         } catch(IOException ioe){
                             throw new ServletException(ioe.getMessage());
-                        } catch (SQLException ex) {
-                            Logger.getLogger(aggiungiPost.class.getName()).log(Level.SEVERE, null, ex);
+                       
                         }finally {
                             is.close();
                             if(output!=null){
                                 output.close();}
                         }
                     }
-                }
+                }else{
+                    
+                    if ( (item.getFieldName()).equals("idgruppo") ){
+                        idgruppo = Integer.parseInt(Streams.asString(item.openStream()));
+                    }else if ( (item.getFieldName()).equals("messaggio")){
+                        messaggio = Streams.asString(item.openStream());
+                    }
+                }                     
             }
+ 
+            manager.addPostFile(user,idgruppo, fileName, tmp,messaggio);
+            
+            
         }catch (FileUploadException ex) {
             Logger.getLogger(aggiungiPost.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(aggiungiPost.class.getName()).log(Level.SEVERE, null, ex);
         }
+         
+         processRequest(request,response);
     }
 
     /**
@@ -223,5 +243,91 @@ public class aggiungiPost extends HttpServlet {
     public String getExtension(String fileName){
         int index=fileName.lastIndexOf(".");
         return (index>=0)?fileName.substring(index):"";
+    }
+    
+    /**
+     *Controlla il testo sistemando eventuali link
+     * @param text testo dell'utente
+     * @param fileName eventuale file caricato dall'utente
+     * @param fileId eventuale id del file caricato dall'utente
+     * @return il testo con i link esatti
+     */
+    public String checkText(String text, String fileName,String fileId){
+        Boolean found=false;
+        ArrayList<String> parts=new ArrayList<String>();
+        ArrayList<String> names=new ArrayList<String>();
+        int end,finder;
+        int index=0;
+        String retVal="",toAdd,nameFound,textFound;
+        if(text!=null&&!text.equals("")){
+            while(!text.equals("")){
+                end=text.indexOf(dollars);
+                
+                if(end<0){
+                    parts.add(index, text);
+                    names.add(index, null);
+                    text="";
+                }else{
+                    toAdd=text.substring(0, end);
+                    if(end>0) {
+                        if(found){
+                            finder=toAdd.indexOf(":");
+                            if(finder>0){
+                                nameFound=text.substring(0,finder);
+                                textFound=text.substring(finder+1,end);
+                                parts.add(index,textFound);
+                                names.add(index, nameFound);
+                            }else{
+                                parts.add(index, toAdd);
+                                names.add(index, "");
+                            }
+                        }else{
+                            parts.add(index, toAdd);
+                            names.add(index, null);
+                        }
+                         index++; 
+                         
+                    }
+                   found=!found;
+                    text=text.substring(end+2);
+                }
+              
+            }
+            for(int i=0;i<parts.size();i++){
+                nameFound=names.get(i);
+                textFound=parts.get(i);
+                if(null!=nameFound){
+                    String tmp=createLink(textFound,nameFound,(textFound.equals(fileName)&&!"".equals(fileName))?fileId:"-1");
+                    retVal+=tmp;
+                }else{
+                    retVal+=textFound;
+                }
+            }
+           
+        }
+        
+        return retVal;
+    }
+    
+    /**
+     * Trasforma un link dell'utente in un link HTML
+     * @param text testo del link
+     * @param name nome dell'utente uploader del file
+     * @param id dell'eventuale file caricato dall'utente 
+     * @return anchor tag aggiustata oppure il testo in input
+     */
+    public String createLink(String text, String name,String id){
+        String tmp;
+        if("-1".equals(id)){
+            if(!"".equals(name)){
+                tmp=manager.getLinkByName(text, name);
+            }else{
+            tmp=manager.getLRULink(text);
+            }
+        }else{
+            tmp=id;
+        }
+        if("".equals(tmp)){return text;}
+        return "<a href='fileDownload?fileId="+tmp+"'>"+text+"<a>";
     }
 }

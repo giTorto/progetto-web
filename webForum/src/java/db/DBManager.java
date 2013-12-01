@@ -238,9 +238,9 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public List<Post> getPostsGruppo(Gruppo g) throws SQLException {
-
-        List<Post> posts = new ArrayList<Post>();
         int id = g.getIdgruppo();
+        List<Post> posts = new ArrayList<Post>();
+       
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM post "
                         + "WHERE idgruppo = ? ORDER BY data_ora DESC");
@@ -625,8 +625,50 @@ public class DBManager implements Serializable {
         } finally {
             stm.close();
         }
-       
         
+    }
+    
+    /**
+     *Ricerca l'ID del file basandosi sul nome. Se il file viene trovato, viene impostato un campo per indicarlo come recente
+     * @param fileName Nome del file
+     * @param userName Nome dell'utente da linkare
+     * @return Url del file associato al nome Utente o stringa vuota
+     */
+    public String getLinkByName(String fileName, String userName){
+        String retVal="";
+        ResultSet rs;
+      /*  String query="SELECT FILEID FROM USERS.FILES WHERE realname='"+fileName+"' AND USERID=("+GET_ID_BY_NAME_QUERY+userName+"')";
+        rs=this.queryDB(query);
+        try {
+            if(rs.next()){
+                retVal=rs.getString("FILEID");
+                query="UPDATE USERS.FILES SET LASTUSED=CURRENT_TIMESTAMP WHERE FILEID="+retVal;
+                conn.createStatement().executeUpdate(query);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }*/
+        return retVal;
+    }
+    
+    /**
+     * Ricerca l'ID del file basandosi sul nome. Il file ricercato è quello utilizzato più recentemente
+     * @param fileName Nome del FIlE da cercare
+     * @return ID del file o stringa vuota
+     */
+    public String getLRULink(String fileName){
+        String retVal="";
+        ResultSet rs ;
+        String query="SELECT FILEID FROM USERS.FILES WHERE realname='"+fileName+"' ORDER BY LASTUSED DESC FETCH FIRST 1 ROWS ONLY";
+    //    rs=this.queryDB(query);
         
+       /* try {
+            if(rs.next()){
+                retVal=rs.getString("FILEID");
+            }   } catch (SQLException ex) {
+                Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+            }*/
+        
+        return retVal;
     }
 }

@@ -51,7 +51,8 @@ public class DisplayGroupSrvlt extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        int idgruppo = Integer.parseInt(request.getParameter("groupID"));
+        String ingruppo = (request.getParameter("groupID"));
+        int idgruppo = Integer.parseInt(ingruppo);
         HttpSession session = ((HttpServletRequest) request).getSession(false);
         if (session != null) {
             user = (Utente) session.getAttribute("user");
@@ -68,13 +69,17 @@ public class DisplayGroupSrvlt extends HttpServlet {
         }
 
         try {
-            gruppo = manager.getGruppo(idgruppo);
+           gruppo = manager.getGruppo(idgruppo);
             postlist = (ArrayList<Post>) manager.getPostsGruppo(gruppo);
+
         } catch (SQLException ex) {
             Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
             //((HttpServletResponse)response).sendRedirect("errorpage.html");
         }
 
+       
+       
+        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -98,7 +103,11 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.println("<h1>" + gruppo.getNome() + "</h1><br>");
             //out.write("<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "/gestionefile\" method=\"post\" enctype=\"multipart/form-data\">");
             out.write("<form action=\"aggiungiPost\" method =\"post\"  enctype=\"multipart/form-data\" >");
-            out.write("Select File to Upload:<input type=\"file\" name=\"file\">");
+            out.println("	<input name=\"idgruppo\" type=\"hidden\" value=\"" + ((Integer)gruppo.getIdgruppo()).toString() + "\" />	"
+                   // + "<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+                    + "<input name=\"messaggio\" value=\"Cosa stai pensando?\" >");
+            out.write("Select File to Upload:<input type=\"file\" name=\"file\">"
+                    + "<input name=\"submit\" type=\"submit\" value=\"send\" /></form>");
             out.write("<br>");
             //out.write("<input type=\"submit\" value=\"Upload\">");
             //out.write("</form>");
@@ -107,9 +116,7 @@ public class DisplayGroupSrvlt extends HttpServlet {
 
             out.println("	<p></p>");
            // out.println("	<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "\" method=\"post\">");
-            out.println("	<input name=\"groupID\" type=\"hidden\" value=\"" + gruppo.getIdgruppo() + "\" />	"
-                    + "<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                    + "<input name=\"Submit1\" type=\"submit\" value=\"send\" /></form>");
+            
             out.println("	<p></p>");
             out.println("</div>");
             out.println("<div>");
