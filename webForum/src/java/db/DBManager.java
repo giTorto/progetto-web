@@ -13,7 +13,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -435,8 +434,8 @@ public class DBManager implements Serializable {
 
         List<Integer> allUsers = new ArrayList<Integer>();
         PreparedStatement stm
-                = con.prepareStatement("SELECT * FROM gruppi_partecipanti "
-                        + "                        WHERE idgruppo = ? and invito_acc=1");
+                = con.prepareStatement("SELECT DISTINCT  idutente FROM gruppi_partecipanti "
+                        + "                                    WHERE idgruppo = ?  and invito_acc=1");
 
         try {
             stm.setInt(1, idgruppo);
@@ -445,8 +444,8 @@ public class DBManager implements Serializable {
             try {
 
                 while (rs.next()) {
-                    Integer ut = new Integer(0);
-                    ut = rs.getInt("idutente");
+
+                    Integer ut = new Integer(rs.getInt("idutente"));
 
                     allUsers.add(ut);
                 }
@@ -645,11 +644,11 @@ public class DBManager implements Serializable {
             PreparedStatement stm
                     = con.prepareStatement("SELECT * FROM POST WHERE idwriter = ? AND realname=?");
             stm.setInt(1, id);
-            stm.setString(2,fileName);
-            
+            stm.setString(2, fileName);
+
             rs = stm.executeQuery();
             retVal = rs.getInt("idpost");
-            
+
             stm.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -666,19 +665,19 @@ public class DBManager implements Serializable {
      * @return ID del file o stringa vuota
      */
     public int getLRULink(String fileName) {
-       
-       int retVal = 0;
+
+        int retVal = 0;
         try {
-            
+
             ResultSet rs;
 
             PreparedStatement stm
                     = con.prepareStatement("SELECT idpost FROM POST WHERE realname=? ORDER BY data_ora DESC FETCH FIRST 1 ROWS ONLY");
-            stm.setString(1,fileName);
-            
+            stm.setString(1, fileName);
+
             rs = stm.executeQuery();
             retVal = rs.getInt("idpost");
-            
+
             stm.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
@@ -715,4 +714,45 @@ public class DBManager implements Serializable {
             stm.close();
         }
     }
+
+    public boolean controllaInvitogià_esistente(int groupid, int idutente) throws SQLException {//ritorna true se c'è già un invito, false altrimenti
+
+        PreparedStatement stm = con.prepareStatement("select * from gruppi_partecipanti where idgruppo= ? and idutente= ?");
+        try {
+            stm.setInt(1, groupid);
+            stm.setInt(2, idutente);
+
+            ResultSet rs = stm.executeQuery();
+
+            if (!rs.isBeforeFirst()) {
+                System.out.println("No data");
+                return false;
+            } else {
+                return true;
+            }
+
+        } catch (Exception e) {
+            System.err.println("errore nel verificare se l'invito esisteva già");
+            return false;
+        } finally {
+            stm.close();
+        }
+    }
+
+    public void insertInvito(int groupid, int idutente) throws SQLException {
+        PreparedStatement stm = con.prepareStatement("INSERT INTO gruppi_partecipanti (idgruppo,idutente,invito_acc) values(?,?,?)");
+        int zero = 0;
+        try {
+            stm.setInt(1, groupid);
+            stm.setInt(2, idutente);
+            stm.setInt(3, zero);
+
+            int executeUpdate = stm.executeUpdate();
+        } catch (Exception e) {
+            System.err.println("errore nel inserire l'invito");
+        } finally {
+            stm.close();
+        }
+    }
+
 }

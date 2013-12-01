@@ -98,6 +98,9 @@ public class Pdf_generator_servlet extends HttpServlet {
              for (Utente utente : utenti_gruppo) {
                 table.addCell(utente.getUserName());
             }
+             if (utenti_gruppo.isEmpty()) {
+                 table.addCell("Il proprietario del gruppo è attualmente l'unico partecipante");
+             }
            
             document.add(table);
             if (datalastpost == null || numpost == -1) {
@@ -113,6 +116,7 @@ public class Pdf_generator_servlet extends HttpServlet {
         }
 
         document.close();
+        utenti_gruppo.clear();
 
     }
 

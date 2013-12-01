@@ -89,7 +89,7 @@ public class ModificaGruppoSrvlt extends HttpServlet {
             out.println("<h2>Inviti:</h2>");
             out.println("<p>Inserisci gli username degli utenti che vuoi invitare separati da una virgola</p>");
 
-            out.println("			<form action=\"\" method=\"post\" name=\"\">");
+            out.println("			<form action=\"" + request.getContextPath() + "/logg/gruppiSrvlt\" method=\"post\" name=\"\">");
             out.println("<div class=\"row\">");
             out.println("	<div class=\"col-lg-6\">");
             out.println("		<div class=\"input-group\">");
