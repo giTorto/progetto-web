@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -58,25 +59,21 @@ public class SessionFilter implements Filter {
                 }
             }
         }
-        
+
         if (authorized) {
             chain.doFilter(request, response);
-            return; 
+            return;
         } else {
-           
 
-            String login_page = filterConfig.getInitParameter("login_page");
             
-            request.getRequestDispatcher("/index.jsp").forward(request, response);
-            
-            
+            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "");
 
-            chain.doFilter(request, response);
+            return;
+            
 
         }
-        throw new ServletException("Unauthorized access, unable to forward to login page");
         
-        
+
     }
 
     /**
