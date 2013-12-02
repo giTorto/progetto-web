@@ -180,7 +180,7 @@ public class aggiungiPost extends HttpServlet {
             Logger.getLogger(aggiungiPost.class.getName()).log(Level.SEVERE, null, ex);
         }
          
-         response.sendRedirect(request.getContextPath()+ "/logg/DisplayGroupSrvlt?groupID="+idgruppo);
+         response.sendRedirect("/webForum/logg/displaygroup?groupID=" + idgruppo );
     }
 
     /**

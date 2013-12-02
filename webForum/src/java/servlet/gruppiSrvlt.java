@@ -111,9 +111,7 @@ public class gruppiSrvlt extends HttpServlet {
 
         out.println("                </table>");
         out.println("            </div>");
-        out.println("");
         out.println("        </body>");
-        out.println("");
         out.println("    </html>");
 
         out.close();

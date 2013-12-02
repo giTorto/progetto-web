@@ -37,9 +37,9 @@ public class DBManager implements Serializable {
             throw new RuntimeException(e.toString(), e);
         }
 
-        Connection con = DriverManager.getConnection(dburl);
+        con = DriverManager.getConnection(dburl);
 
-        this.con = con;
+        
     }
 
     public static void shutdown() {
