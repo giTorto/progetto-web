@@ -93,11 +93,12 @@ public class GroupChangeName implements Filter {
         String inviti2parse = "";
         String creazione_gruppoNome = "";
 
+        /*
         try {
             groupid = Integer.parseInt(request.getParameter("groupID"));
         } catch (Exception e) {
             System.err.println("Errore nel recupero dell'groupid");
-        }
+        }*/
 
 
         /*

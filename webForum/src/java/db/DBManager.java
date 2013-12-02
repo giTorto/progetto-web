@@ -15,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -701,7 +702,9 @@ public class DBManager implements Serializable {
             stm.setString(1, fileName);
             
             rs = stm.executeQuery();
-            retVal = rs.getInt("idpost");
+            if(rs.next())
+            {retVal = rs.getInt("idpost");
+            }
             
             stm.close();
         } catch (SQLException ex) {
@@ -778,6 +781,32 @@ public class DBManager implements Serializable {
         } finally {
             stm.close();
         }
+    }
+    
+       /**
+     *Trova nel DB i dati di un file basandosi sul suo id
+     * @param id ID del FILE
+     * @param userId
+     * @return i dati trovati o un set vuoto
+     */
+    public HashMap<String, String> getRealAndDBName(int idpost) throws SQLException{
+        ResultSet rs;
+        HashMap<String, String> retVal = new HashMap<String, String>();
+        //String query="SELECT GROUPID,REALNAME,DBNAME FROM USERS.FILES WHERE FILEID="+id+" AND GROUPID ="+groupId;
+        //String query="SELECT GROUPID,REALNAME,DBNAME FROM USERS.FILES WHERE FILEID="+id+" AND GROUPID IN ("+GET_GROUPS_QUERY+userId+")";
+        PreparedStatement pr = con.prepareStatement("SELECT * FROM POST where idpost=?");
+      
+        try {
+            pr.setInt(1, idpost);
+           
+            rs=pr.executeQuery();
+            if(rs.next()){
+                retVal.put("path", "media\\"+ rs.getString("idgruppo")+"\\"+ rs.getString("dbname"));
+                retVal.put("name", rs.getString("realname"));}
+        } catch (SQLException ex) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return retVal;
     }
     
 }

@@ -170,8 +170,8 @@ public class aggiungiPost extends HttpServlet {
                     }
                 }                     
             }
- 
-            manager.addPostFile(user,idgruppo, fileName, tmp,messaggio);
+            String resultament = checkText(messaggio,fileName,tmp);
+            manager.addPostFile(user,idgruppo, fileName, tmp,resultament);
             
             
         }catch (FileUploadException ex) {
@@ -323,12 +323,12 @@ public class aggiungiPost extends HttpServlet {
             if(!"".equals(name)){
                 tmp=manager.getLinkByName(text, name);
             }else{
-            tmp=manager.getLRULink(text);
+                tmp=manager.getLRULink(text);
             }
         }else{
             tmp=idt;
         }
         if("".equals(tmp)){return text;}
-        return "<a href='fileDownload?fileId="+tmp+"'>"+text+"<a>";
+        return "<a href='fileDownload?fileId="+tmp+"'>"+text+"</a>";
     }
 }

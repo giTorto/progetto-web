@@ -112,7 +112,7 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.write("<form action=\"aggiungiPost\" method =\"post\"  enctype=\"multipart/form-data\" >");
             out.println("	<input name=\"idgruppo\" type=\"hidden\" value=\"" + ((Integer)gruppo.getIdgruppo()).toString() + "\" />	"
                    // + "<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                    + "<input name=\"messaggio\" placeholder=\"Cosa stai pensando?\" > <br>");
+                    + "<textarea name=\"messaggio\" placeholder=\"Cosa stai pensando?\" rows=\"4\" cols=\"50\"> <br> </textarea>");
             out.write("Select File to Upload:<input type=\"file\" name=\"file\">"
                     + "<input name=\"submit\" type=\"submit\" value=\"send\" /></form>");
             out.write("<br>");

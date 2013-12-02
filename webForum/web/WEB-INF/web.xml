@@ -71,10 +71,14 @@
     <servlet>
         <servlet-name>aggiungiPost</servlet-name>
         <servlet-class>servlet.aggiungiPost</servlet-class>
-           <init-param>
+        <init-param>
             <param-name> media </param-name>
             <param-value> /logg/media </param-value>
         </init-param>
+    </servlet>
+    <servlet>
+        <servlet-name>FileDownload</servlet-name>
+        <servlet-class>servlet.FileDownload</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
@@ -136,6 +140,10 @@
         <servlet-name>aggiungiPost</servlet-name>
         <url-pattern>/logg/aggiungiPost</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FileDownload</servlet-name>
+        <url-pattern>/logg/fileDownload</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -170,4 +178,5 @@
         <param-value>jdbc:derby://localhost:1527/webdb;user=utente;password=utente</param-value>
     </context-param>
     
-</web-app>
+
+    </web-app>

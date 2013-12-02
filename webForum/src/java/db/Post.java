@@ -44,7 +44,8 @@ public class Post {
 
     public void tohtmlrow(PrintWriter out, Utente u) {
         Utente us = this.getWriter();
-        out.println("		<li><label id='username'>"+us.getUserName()+"</label>  <label id=\"Label1\">"+this.getTesto()+"</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">"+this.getData_ora().toString()+" ");
+        out.println("		<li><label id='username'>"+us.getUserName()+"</label>:  <label id=\"Label1\">"+this.getTesto()+"</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">"+this.getData_ora().toString()+
+                "<label id='linkPost'> </label>");
         out.println("		</label>&nbsp;&nbsp;<label id=\"Label1\">"+/*this.getWriter().getUserName()*/""+"</label><br>");
         out.println("		<br></li>");
     }
