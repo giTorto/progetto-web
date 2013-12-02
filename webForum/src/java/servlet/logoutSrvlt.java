@@ -72,9 +72,16 @@ public class logoutSrvlt extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+ HttpSession session = request.getSession(false);
 
+        if (session != null) {
+            session.removeAttribute("user");
+            session.invalidate();
+        }
+        request.setAttribute("message", "Logout effettuato con successo");
         processRequest(request, response);
     }
+    
 
     /**
      * Handles the HTTP <code>POST</code> method.
