@@ -26,6 +26,8 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import servlet.gruppiSrvlt;
 import db.Gruppo;
+import servlet.invitiSrvlt;
+import util.Util;
 
 /**
  *
@@ -46,24 +48,7 @@ public class GroupChangeName implements Filter {
 
     }
 
-    public void sendinviti(ArrayList<String> usernames, int idgruppo) {
-        for (String username : usernames) {
-            try {
-                Utente u = new Utente();
-                u = manager.getMoreByUserName(username);
-
-                if (!manager.controllaInvitogià_esistente(idgruppo, u.getId())) {
-                    try {
-                        manager.insertInvito(idgruppo, u.getId());
-                    } catch (SQLException ex) {
-                        Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            } catch (SQLException ex) {
-                Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-    }
+    
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -93,12 +78,12 @@ public class GroupChangeName implements Filter {
         String inviti2parse = "";
         String creazione_gruppoNome = "";
 
-        /*
+        
         try {
             groupid = Integer.parseInt(request.getParameter("groupID"));
         } catch (Exception e) {
             System.err.println("Errore nel recupero dell'groupid");
-        }*/
+        }
 
 
         /*
@@ -135,7 +120,7 @@ public class GroupChangeName implements Filter {
         if (ok_inviti && !"".equals(inviti2parse) && inviti2parse != null  && groupid != -1) {
             try {
                 ArrayList<String> username_invitati = parseFromString(inviti2parse);
-                sendinviti(username_invitati, groupid);
+                Util.sendinviti(username_invitati, groupid,manager);
             } catch (Exception e) {
                 System.err.println("Errore negli inviti");
             }
@@ -160,7 +145,7 @@ public class GroupChangeName implements Filter {
 
                     Gruppo gruppo_appena_creato = manager.getGruppo(creazione_gruppoNome);
                     ArrayList<String> username_invitati = parseFromString(inviti2parse);
-                    sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo());
+                    Util.sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo(),manager);
                 } catch (SQLException ex) {
                     Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
                 }
