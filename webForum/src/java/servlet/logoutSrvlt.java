@@ -42,6 +42,9 @@ public class logoutSrvlt extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
+             out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
+            out.println("                <script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
+            out.println("                <script src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js\"></script>");
             out.println("<title>Servlet logoutSrvlt</title>");
             out.println("</head>");
             out.println("<body>");

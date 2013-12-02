@@ -61,6 +61,14 @@ public class creaGruppoSrvlt extends HttpServlet {
             out.println("");
             out.println("<body style=\"\">");
             out.println("");
+            out.println("<div class=\"panel panel-default\">");
+            out.println("  <div class=\"panel-body\" align=\"right\">");
+            out.println("<button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/main" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Home</button>");
+            out.println("  <button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/logoutSrvlt" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Logout</button>");
+            out.println("");
+            out.println("  </div>");
+            out.println("</div>");
+            out.println("");
             out.println("<div class=\"panel panel-default\" margin-left=\"auto\";\n"
                     + "    margin-right=\"auto\";\n"
                     + "    margin-top=\"0\";\n"
