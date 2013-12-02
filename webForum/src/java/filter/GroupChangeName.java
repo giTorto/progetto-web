@@ -6,11 +6,15 @@
 package filter;
 
 import db.DBManager;
+
+import db.Utente;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.Filter;
@@ -19,7 +23,9 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import servlet.gruppiSrvlt;
+import db.Gruppo;
 
 /**
  *
@@ -29,6 +35,35 @@ public class GroupChangeName implements Filter {
 
     private static final boolean debug = true;
     private DBManager manager;
+
+    private ArrayList<String> parseFromString(String phrase_inviti) {
+        ArrayList<String> retval = new ArrayList<String>();
+        retval.clear();
+        String delims = "[,]";
+        String[] tokens = phrase_inviti.split(delims);
+        retval.addAll(Arrays.asList(tokens));
+        return retval;
+
+    }
+
+    public void sendinviti(ArrayList<String> usernames, int idgruppo) {
+        for (String username : usernames) {
+            try {
+                Utente u = new Utente();
+                u = manager.getMoreByUserName(username);
+
+                if (!manager.controllaInvitogià_esistente(idgruppo, u.getId())) {
+                    try {
+                        manager.insertInvito(idgruppo, u.getId());
+                    } catch (SQLException ex) {
+                        Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
@@ -50,22 +85,86 @@ public class GroupChangeName implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        boolean puoiandareavanti = true;
+        boolean puoiandareavanti_nome = true;
+        boolean ok_inviti = true;
+        boolean ok_crea_gruppo = true;
         int groupid = -1;
         String new_group_name = "";
+        String inviti2parse = "";
+        String creazione_gruppoNome = "";
+
         try {
             groupid = Integer.parseInt(request.getParameter("groupID"));
-            new_group_name = request.getParameter("nuovo_nome_gruppo");
         } catch (Exception e) {
-            puoiandareavanti = false;
+            System.err.println("Errore nel recupero dell'groupid");
         }
 
-        if (puoiandareavanti) {
+
+        /*
+         * se cambia il nome da bottone modifica
+         */
+        try {
+            new_group_name = request.getParameter("nuovo_nome_gruppo");
+            if (new_group_name == null) {
+                puoiandareavanti_nome = false;
+            }
+        } catch (Exception e) {
+            puoiandareavanti_nome = false;
+        }
+
+        if (puoiandareavanti_nome && !"".equals(new_group_name) && new_group_name != null) {
             try {
                 manager.updateGroupName(groupid, new_group_name);
             } catch (SQLException ex) {
                 Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        /*
+         * se manda inviti da bottone modifica
+         */
+        try {
+            inviti2parse = request.getParameter("areainviti");
+            if (inviti2parse == null) {
+                ok_inviti = false;
+            }
+        } catch (Exception e) {
+            ok_inviti = false;
+        }
 
+        if (ok_inviti && !"".equals(inviti2parse) && inviti2parse != null  && groupid != -1) {
+            try {
+                ArrayList<String> username_invitati = parseFromString(inviti2parse);
+                sendinviti(username_invitati, groupid);
+            } catch (Exception e) {
+                System.err.println("Errore negli inviti");
+            }
+        }
+        /*
+         * se arriva una creazione gruppo
+         */
+        try {
+            creazione_gruppoNome = request.getParameter("creazione_gruppo_nome");
+            if (creazione_gruppoNome == null) {
+                ok_crea_gruppo = false;
+            }
+        } catch (Exception e) {
+            ok_crea_gruppo = false;
+        }
+
+        if (ok_crea_gruppo && !"".equals(inviti2parse) && inviti2parse != null && !"".equals(creazione_gruppoNome) && creazione_gruppoNome != null) {
+            try {
+                Utente ownernewgroup = (Utente) ((HttpServletRequest) request).getSession().getAttribute("user");
+                try {
+                    manager.creaGruppo(ownernewgroup, creazione_gruppoNome);
+
+                    Gruppo gruppo_appena_creato = manager.getGruppo(creazione_gruppoNome);
+                    ArrayList<String> username_invitati = parseFromString(inviti2parse);
+                    sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo());
+                } catch (SQLException ex) {
+                    Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+            } catch (Exception e) {
             }
         }
 

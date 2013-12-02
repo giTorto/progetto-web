@@ -78,18 +78,27 @@ public class gruppiSrvlt extends HttpServlet {
         out.println("        </head>");
         out.println("");
         out.println("        <body>");
+        out.println("<div class=\"panel panel-default\">");
+            out.println("  <div class=\"panel-body\" align=\"right\">");
+            out.println("<button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/main" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Home</button>");
+            out.println("  <button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/logoutSrvlt" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Logout</button>");
+            out.println("");
+            out.println("  </div>");
+            out.println("</div>");
+            out.println("");
         out.println("");
         out.println("            <div class=\"panel panel-default\">");
         out.println("                <!-- Default panel contents -->");
         out.println("                <div class=\"panel-heading\">");
-        out.println("                    Gruppi</div>");
+        out.println("                    <h1 align=\"center\">I miei gruppi</h1></div>");
         out.println("                <div class=\"panel-body\">");
-        out.println("                    <p>String boolean isowner</p>");
+      
         out.println("                </div>");
         out.println("                <!-- Table -->");
         out.println("                <table class=\"table\">");
         out.println("                    <thead>");
         out.println("                        <tr>");
+        out.println("<h2>Gruppi di cui sei proprietario</h2>");
         out.println("                            <th>Gruppo</th>");
         out.println("                            <th>Data creazione</th>");
         out.println("                            <th>Link</th>");
@@ -103,8 +112,17 @@ public class gruppiSrvlt extends HttpServlet {
         for (Gruppo gruppo : gruppiProp) {
             gruppo.tohtmlrow(out, user);
         }
-        
-        out.println("<tr> <td colspan=5> <h2>Gruppi a cui partecipi </h2> </td> </tr>");
+        out.println("                </table>");
+        out.println("                <table class=\"table\">");
+        out.println(" <h2>Gruppi a cui partecipi </h2> ");
+        out.println("<thead>\n" +
+"			<tr>\n" +
+"				<th>Gruppo</th>\n" +
+"				<th>Data creazione</th>\n" +
+"				<th>Link</th>\n" +
+"				\n" +
+"			</tr>\n" +
+"		</thead>");
         for (Gruppo gruppo : gruppiParte) {
             gruppo.tohtmlrow(out, user);
         }
