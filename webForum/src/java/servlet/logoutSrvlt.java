@@ -51,7 +51,7 @@ public class logoutSrvlt extends HttpServlet {
             out.println("<h1>Servlet Logout effettuato con successo </h1>");
             out.println("<h2> vuoi tornare al login? </h2>");
             out.println("<form method=\'post\' action=\'" + request.getContextPath() + "\' >");
-            out.println("<input name=\"gohome\" type=\"submit\" value=\"Torna al login!\">");
+            out.println("<input class=\"btn btn-primary btn-lg\" role=\"button\" align=\"center\" name=\"gohome\" type=\"submit\" value=\"Torna al login!\">");
             out.println("</form>");
             out.println("</body>");
             out.println("</html>");

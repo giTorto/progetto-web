@@ -78,23 +78,34 @@ public class invitiSrvlt extends HttpServlet {
             out.println("</div>");
             out.println("");
             out.println("<h1> Inviti a " + user.getUserName() + "</h1>");
-            out.println("<h1>Servlet invitiSrvlt at " + request.getContextPath() + "</h1>");
+            out.println("<div class=\"panel panel-default\">");
+            out.println("  <div class=\"panel-body\">");
             out.println("<form action=\"accettaInvitiSrvlt\" method=\"GET\">");
-            out.println("<table border=\'1\'> <tr> <th> Owner </th> <th> Nome Gruppo </th> <th>Data creazione</th> <th> Sei stato invitato<br>spunta la casella per accettare l'invito </th> </tr>");
+            out.println("<table class=\"table\"> <tr> <th> Owner </th> <th> Nome Gruppo </th> <th>Data creazione</th> <th> Sei stato invitato<br>spunta la casella per accettare l'invito </th> </tr>");
 
             for (Gruppo gruppo : inviti) {
                 out.println("<tr> <td>" + gruppo.getOwnerName() + "</td> <td> " + gruppo.getNome() + "</td><td>"
-                        + gruppo.getDataCreazione().toString() + "</td><td><input name=\""
-                        + gruppo.getIdgruppo() + "\" type=\"checkbox\" value=\"Accetto\" checked=\"checked\"/></td>");
+                        + gruppo.getDataCreazione().toString() + "</td><td><span class=\"input-group-addon\"><input name=\""
+                        + gruppo.getIdgruppo() + "\" type=\"checkbox\" value=\"Accetto\" checked=\"checked\"/></span></td>");
             }
             out.println("</table> ");
-            out.println("<input type=\"submit\" value=\"Fatto\"  > ");
-            out.println("</form> </body> </html>");
+
+            out.println("  </div>");
+            out.println("</div>");
+            out.println("");
+            out.println("<input align=\"center\" class=\"btn btn-primary btn-lg\" type=\"submit\" value=\"Prosegui\"  > </form>");
+            out.println(" </body> </html>");
         } catch (SQLException ex) {
             Logger.getLogger(invitiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
             out.close();
         }
+        //            out.println("<div class=\"panel panel-default\">");
+//            out.println("  <div class=\"panel-body\">");
+//            out.println("    Basic panel example");
+//            out.println("  </div>");
+//            out.println("</div>");
+//            out.println("");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
