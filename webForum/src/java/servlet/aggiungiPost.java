@@ -221,7 +221,7 @@ public class aggiungiPost extends HttpServlet {
         return sb.toString();
     }
       
-         /**
+    /**
      *Su alcuni browser (IE) il file viene caricato con il path assoluto, quindi bisogna recuperare il solo nome del file 
      * @param fileName
      * @return vero nome del file
