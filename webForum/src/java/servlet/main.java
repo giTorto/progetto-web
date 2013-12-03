@@ -53,13 +53,16 @@ public class main extends HttpServlet {
             out.println("<head>");
             out.println("<title>Servlet loginSrvlt</title>");
             out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
-            out.println("                <script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
-            out.println("                <script src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js\"></script>");
+            out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
+            out.println("<script src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js\"></script>");
             out.println("</head>");
             out.println("<body>");
 
-            out.println("<h1>Ultimo accesso eseguito alle: " + header + "</h1>");
-
+                if (header.contains("Benvenuto")){
+                     out.println("<h1>" + header + "</h1>");
+                }else{
+                    out.println("<h1>Ultimo accesso eseguito alle: " + header + "</h1>");
+                }
             out.println("<h2> Benvenuto " + ((Utente) request.getSession().getAttribute("user")).getUserName() + " </h2>");
 
             out.println("<div class=\"panel panel-default\">");
@@ -75,18 +78,6 @@ public class main extends HttpServlet {
             out.println("  </div>");
             out.println("</div>");
             out.println("");
-//            out.println("<form method=\'post\' action=\'invitiSrvlt\' >");
-//            out.println("<input name=\"inviti\" type=\"submit\" value=\"Inviti\"> ");
-//            out.println("</form>");
-//            out.println("<form method=\'post\' action=\'gruppiSrvlt\' >");
-//            out.println("<input name=\"gruppi\" type=\"submit\" value=\"Gruppi\"> ");
-//            out.println("</form>");
-//            out.println("<form method=\'post\' action=\'creaGruppoSrvlt\' >");
-//            out.println("<input name=\"creagruppo\" type=\"submit\" value=\"Crea Gruppo\"> ");
-//            out.println("</form>");
-//            out.println("<form method=\'post\' action=\'logoutSrvlt\' >");
-//            out.println("<input name=\"logout\" type=\"submit\" value=\"LogOut\">");
-//            out.println("</form>");
 
             out.write("</body>");
             out.write("</html>");

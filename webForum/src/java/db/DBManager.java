@@ -229,6 +229,36 @@ public class DBManager implements Serializable {
             stm.close();
         }
     }
+    
+    
+     public Utente getMoreByUserName(String ut) throws SQLException {
+        
+        PreparedStatement stm = con.prepareStatement("SELECT * FROM utente WHERE username = ?");
+        try {
+            stm.setString(1, ut);
+            ResultSet rs = stm.executeQuery();
+            
+            try {
+                if (rs.next()) {
+                    Utente user = new Utente();
+                    user.setUserName(rs.getString("username"));
+                    
+                    user.setId(rs.getInt("idutente"));
+                    return user;
+                } else {
+                    return null;
+                    
+                }
+                
+            } finally {
+                // ricordarsi SEMPRE di chiudere i ResultSet in un blocco finally 
+                rs.close();
+            }
+            
+        } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
+            stm.close();
+        }
+    }
 
     /**
      * Permette di ottenere facilmente la lista di tutti i post di un gruppo ora
@@ -664,15 +694,16 @@ public class DBManager implements Serializable {
     public int getLinkByName(String fileName, String user) {
         int retVal = 0;
         try {
-            int id = (getMoreByUserName(user).getId());
+       
             ResultSet rs;
             
             PreparedStatement stm
-                    = con.prepareStatement("SELECT * FROM POST WHERE idwriter = ? AND realname=?");
-            stm.setInt(1, id);
+                    = con.prepareStatement("SELECT * FROM POST p inner join utente u on p.idwriter = u.idutente WHERE u.username = ? AND realname=?");
+            stm.setString(1, user);
             stm.setString(2, fileName);
             
             rs = stm.executeQuery();
+            rs.next();
             retVal = rs.getInt("idpost");
             
             stm.close();
@@ -712,35 +743,6 @@ public class DBManager implements Serializable {
         }
         
         return retVal;
-    }
-    
-    public Utente getMoreByUserName(String nome) throws SQLException {
-        
-        PreparedStatement stm = con.prepareStatement("SELECT * FROM utente WHERE username = ?");
-        try {
-            stm.setString(1, nome);
-            ResultSet rs = stm.executeQuery();
-            
-            try {
-                if (rs.next()) {
-                    Utente user = new Utente();
-                    user.setUserName(rs.getString("username"));
-                    
-                    user.setId(rs.getInt("idutente"));
-                    return user;
-                } else {
-                    return null;
-                    
-                }
-                
-            } finally {
-                // ricordarsi SEMPRE di chiudere i ResultSet in un blocco finally 
-                rs.close();
-            }
-            
-        } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
-            stm.close();
-        }
     }
     
     public boolean controllaInvitogià_esistente(int groupid, int idutente) throws SQLException {//ritorna true se c'è già un invito, false altrimenti

@@ -297,8 +297,14 @@ public class aggiungiPost extends HttpServlet {
                 nameFound=names.get(i);
                 textFound=parts.get(i);
                 if(null!=nameFound){
-                    String tmp=createLink(textFound,nameFound,(textFound.equals(fileName)&&!"".equals(fileName))?fileId:"-1");
-                    retVal+=tmp;
+                    if((textFound.equals(fileName)&&!"".equals(fileName))){
+                        String tmp=createLink(textFound,nameFound,"-1");
+                        retVal+=tmp;
+                    }else{
+                        String tmp=createLink(textFound,nameFound,fileId);
+                        retVal+=tmp;
+                    }
+                    
                 }else{
                     retVal+=textFound;
                 }
@@ -317,9 +323,13 @@ public class aggiungiPost extends HttpServlet {
      * @return anchor tag aggiustata oppure il testo in input
      */
     public String createLink(String text, String name,String id){
-        int idt = Integer.parseInt(id);
+        int idt=0;
+        if (!(id==null) ){
+        idt = Integer.parseInt(id);
+        }
+        
         int tmp;
-        if("-1".equals(id)){
+        if("-1".equals(id) || id==null ){
             if(!"".equals(name)){
                 tmp=manager.getLinkByName(text, name);
             }else{
