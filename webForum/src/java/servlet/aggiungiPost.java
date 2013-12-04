@@ -350,7 +350,7 @@ public class aggiungiPost extends HttpServlet {
 
         if ("".equals(tmp) || tmp == 0) {
             text = text.toLowerCase();
-            if (name.contains("http") || name.contains("https")) {
+            if ( (name.contains("http")&&text.contains("//"))  || (name.contains("//") && name.contains("https")) ) {
                 if (text.contains("www")) {
                     return "<a href='"+ name +"://"+ text + "'>" + text.substring(2) + "</a>";
                 } else {
