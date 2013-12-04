@@ -69,10 +69,10 @@ public class main extends HttpServlet {
             out.println("  <div class=\"panel-body\" align=\"right\">");
 
             out.println("<ul class=\"list-group\">\n"
-                    + "  <li align=\"center\" class= \"list-group-item\" style=\"background-color:lightgreen; text-color:white\" onclick=\"location.href='" + request.getContextPath() + "/logg/invitiSrvlt" + "'\"><h3>Inviti</h3></li>\n"
-                    + "  <li align=\"center\" class=\"list-group-item\" style=\"background-color:lightblue\" onclick=\"location.href='" + request.getContextPath() + "/logg/gruppiSrvlt" + "'\"><h3>Gruppi</h3></li>\n"
-                    + "  <li align=\"center\" class=\"list-group-item\" style=\"background-color:orange\" onclick=\"location.href='" + request.getContextPath() + "/logg/creaGruppoSrvlt" + "'\"><h3>Crea gruppo</h3></li>\n"
-                    + "  <li align=\"center\" class=\"list-group-item\" style=\"background-color:#CC0000\" onclick=\"location.href='" + request.getContextPath() + "/logg/logoutSrvlt" + "'\"><h3>Logout</h3></li>\n"
+                    + "  <li align=\"center\" class= \"list-group-item\" onmouseover=\"document.body.style.cursor=&#39;pointer&#39;\" onmouseout=\"document.body.style.cursor=&#39;auto&#39;\" style=\"background-color:lightgreen; text-color:white\" onclick=\"location.href='" + request.getContextPath() + "/logg/invitiSrvlt" + "'\"><h3>Inviti</h3></li>\n"
+                    + "  <li align=\"center\" class=\"list-group-item\" onmouseover=\"document.body.style.cursor=&#39;pointer&#39;\" onmouseout=\"document.body.style.cursor=&#39;auto&#39;\" style=\"background-color:lightblue\" onclick=\"location.href='" + request.getContextPath() + "/logg/gruppiSrvlt" + "'\"><h3>Gruppi</h3></li>\n"
+                    + "  <li align=\"center\" class=\"list-group-item\" onmouseover=\"document.body.style.cursor=&#39;pointer&#39;\" onmouseout=\"document.body.style.cursor=&#39;auto&#39;\" style=\"background-color:orange\" onclick=\"location.href='" + request.getContextPath() + "/logg/creaGruppoSrvlt" + "'\"><h3>Crea gruppo</h3></li>\n"
+                    + "  <li align=\"center\" class=\"list-group-item\" onmouseover=\"document.body.style.cursor=&#39;pointer&#39;\" onmouseout=\"document.body.style.cursor=&#39;auto&#39;\" style=\"background-color:#CC0000\" onclick=\"location.href='" + request.getContextPath() + "/logg/logoutSrvlt" + "'\"><h3>Logout</h3></li>\n"
                   
                     + "</ul>");
             out.println("  </div>");
