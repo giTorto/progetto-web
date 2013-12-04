@@ -57,18 +57,6 @@
         <servlet-class>servlet.ModificaGruppoSrvlt</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>GestioneFile</servlet-name>
-        <servlet-class>servlet.GestioneFile</servlet-class>
-        <init-param>
-            <param-name>
-                uploadDir
-            </param-name>
-            <param-value>
-                /tmp
-            </param-value>
-        </init-param>
-    </servlet>
-    <servlet>
         <servlet-name>aggiungiPost</servlet-name>
         <servlet-class>servlet.aggiungiPost</servlet-class>
         <init-param>
@@ -133,10 +121,6 @@
         <url-pattern>/logg/modificaGruppo</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>GestioneFile</servlet-name>
-        <url-pattern>/logg/displaygroup/gestionefile</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
         <servlet-name>aggiungiPost</servlet-name>
         <url-pattern>/logg/aggiungiPost</url-pattern>
     </servlet-mapping>
@@ -157,7 +141,7 @@
             <param-value>/index.jsp</param-value>
         </init-param>
     </filter>
-      <filter>
+    <filter>
         <filter-name>CheckAccessUser2Group</filter-name>
         <filter-class>filter.CheckAccessUser2Group</filter-class>
     </filter>
@@ -185,6 +169,4 @@
         <param-name> dburl</param-name>
         <param-value>jdbc:derby://localhost:1527/webdb;user=utente;password=utente</param-value>
     </context-param>
-    
-
-    </web-app>
+</web-app>
