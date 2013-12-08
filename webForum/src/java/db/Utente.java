@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package db;
 
 import java.io.Serializable;
@@ -21,29 +20,27 @@ public class Utente implements Serializable {
     public int getId() {
         return id;
     }
-    
-    
-    public String getPassword(){
+
+    public String getPassword() {
         return password;
     }
-    
-    public void setPassword(String password){
+
+    public void setPassword(String password) {
         this.password = password;
-        
+
     }
-    
-    public String getUserName(){
+
+    public String getUserName() {
         return userName;
     }
-    
-    public void setUserName(String userName){
+
+    public void setUserName(String userName) {
         this.userName = userName;
-        
+
     }
 
     public void setId(int id) {
         this.id = id;
     }
-    
-    
+
 }

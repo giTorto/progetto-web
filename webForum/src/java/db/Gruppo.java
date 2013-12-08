@@ -59,10 +59,10 @@ public class Gruppo {
         out.println("                        <td>" + this.getNome() + "</td>");
         out.println("                        <td>" + this.getDataCreazione() + "</td>");
         out.println("			<td><a href=\"" + "/webForum/logg/displaygroup?"
-                + "groupID=" + getIdgruppo() +"\">vai al gruppo</a> </td>");
+                + "groupID=" + getIdgruppo() + "\">vai al gruppo</a> </td>");
         out.println("			<td>");
         if (this.getOwnerName().equals(u.getUserName())) {
-            
+
             out.println("			<form action=\"modificaGruppo\" method=\"post\" name=\"altergroup\">");
             out.println("				<button class=\"btn btn-default\" type=\"submit\">Modifica</button>");
             out.println("				<input name=\"groupID\" type=\"hidden\" value=\"" + getIdgruppo() + "\" />");

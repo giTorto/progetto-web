@@ -60,7 +60,8 @@ public class FileDownloadFilter implements Filter {
             FilterChain chain)
             throws IOException, ServletException {
         permesso_accesso_file = false;
-        idgruppo=-1;
+        boolean something_wrong = false; //ad esempio se uno chiama un file in get e non è loggato
+        idgruppo = -1;
         if (debug) {
             log("FileDownloadFilter:doFilter()");
         }
@@ -69,6 +70,7 @@ public class FileDownloadFilter implements Filter {
             fileId = request.getParameter("fileId");
         } catch (Exception e) {
             System.err.println("Filtro accesso ai file: errore nel recupero del fileid");
+            something_wrong = true;
         }
 
         try {
@@ -81,26 +83,33 @@ public class FileDownloadFilter implements Filter {
         HttpSession session = ((HttpServletRequest) request).getSession(false);
         if (session != null) {
             user = (Utente) session.getAttribute("user");
+            if (user == null) {
+                something_wrong = true;
+            }
         }
 
         try {
-
-            ArrayList<Integer> ListidsPartecipanti = (ArrayList<Integer>) manager.getUtenti(idgruppo);
-            Gruppo gruppo = manager.getGruppo(idgruppo);
-            Utente owner = manager.getMoreByUserName(gruppo.getOwnerName());
-            ListidsPartecipanti.add(owner.getId());
-            if (ListidsPartecipanti.contains(user.getId())) {
-                permesso_accesso_file = true;
+            if (user != null) {
+                ArrayList<Integer> ListidsPartecipanti = (ArrayList<Integer>) manager.getUtenti(idgruppo);
+                Gruppo gruppo = manager.getGruppo(idgruppo);
+                Utente owner = manager.getMoreByUserName(gruppo.getOwnerName());
+                ListidsPartecipanti.add(owner.getId());
+                if (ListidsPartecipanti.contains(user.getId())) {
+                    permesso_accesso_file = true;
+                }
             }
+
         } catch (SQLException ex) {
             Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
             ((HttpServletResponse) response).sendRedirect("errorpage.html");
         }
 
-        if (!permesso_accesso_file) {
-            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath());
+        if (!permesso_accesso_file || something_wrong) {
+
+            ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/logg/gruppiSrvlt ");
+        } else {
+            chain.doFilter(request, response);
         }
-        chain.doFilter(request, response);
 
     }
 

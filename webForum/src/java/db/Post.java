@@ -26,8 +26,6 @@ public class Post {
     public void setLink(String link) {
         this.link = link;
     }
-    
-    
 
     public Date getData_ora() {
         return data_ora;
@@ -55,10 +53,12 @@ public class Post {
 
     public void tohtmlrow(PrintWriter out, Utente u) {
         Utente us = this.getWriter();
-        out.println("		<li><label id='username'>"+us.getUserName()+"</label>:  <label id=\"Label1\">"+this.getTesto()+"</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">"+this.getData_ora().toString()+
-                "<label id='linkPost'> </label>");
-        out.println("		</label>&nbsp;&nbsp;<label id=\"Label1\">"+/*this.getWriter().getUserName()*/""+"</label><br>");
-        out.println("<label> "+this.getLink()+ "</label>");
+        out.println("		<li><label id='username'>" + us.getUserName() + "</label>:  <label id=\"Label1\">" + this.getTesto() + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">" + this.getData_ora().toString()
+                + "<label id='linkPost'> </label>");
+        out.println("		</label>&nbsp;&nbsp;<label id=\"Label1\">" +/*
+                 * this.getWriter().getUserName()
+                 */ "" + "</label><br>");
+        out.println("<label> " + this.getLink() + "</label>");
         out.println("		<br></li>");
     }
 

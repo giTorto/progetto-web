@@ -62,17 +62,11 @@ public class SessionFilter implements Filter {
 
         if (authorized) {
             chain.doFilter(request, response);
-            return;
         } else {
 
-            
             ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "");
 
-            return;
-            
-
         }
-        
 
     }
 

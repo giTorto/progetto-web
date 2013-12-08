@@ -52,16 +52,13 @@ public class DisplayGroupSrvlt extends HttpServlet {
             throws ServletException, IOException {
 
         String ingruppo = (request.getParameter("groupID"));
-        
-        
-      
+
         int idgruppo = Integer.parseInt(ingruppo);
         HttpSession session = ((HttpServletRequest) request).getSession(false);
         if (session != null) {
             user = (Utente) session.getAttribute("user");
         }
 
-        
         nuovopost = request.getParameter("messaggio");
         if (nuovopost != null) {
             try {
@@ -73,7 +70,7 @@ public class DisplayGroupSrvlt extends HttpServlet {
         }
 
         try {
-           gruppo = manager.getGruppo(idgruppo);
+            gruppo = manager.getGruppo(idgruppo);
             postlist = (ArrayList<Post>) manager.getPostsGruppo(gruppo);
 
         } catch (SQLException ex) {
@@ -81,9 +78,6 @@ public class DisplayGroupSrvlt extends HttpServlet {
             //((HttpServletResponse)response).sendRedirect("errorpage.html");
         }
 
-       
-       
-        
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -94,7 +88,7 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.println("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
             out.println("");
             out.println("<head>");
-             out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
+            out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
             out.println("                <script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
             out.println("                <script src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js\"></script>");
             out.println("<meta content=\"text/html; charset=utf-8\" http-equiv=\"Content-Type\">");
@@ -110,8 +104,8 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.println("<h1>" + gruppo.getNome() + "</h1><br>");
             //out.write("<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "/gestionefile\" method=\"post\" enctype=\"multipart/form-data\">");
             out.write("<form action=\"aggiungiPost\" method =\"post\"  enctype=\"multipart/form-data\" >");
-            out.println("	<input name=\"idgruppo\" type=\"hidden\" value=\"" + ((Integer)gruppo.getIdgruppo()).toString() + "\" />	"
-                   // + "<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+            out.println("	<input name=\"idgruppo\" type=\"hidden\" value=\"" + ((Integer) gruppo.getIdgruppo()).toString() + "\" />	"
+                    // + "<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
                     + "<textarea name=\"messaggio\" placeholder=\"Cosa stai pensando?\" rows=\"4\" cols=\"50\"> </textarea>");
             out.write("Select File to Upload:<input type=\"file\" name=\"file\">"
                     + "<input name=\"submit\" type=\"submit\" value=\"send\" /></form>");
@@ -122,8 +116,8 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.println("	</h1>");
 
             out.println("	<p></p>");
-           // out.println("	<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "\" method=\"post\">");
-            
+            // out.println("	<form action=\"" + ((HttpServletRequest) request).getRequestURI() + "\" method=\"post\">");
+
             out.println("	<p></p>");
             out.println("</div>");
             out.println("<div>");

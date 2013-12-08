@@ -25,7 +25,7 @@ import javax.servlet.http.HttpSession;
  * @author Giulian
  */
 public class loginSrvlt extends HttpServlet {
-    
+
     private DBManager manager;
     Utente user;
 
@@ -34,16 +34,16 @@ public class loginSrvlt extends HttpServlet {
         // inizializza il DBManager dagli attributi di Application
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
     }
-    
-    public void checkESetCookie(HttpServletRequest request, HttpServletResponse response){
-        
+
+    public void checkESetCookie(HttpServletRequest request, HttpServletResponse response) {
+
         String header = "";
 
         HttpSession sessione = request.getSession();
-        Utente u = (Utente)sessione.getAttribute("user");
-        
+        Utente u = (Utente) sessione.getAttribute("user");
+
         Date date = Calendar.getInstance().getTime();
-        
+
         /*
          * logic of cookies
          */
@@ -51,18 +51,18 @@ public class loginSrvlt extends HttpServlet {
         for (Cookie cookie : mycookies) {
             if (cookie.getName().equals(u.getUserName())) {
                 header = cookie.getValue();
-               cookie.setMaxAge(0);
+                cookie.setMaxAge(0);
             }
         }
         if (header.equals("")) {
             //allora non avevamo il cookike timestamp
             header = "Benvenuto per la prima volta\n";
         }
-            Cookie timecookie = new Cookie(u.getUserName(), date.toString());
-            timecookie.setMaxAge(730000);
-            response.addCookie(timecookie);
-            
-            sessione.setAttribute("LastAccess",header);
+        Cookie timecookie = new Cookie(u.getUserName(), date.toString());
+        timecookie.setMaxAge(730000);
+        response.addCookie(timecookie);
+
+        sessione.setAttribute("LastAccess", header);
     }
 
     /**
@@ -76,17 +76,16 @@ public class loginSrvlt extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    
 
         HttpSession sessione = request.getSession();
-        Utente u = (Utente)sessione.getAttribute("user");
+        Utente u = (Utente) sessione.getAttribute("user");
         String header;
-   
-        header = (String)sessione.getAttribute("LastAccess");
-    
+
+        header = (String) sessione.getAttribute("LastAccess");
+
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
+
 
         /*
          * end logic of cookies
@@ -103,7 +102,7 @@ public class loginSrvlt extends HttpServlet {
             out.println("<body>");
             out.println("<h1>" + header + "</h1>");
             out.println("<h1>Servlet loginSrvlt at " + request.getContextPath() + "</h1>");
-            out.println("<h2> Benvenuto"+((Utente)request.getSession().getAttribute("user")).getUserName()+" </h2>");
+            out.println("<h2> Benvenuto" + ((Utente) request.getSession().getAttribute("user")).getUserName() + " </h2>");
             out.println("<form method=\'post\' action=\'invitiSrvlt\' >");
             out.println("<input name=\"inviti\" type=\"submit\" value=\"Inviti\"> ");
             out.println("</form>");
@@ -193,11 +192,11 @@ public class loginSrvlt extends HttpServlet {
 
             HttpSession session = request.getSession(true);
             session.setAttribute("user", user);
-            checkESetCookie(request,response);
-            
+            checkESetCookie(request, response);
+
             //processRequest(request, response);
-             response.sendRedirect(request.getContextPath() + "/logg/main");
-           
+            response.sendRedirect(request.getContextPath() + "/logg/main");
+
         }
 
     }

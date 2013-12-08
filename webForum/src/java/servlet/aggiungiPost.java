@@ -10,7 +10,6 @@ import db.Utente;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -66,7 +65,9 @@ public class aggiungiPost extends HttpServlet {
         // response.sendRedirect("");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
+            /*
+             * TODO output your page here. You may use following sample code.
+             */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -107,27 +108,27 @@ public class aggiungiPost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         int ingruppo;
-          Integer idgruppo = 0;
-           String messaggio = "";
+        int ingruppo;
+        Integer idgruppo = 0;
+        String messaggio = "";
         try {
             ingruppo = Integer.parseInt(request.getParameter("idgruppo"));
         } catch (Exception e) {
             System.err.println("Fileupload: errore con idgruppo");
-            ingruppo=-1;
+            ingruppo = -1;
         }
-       
-        if (ingruppo!=-1)
-            idgruppo=ingruppo;
-       
+
+        if (ingruppo != -1) {
+            idgruppo = ingruppo;
+        }
+
         try {
             messaggio = (request.getParameter("messaggio"));
         } catch (Exception e) {
             System.err.println("Fileupload: errore con messaggio inviato");
-            messaggio="";
+            messaggio = "";
         }
-      
-       
+
         String fileName, relPath;
         String path;
         String tmp = null;
@@ -368,11 +369,11 @@ public class aggiungiPost extends HttpServlet {
 
         if ("".equals(tmp) || tmp == 0) {
             text = text.toLowerCase();
-            if ( (name.contains("http")&&text.contains("//"))  || (name.contains("//") && name.contains("https")) ) {
+            if ((name.contains("http") && text.contains("//")) || (name.contains("//") && name.contains("https"))) {
                 if (text.contains("www")) {
-                    return "<a href='"+ name +"://"+ text + "'>" + text.substring(2) + "</a>";
+                    return "<a href='" + name + "://" + text + "'>" + text.substring(2) + "</a>";
                 } else {
-                    return "<a href='" + name +"://"+ text + "'>" + text.substring(2) + "</a>";
+                    return "<a href='" + name + "://" + text + "'>" + text.substring(2) + "</a>";
                 }
 
             } else if (text.contains("www")) {

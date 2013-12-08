@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package util;
 
 import db.DBManager;
@@ -19,8 +18,8 @@ import servlet.gruppiSrvlt;
  * @author Lorenzo
  */
 public class Util {
-    
-    public  static void sendinviti(ArrayList<String> usernames, int idgruppo, DBManager manager) {
+
+    public static void sendinviti(ArrayList<String> usernames, int idgruppo, DBManager manager) {
         for (String username : usernames) {
             try {
                 Utente u = new Utente();
@@ -38,5 +37,5 @@ public class Util {
             }
         }
     }
-    
+
 }

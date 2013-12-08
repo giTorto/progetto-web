@@ -23,9 +23,9 @@ import javax.servlet.http.HttpServletResponse;
  * @author Giulian
  */
 public class accettaInvitiSrvlt extends HttpServlet {
-    
+
     private DBManager manager;
-    
+
     @Override
     public void init() {
         // inizializza il DBManager dagli attributi di Application
@@ -43,7 +43,7 @@ public class accettaInvitiSrvlt extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         ArrayList<Integer> groupids = new ArrayList<Integer>();
         Enumeration paramNames = request.getParameterNames();
         while (paramNames.hasMoreElements()) {
@@ -51,7 +51,7 @@ public class accettaInvitiSrvlt extends HttpServlet {
             param_groupid = Integer.parseInt((String) paramNames.nextElement());
             groupids.add(param_groupid);
         }
-        
+
         try {
             Utente utente = (Utente) request.getSession().getAttribute("user");
             try {
@@ -60,7 +60,7 @@ public class accettaInvitiSrvlt extends HttpServlet {
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
-                
+
             }
         } catch (Exception e) {
             System.err.println("errore nel gestire gli inviti");
@@ -80,7 +80,7 @@ public class accettaInvitiSrvlt extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         processRequest(request, response);
     }
 
@@ -95,7 +95,7 @@ public class accettaInvitiSrvlt extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         processRequest(request, response);
     }
 

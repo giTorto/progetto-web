@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlet;
 
 import db.DBManager;
@@ -24,19 +23,20 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-
 /**
  *
  * @author Giulian
  */
 public class FileDownload extends HttpServlet {
-DBManager manager=null;
 
-  @Override
+    DBManager manager = null;
+
+    @Override
     public void init() {
         // inizializza il DBManager dagli attributi di Application
         this.manager = (DBManager) super.getServletContext().getAttribute("dbmanager");
     }
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -51,11 +51,13 @@ DBManager manager=null;
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
-            /* TODO output your page here. You may use following sample code. */
+            /*
+             * TODO output your page here. You may use following sample code.
+             */
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet FileDownload</title>");            
+            out.println("<title>Servlet FileDownload</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet FileDownload at " + request.getContextPath() + "</h1>");
@@ -78,38 +80,39 @@ DBManager manager=null;
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-          String fileId = request.getParameter("fileId").toString();
+        String fileId = request.getParameter("fileId").toString();
         String groupId = "2";
-        if(fileId==null){
-         showError();
+        if (fileId == null) {
+            showError();
         }
         HashMap<String, String> dbData = null;
-    try {
-        dbData = manager.getRealAndDBName(Integer.parseInt(fileId)); //qui va fatto un filtro sui idpost,idgruppo e idutente
-    } catch (SQLException ex) {
-        Logger.getLogger(FileDownload.class.getName()).log(Level.SEVERE, null, ex);
-    }
-        String path=dbData.get("path");
-        String name=dbData.get("name");
+        try {
+            dbData = manager.getRealAndDBName(Integer.parseInt(fileId)); //qui va fatto un filtro sui idpost,idgruppo e idutente
+        } catch (SQLException ex) {
+            Logger.getLogger(FileDownload.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String path = dbData.get("path");
+        String name = dbData.get("name");
         ServletContext ctx = getServletContext();
-        File download=new File(ctx.getRealPath("")+"\\"+path);
-        if(name==null){
-        showError();
-        }else{
-        InputStream fis = new FileInputStream(download);
-        String mimeType = ctx.getMimeType(download.getAbsolutePath());
-	response.setContentType(mimeType != null? mimeType:"application/octet-stream");
-	response.setContentLength((int) download.length());
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + name + "\"");
-        ServletOutputStream os= response.getOutputStream();
-        byte[] bufferData = new byte[1024];
-        int read=0;
-        while((read = fis.read(bufferData))!= -1){
-            os.write(bufferData, 0, read);
-		}
-        os.flush();
-        os.close();
-        fis.close();}
+        File download = new File(ctx.getRealPath("") + "\\" + path);
+        if (name == null) {
+            showError();
+        } else {
+            InputStream fis = new FileInputStream(download);
+            String mimeType = ctx.getMimeType(download.getAbsolutePath());
+            response.setContentType(mimeType != null ? mimeType : "application/octet-stream");
+            response.setContentLength((int) download.length());
+            response.setHeader("Content-Disposition", "attachment; filename=\"" + name + "\"");
+            ServletOutputStream os = response.getOutputStream();
+            byte[] bufferData = new byte[1024];
+            int read = 0;
+            while ((read = fis.read(bufferData)) != -1) {
+                os.write(bufferData, 0, read);
+            }
+            os.flush();
+            os.close();
+            fis.close();
+        }
     }
 
     /**
@@ -135,8 +138,8 @@ DBManager manager=null;
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-    
-      static public void showError() throws FileNotFoundException{
+
+    static public void showError() throws FileNotFoundException {
         //scegli cosa fare, o reindirizzi o mandi l'errore (oppure reindirizzi ad una pagina con un messaggio d'errore, che crei tu, tipo 404)
         throw new FileNotFoundException("You do not have priviliegies or the file is missing");
         //response.sendRedirect(request.getContextPath() + "/index.html"); 

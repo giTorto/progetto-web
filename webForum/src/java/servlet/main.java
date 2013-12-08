@@ -58,11 +58,11 @@ public class main extends HttpServlet {
             out.println("</head>");
             out.println("<body>");
 
-                if (header.contains("Benvenuto")){
-                     out.println("<h1>" + header + "</h1>");
-                }else{
-                    out.println("<h1>Ultimo accesso eseguito alle: " + header + "</h1>");
-                }
+            if (header.contains("Benvenuto")) {
+                out.println("<h1>" + header + "</h1>");
+            } else {
+                out.println("<h1>Ultimo accesso eseguito alle: " + header + "</h1>");
+            }
             out.println("<h2> Benvenuto " + ((Utente) request.getSession().getAttribute("user")).getUserName() + " </h2>");
 
             out.println("<div class=\"panel panel-default\">");
@@ -73,7 +73,6 @@ public class main extends HttpServlet {
                     + "  <li align=\"center\" class=\"list-group-item\" onmouseover=\"document.body.style.cursor=&#39;pointer&#39;\" onmouseout=\"document.body.style.cursor=&#39;auto&#39;\" style=\"background-color:lightblue\" onclick=\"location.href='" + request.getContextPath() + "/logg/gruppiSrvlt" + "'\"><h3>Gruppi</h3></li>\n"
                     + "  <li align=\"center\" class=\"list-group-item\" onmouseover=\"document.body.style.cursor=&#39;pointer&#39;\" onmouseout=\"document.body.style.cursor=&#39;auto&#39;\" style=\"background-color:orange\" onclick=\"location.href='" + request.getContextPath() + "/logg/creaGruppoSrvlt" + "'\"><h3>Crea gruppo</h3></li>\n"
                     + "  <li align=\"center\" class=\"list-group-item\" onmouseover=\"document.body.style.cursor=&#39;pointer&#39;\" onmouseout=\"document.body.style.cursor=&#39;auto&#39;\" style=\"background-color:#CC0000\" onclick=\"location.href='" + request.getContextPath() + "/logg/logoutSrvlt" + "'\"><h3>Logout</h3></li>\n"
-                  
                     + "</ul>");
             out.println("  </div>");
             out.println("</div>");

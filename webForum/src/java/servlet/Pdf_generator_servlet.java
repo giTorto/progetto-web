@@ -72,7 +72,7 @@ public class Pdf_generator_servlet extends HttpServlet {
             }
         } catch (SQLException ex) {
             Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
-        } 
+        }
 
         response.setContentType("application/pdf");
 
@@ -94,14 +94,14 @@ public class Pdf_generator_servlet extends HttpServlet {
 
             // Code 2
             table.addCell("Nomi degli utenti partecipanti");
-            
-             for (Utente utente : utenti_gruppo) {
+
+            for (Utente utente : utenti_gruppo) {
                 table.addCell(utente.getUserName());
             }
-             if (utenti_gruppo.isEmpty()) {
-                 table.addCell("Il proprietario del gruppo è attualmente l'unico partecipante");
-             }
-           
+            if (utenti_gruppo.isEmpty()) {
+                table.addCell("Il proprietario del gruppo è attualmente l'unico partecipante");
+            }
+
             document.add(table);
             if (datalastpost == null || numpost == -1) {
                 document.add(new Paragraph("something null"));

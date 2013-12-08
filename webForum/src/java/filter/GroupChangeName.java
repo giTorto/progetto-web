@@ -47,8 +47,6 @@ public class GroupChangeName implements Filter {
 
     }
 
-    
-
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
@@ -78,7 +76,6 @@ public class GroupChangeName implements Filter {
         String inviti2parse = "";
         String creazione_gruppoNome = "";
 
-        
         try {
             groupid = Integer.parseInt(request.getParameter("groupID"));
         } catch (Exception e) {
@@ -117,10 +114,10 @@ public class GroupChangeName implements Filter {
             ok_inviti = false;
         }
 
-        if (ok_inviti && !"".equals(inviti2parse) && inviti2parse != null  && groupid != -1) {
+        if (ok_inviti && !"".equals(inviti2parse) && inviti2parse != null && groupid != -1) {
             try {
                 ArrayList<String> username_invitati = parseFromString(inviti2parse);
-                Util.sendinviti(username_invitati, groupid,manager);
+                Util.sendinviti(username_invitati, groupid, manager);
             } catch (Exception e) {
                 System.err.println("Errore negli inviti");
             }
@@ -145,7 +142,7 @@ public class GroupChangeName implements Filter {
 
                     Gruppo gruppo_appena_creato = manager.getGruppo(creazione_gruppoNome);
                     ArrayList<String> username_invitati = parseFromString(inviti2parse);
-                    Util.sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo(),manager);
+                    Util.sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo(), manager);
                 } catch (SQLException ex) {
                     Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
                 }

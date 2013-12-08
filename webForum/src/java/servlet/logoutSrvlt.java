@@ -8,7 +8,6 @@ package servlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,7 +32,6 @@ public class logoutSrvlt extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
-        
 
         try {
             /*
@@ -42,7 +40,7 @@ public class logoutSrvlt extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-             out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
+            out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
             out.println("                <script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
             out.println("                <script src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js\"></script>");
             out.println("<title>Servlet logoutSrvlt</title>");
@@ -72,7 +70,7 @@ public class logoutSrvlt extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
- HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
 
         if (session != null) {
             session.removeAttribute("user");
@@ -81,7 +79,6 @@ public class logoutSrvlt extends HttpServlet {
         request.setAttribute("message", "Logout effettuato con successo");
         processRequest(request, response);
     }
-    
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -101,17 +98,14 @@ public class logoutSrvlt extends HttpServlet {
             session.removeAttribute("user");
             session.invalidate();
         }
-        
-        /*
-        Cookie[] mycookies = request.getCookies();
-        for (Cookie cookie : mycookies) {
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-        }*/
 
+        /*
+         * Cookie[] mycookies = request.getCookies(); for (Cookie cookie :
+         * mycookies) { cookie.setMaxAge(0); response.addCookie(cookie);
+        }
+         */
         request.setAttribute("message", "Logout effettuato con successo");
-        
-        
+
         // rimando al login
         // RequestDispatcher rd = request.getRequestDispatcher("/");
         // rd.forward(request, response);
