@@ -26,11 +26,11 @@ import java.util.logging.Logger;
  * @author Giulian
  */
 public class DBManager implements Serializable {
-    
+
     private transient Connection con;//transient = non serializzabile
 
     public DBManager(String dburl) throws SQLException {
-        
+
         try {
             Class.forName("org.apache.derby.jdbc.ClientDriver", true, getClass().getClassLoader());
         } catch (Exception e) {
@@ -38,20 +38,20 @@ public class DBManager implements Serializable {
         }
 
         Connection con = DriverManager.getConnection(dburl);
-        
+
         this.con = con;
 
     }
-    
+
     public static void shutdown() {
         try {
             DriverManager.getConnection("jdbc:derby:;shutdown=true");
         } catch (SQLException ex) {
-            
+
             Logger.getLogger(DBManager.class.getName()).info(ex.getMessage());
-            
+
         }
-        
+
     }
 
     /**
@@ -72,7 +72,7 @@ public class DBManager implements Serializable {
             stm.setString(1, username);
             stm.setString(2, password);
             ResultSet rs = stm.executeQuery();
-            
+
             try {
                 if (rs.next()) {
                     Utente user = new Utente();
@@ -81,33 +81,33 @@ public class DBManager implements Serializable {
                     return user;
                 } else {
                     return null;
-                    
+
                 }
-                
+
             } finally {
                 // ricordarsi SEMPRE di chiudere i ResultSet in un blocco finally 
                 rs.close();
             }
-            
+
         } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
             stm.close();
         }
-        
+
     }
-    
+
     public List<Gruppo> getGruppiOwner(Utente u) throws SQLException {
-        
+
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
         int id = u.getId();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM gruppo g, utente u where u.idutente = g.idowner and u.idutente =? ");
-        
+
         try {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-            
+
             try {
-                
+
                 while (rs.next()) {
                     Gruppo p = new Gruppo();
                     p.setNome(rs.getString("nome"));
@@ -117,32 +117,32 @@ public class DBManager implements Serializable {
                     gruppi.add(p);
                 }
             } finally {
-                
+
                 rs.close();
             }
         } finally {
-            
+
             stm.close();
         }
-        
+
         return gruppi;
-        
+
     }
-    
+
     public List<Gruppo> getGruppiPart(Utente u) throws SQLException {
-        
+
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
         int id = u.getId();
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM (gruppo g INNER JOIN gruppi_partecipanti gr ON gr.idgruppo = g.idgruppo)  INNER JOIN utente u ON gr.idutente = u.idutente WHERE u.idutente = ? "
                         + "AND gr.invito_acc > 0");
-        
+
         try {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-            
+
             try {
-                
+
                 while (rs.next()) {
                     Gruppo p = new Gruppo();
                     p.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
@@ -150,21 +150,21 @@ public class DBManager implements Serializable {
                     p.setDataCreazione(rs.getDate("datacreazione"));
                     p.setIdgruppo(rs.getInt("idgruppo"));
                     gruppi.add(p);
-                    
+
                 }
             } finally {
-                
+
                 rs.close();
             }
         } finally {
-            
+
             stm.close();
         }
-        
+
         return gruppi;
-        
+
     }
-    
+
     public List<Gruppo> getInvitiGruppi(Utente u) throws SQLException {
         List<Gruppo> gruppi = new ArrayList<Gruppo>();
         int id = u.getId();
@@ -172,13 +172,13 @@ public class DBManager implements Serializable {
                 = con.prepareStatement("SELECT g.idgruppo,g.nome,g.idowner,g.datacreazione,grp.idutente,u.username,grp.invito_acc \n"
                         + "FROM (gruppo g INNER JOIN gruppi_partecipanti grp ON grp.idgruppo = g.idgruppo) INNER JOIN utente u on grp.idutente=u.idutente\n"
                         + "WHERE grp.idutente=? AND grp.invito_acc=0");
-        
+
         try {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-            
+
             try {
-                
+
                 while (rs.next()) {
                     Gruppo p = new Gruppo();
                     p.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
@@ -186,75 +186,74 @@ public class DBManager implements Serializable {
                     p.setDataCreazione(rs.getDate("datacreazione"));
                     p.setIdgruppo(rs.getInt("idgruppo"));
                     gruppi.add(p);
-                    
+
                 }
             } finally {
-                
+
                 rs.close();
             }
         } finally {
-            
+
             stm.close();
         }
-        
+
         return gruppi;
-        
+
     }
-    
+
     public Utente getMoreUtente(int id) throws SQLException {
-        
+
         PreparedStatement stm = con.prepareStatement("SELECT * FROM utente WHERE idutente = ?");
         try {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-            
+
             try {
                 if (rs.next()) {
                     Utente user = new Utente();
                     user.setUserName(rs.getString("username"));
-                    
+
                     user.setId(rs.getInt("idutente"));
                     return user;
                 } else {
                     return null;
-                    
+
                 }
-                
+
             } finally {
                 // ricordarsi SEMPRE di chiudere i ResultSet in un blocco finally 
                 rs.close();
             }
-            
+
         } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
             stm.close();
         }
     }
-    
-    
-     public Utente getMoreByUserName(String ut) throws SQLException {
-        
+
+    public Utente getMoreByUserName(String ut) throws SQLException {
+
         PreparedStatement stm = con.prepareStatement("SELECT * FROM utente WHERE username = ?");
         try {
             stm.setString(1, ut);
             ResultSet rs = stm.executeQuery();
-            
+
             try {
                 if (rs.next()) {
                     Utente user = new Utente();
                     user.setUserName(rs.getString("username"));
-                    
+
                     user.setId(rs.getInt("idutente"));
                     return user;
                 } else {
                     return null;
-                    
+
                 }
-                
+
             } finally {
                 // ricordarsi SEMPRE di chiudere i ResultSet in un blocco finally 
                 rs.close();
             }
-            
+
         } finally { // ricordarsi SEMPRE di chiudere i PreparedStatement in un blocco finally
             stm.close();
         }
@@ -269,43 +268,43 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public List<Post> getPostsGruppo(Gruppo g) throws SQLException {
-        
+
         List<Post> posts = new ArrayList<Post>();
         int id = g.getIdgruppo();
         String link = "";
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM post "
                         + "WHERE idgruppo = ? ORDER BY data_ora DESC");
-        
+
         try {
             stm.setInt(1, id);
             ResultSet rs = stm.executeQuery();
-            
+
             try {
-                
+
                 while (rs.next()) {
                     Post p = new Post();
                     //Utente tu = getMoreUtente(rs.getInt("idwriter"));
                     p.setTesto(rs.getString("testo"));
                     p.setData_ora(rs.getDate("data_ora"));
                     p.setWriter(getMoreUtente(rs.getInt("idwriter")));
-                    if( rs.getString("dbname")!=null ){
-                        link = "<a href='fileDownload?fileId="+ rs.getInt("idpost")+"'>"+rs.getString("realname")+"</a>";
+                    if (rs.getString("dbname") != null) {
+                        link = "<a href='fileDownload?fileId=" + rs.getInt("idpost") + "'>" + rs.getString("realname") + "</a>";
                         p.setLink(link);
                     };
                     posts.add(p);
                 }
             } finally {
-                
+
                 rs.close();
             }
         } finally {
-            
+
             stm.close();
         }
-        
+
         return posts;
-        
+
     }
 
     /**
@@ -323,10 +322,10 @@ public class DBManager implements Serializable {
      */
     public void setAccettaInvito(Utente u, int idgruppo) throws SQLException {
         int idutente = u.getId();
-        
+
         PreparedStatement stm
                 = con.prepareStatement("UPDATE gruppi_partecipanti SET invito_acc=1 WHERE idutente =? AND idgruppo = ?");
-        
+
         try {
             stm.setInt(1, idutente);
             stm.setInt(2, idgruppo);
@@ -334,7 +333,7 @@ public class DBManager implements Serializable {
         } finally {
             stm.close();
         }
-        
+
     }
 
     /**
@@ -349,10 +348,10 @@ public class DBManager implements Serializable {
     public void creaGruppo(Utente u, String nome) throws SQLException {
         int idutente = u.getId();
         Date data = new Date(Calendar.getInstance().getTimeInMillis());
-        
+
         PreparedStatement stm
                 = con.prepareStatement("INSERT INTO gruppo (nome,datacreazione,idowner) values(?,?,?) ");
-        
+
         try {
             stm.setString(1, nome);
             stm.setDate(2, data);
@@ -361,7 +360,7 @@ public class DBManager implements Serializable {
         } finally {
             stm.close();
         }
-        
+
     }
 
     /**
@@ -378,11 +377,11 @@ public class DBManager implements Serializable {
      */
     public void inviteAllYouDesire(List<Integer> idinvitati, int idgruppo) throws SQLException {
         PreparedStatement stm;
-        
+
         for (Integer idinvitato : idinvitati) {
-            
+
             stm = con.prepareStatement("Insert into gruppi_partecipanti (idutente, invito_acc,idgruppo) values (?,0,?)");
-            
+
             try {
                 stm.setInt(1, idinvitato);
                 stm.setInt(3, idgruppo);
@@ -391,7 +390,7 @@ public class DBManager implements Serializable {
                 stm.close();
             }
         }
-        
+
     }
 
     /**
@@ -405,12 +404,12 @@ public class DBManager implements Serializable {
      */
     public void aggiungiPost(Utente u, int idgruppo, String testo) throws SQLException {
         int idutente = u.getId();
-        
+
         Date data = new Date(Calendar.getInstance().getTimeInMillis());
-        
+
         PreparedStatement stm
                 = con.prepareStatement("INSERT INTO POST (data_ora,testo,idwriter,idgruppo) values(?,?,?,?) ");
-        
+
         try {
             stm.setDate(1, data);
             stm.setString(2, testo);
@@ -418,7 +417,7 @@ public class DBManager implements Serializable {
             stm.setInt(4, idgruppo);
             int executeUpdate = stm.executeUpdate();
         } catch (SQLException ex) {
-            
+
         } finally {
             stm.close();
         }
@@ -439,12 +438,12 @@ public class DBManager implements Serializable {
             ResultSet rs = stm.executeQuery();
             try {
                 while (rs.next()) {
-                    
+
                     group.setNome(rs.getString("nome"));
                     group.setDataCreazione(rs.getDate("datacreazione"));
                     group.setIdgruppo(rs.getInt("idgruppo"));
                     group.setOwnerName(getMoreUtente(rs.getInt("idowner")).getUserName());
-                    
+
                 }
             } finally {
                 rs.close();
@@ -454,7 +453,7 @@ public class DBManager implements Serializable {
         }
         return group;
     }
-    
+
     public Gruppo getGruppo(String nome) throws SQLException {
         ArrayList<Gruppo> gruppi = new ArrayList<Gruppo>();
         PreparedStatement stm = con.prepareStatement("SELECT * FROM gruppo g where g.nome=?");
@@ -492,33 +491,33 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public List<Integer> getUtenti(int idgruppo) throws SQLException {
-        
+
         List<Integer> allUsers = new ArrayList<Integer>();
         PreparedStatement stm
                 = con.prepareStatement("SELECT DISTINCT  idutente FROM gruppi_partecipanti "
                         + "                                    WHERE idgruppo = ?  and invito_acc=1");
-        
+
         try {
             stm.setInt(1, idgruppo);
             ResultSet rs = stm.executeQuery();
-            
+
             try {
-                
+
                 while (rs.next()) {
-                    
+
                     Integer ut = new Integer(rs.getInt("idutente"));
-                    
+
                     allUsers.add(ut);
                 }
             } finally {
-                
+
                 rs.close();
             }
         } finally {
-            
+
             stm.close();
         }
-        
+
         return allUsers;
     }
 
@@ -535,28 +534,28 @@ public class DBManager implements Serializable {
      */
     public int getPostPerUtente(int idgruppo, int idutente) throws SQLException {
         int postPerUtente = 0;
-        
+
         PreparedStatement stm
                 = con.prepareStatement("SELECT COUNT(p.idwriter) "
                         + "FROM post p  "
                         + "WHERE g.idgruppo = ? "
                         + "AND p.idwriter = ?");
-        
+
         try {
             stm.setInt(1, idgruppo);
             stm.setInt(2, idutente);
             ResultSet rs = stm.executeQuery();
-            
+
             postPerUtente = rs.getInt(1);
             rs.close();
-            
+
         } finally {
-            
+
             stm.close();
         }
-        
+
         return postPerUtente;
-        
+
     }
 
     /**
@@ -568,30 +567,30 @@ public class DBManager implements Serializable {
      * @throws SQLException
      */
     public int getNumPostPerGruppo(int idgruppo) throws SQLException {
-        
+
         PreparedStatement stm
                 = con.prepareStatement("SELECT COUNT (p.idgruppo) AS count "
                         + "FROM post p  "
                         + "WHERE p.idgruppo = ?");
-        
+
         try {
             stm.setInt(1, idgruppo);
             ResultSet resultSet = stm.executeQuery();
-            
+
             try {
                 if (resultSet.next()) {
                     return resultSet.getInt("count");
                 } else {
                     return 0;
                 }
-                
+
             } finally {
                 resultSet.close();
             }
         } finally {
             stm.close();
         }
-        
+
     }
 
     /**
@@ -604,36 +603,36 @@ public class DBManager implements Serializable {
      */
     public Date getDataUltimoPost(int idgruppo) throws SQLException {
         Date data = null;
-        
+
         PreparedStatement stm = con.prepareStatement("SELECT max(data_ora) as maxdata from post where idgruppo = ? ");
-        
+
         try {
             stm.setInt(1, idgruppo);
             ResultSet resultSet = stm.executeQuery();
-            
+
             try {
                 if (resultSet.next()) {
                     return resultSet.getDate("maxdata");
                 } else {
                     return null;
                 }
-                
+
             } finally {
                 resultSet.close();
             }
         } finally {
             stm.close();
         }
-        
+
     }
-    
+
     public void updateGroupName(int idgroup, String nuovo_nome) throws SQLException {
-        
+
         PreparedStatement stm = con.prepareStatement("UPDATE GRUPPO   SET NOME = ?  WHERE IDGRUPPO = ?");
         try {
             stm.setString(1, nuovo_nome);
             stm.setInt(2, idgroup);
-            
+
             int executeUpdate = stm.executeUpdate();
         } catch (SQLException ex) {
             System.err.println("Errore nell'aggiornare il gruppo con id:" + idgroup);
@@ -641,7 +640,7 @@ public class DBManager implements Serializable {
             stm.close();
         }
     }
-    
+
     public void updatePartecipanti(int idutente, int id_gruppo_accettato) throws SQLException {
         PreparedStatement stm = con.prepareStatement("UPDATE GRUPPI_PARTECIPANTI   SET INVITO_ACC = 1  WHERE IDUTENTE=? AND idgruppo=?");
         try {
@@ -666,12 +665,12 @@ public class DBManager implements Serializable {
      */
     public void addPostFile(Utente user, int idgruppo, String realname, String dbname, String testo) throws SQLException {
         int idutente = user.getId();
-        
+
         Date data = new Date(Calendar.getInstance().getTimeInMillis());
-        
+
         PreparedStatement stm
                 = con.prepareStatement("INSERT INTO POST (data_ora,testo,idwriter,idgruppo,realname,dbname) values(?,?,?,?,?,?) ");
-        
+
         try {
             stm.setDate(1, data);
             stm.setString(2, testo);
@@ -681,11 +680,11 @@ public class DBManager implements Serializable {
             stm.setString(6, dbname);
             int executeUpdate = stm.executeUpdate();
         } catch (SQLException ex) {
-            
+
         } finally {
             stm.close();
         }
-        
+
     }
 
     /**
@@ -699,23 +698,23 @@ public class DBManager implements Serializable {
     public int getLinkByName(String fileName, String user) {
         int retVal = 0;
         try {
-       
+
             ResultSet rs;
-            
+
             PreparedStatement stm
                     = con.prepareStatement("SELECT * FROM POST p inner join utente u on p.idwriter = u.idutente WHERE u.username = ? AND realname=?");
             stm.setString(1, user);
             stm.setString(2, fileName);
-            
+
             rs = stm.executeQuery();
             rs.next();
             retVal = rs.getInt("idpost");
-            
+
             stm.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return retVal;
     }
 
@@ -727,35 +726,35 @@ public class DBManager implements Serializable {
      * @return ID del file o stringa vuota
      */
     public int getLRULink(String fileName) {
-        
+
         int retVal = 0;
         try {
-            
+
             ResultSet rs;
-            
+
             PreparedStatement stm
                     = con.prepareStatement("SELECT idpost FROM POST WHERE realname=? ORDER BY data_ora DESC FETCH FIRST 1 ROWS ONLY");
             stm.setString(1, fileName);
-            
+
             rs = stm.executeQuery();
-            if(rs.next())
-            {retVal = rs.getInt("idpost");
+            if (rs.next()) {
+                retVal = rs.getInt("idpost");
             }
-            
+
             stm.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         return retVal;
     }
-    
-   public boolean controllaInvitogià_esistente(int groupid, int idutente) throws SQLException {//ritorna true se c'è già un invito, false altrimenti
 
-        boolean retval=false;
+    public boolean controllaInvitogià_esistente(int groupid, int idutente) throws SQLException {//ritorna true se c'è già un invito, false altrimenti
+
+        boolean retval = false;
         try {
             PreparedStatement stm = con.prepareStatement("select * from gruppi_partecipanti where idgruppo= ? and idutente= ?");
-        
+
             stm.setInt(1, groupid);
             stm.setInt(2, idutente);
 
@@ -763,20 +762,17 @@ public class DBManager implements Serializable {
 
             if (!rs.next()) {
                 System.out.println("No data");
-                retval=false;
+                retval = false;
             } else {
-                retval=true;
+                retval = true;
             }
             stm.close();
         } catch (SQLException e) {
             System.err.println("errore nel verificare se l'invito esisteva già");
-           return false;
+            return false;
         }
         return retval;
     }
-
-
-
 
     public void insertInvito(int groupid, int idutente) throws SQLException {
         PreparedStatement stm = con.prepareStatement("INSERT INTO gruppi_partecipanti (idgruppo,idutente,invito_acc) values(?,?,?)");
@@ -793,31 +789,52 @@ public class DBManager implements Serializable {
             stm.close();
         }
     }
-    
-       /**
-     *Trova nel DB i dati di un file basandosi sul suo id
+
+    /**
+     * Trova nel DB i dati di un file basandosi sul suo id
+     *
      * @param id ID del FILE
      * @param userId
      * @return i dati trovati o un set vuoto
      */
-    public HashMap<String, String> getRealAndDBName(int idpost) throws SQLException{
+    public HashMap<String, String> getRealAndDBName(int idpost) throws SQLException {
         ResultSet rs;
         HashMap<String, String> retVal = new HashMap<String, String>();
         //String query="SELECT GROUPID,REALNAME,DBNAME FROM USERS.FILES WHERE FILEID="+id+" AND GROUPID ="+groupId;
         //String query="SELECT GROUPID,REALNAME,DBNAME FROM USERS.FILES WHERE FILEID="+id+" AND GROUPID IN ("+GET_GROUPS_QUERY+userId+")";
         PreparedStatement pr = con.prepareStatement("SELECT * FROM POST where idpost=?");
-      
+
         try {
             pr.setInt(1, idpost);
-           
-            rs=pr.executeQuery();
-            if(rs.next()){
-                retVal.put("path", "media\\"+ rs.getString("idgruppo")+"\\"+ rs.getString("dbname"));
-                retVal.put("name", rs.getString("realname"));}
+
+            rs = pr.executeQuery();
+            if (rs.next()) {
+                retVal.put("path", "media\\" + rs.getString("idgruppo") + "\\" + rs.getString("dbname"));
+                retVal.put("name", rs.getString("realname"));
+            }
         } catch (SQLException ex) {
             Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, ex);
         }
         return retVal;
     }
-    
+
+    public int getGroupid_from_Fileid(int fileid) throws SQLException {
+        int retval = -1;
+        PreparedStatement stm = con.prepareStatement("select idgruppo from POST where idpost=?");
+        try {
+            stm.setInt(1, fileid);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                retval = rs.getInt("idgruppo");
+            }
+
+        } catch (SQLException e) {
+            Logger.getLogger(DBManager.class.getName()).log(Level.SEVERE, null, e);
+            System.err.println("Errore nel recupero del gruppoid relativo al fileid");
+            retval = -1;
+        }
+        stm.close();
+        return retval;
+    }
+
 }
