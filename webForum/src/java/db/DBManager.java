@@ -750,30 +750,34 @@ public class DBManager implements Serializable {
         return retVal;
     }
     
-    public boolean controllaInvitogià_esistente(int groupid, int idutente) throws SQLException {//ritorna true se c'è già un invito, false altrimenti
+   public boolean controllaInvitogià_esistente(int groupid, int idutente) throws SQLException {//ritorna true se c'è già un invito, false altrimenti
 
-        PreparedStatement stm = con.prepareStatement("select * from gruppi_partecipanti where idgruppo= ? and idutente= ?");
+        boolean retval=false;
         try {
+            PreparedStatement stm = con.prepareStatement("select * from gruppi_partecipanti where idgruppo= ? and idutente= ?");
+        
             stm.setInt(1, groupid);
             stm.setInt(2, idutente);
-            
+
             ResultSet rs = stm.executeQuery();
-            
-            if (!rs.isBeforeFirst()) {
+
+            if (!rs.next()) {
                 System.out.println("No data");
-                return false;
+                retval=false;
             } else {
-                return true;
+                retval=true;
             }
-            
-        } catch (Exception e) {
-            System.err.println("errore nel verificare se l'invito esisteva già");
-            return false;
-        } finally {
             stm.close();
+        } catch (SQLException e) {
+            System.err.println("errore nel verificare se l'invito esisteva già");
+           return false;
         }
+        return retval;
     }
-    
+
+
+
+
     public void insertInvito(int groupid, int idutente) throws SQLException {
         PreparedStatement stm = con.prepareStatement("INSERT INTO gruppi_partecipanti (idgruppo,idutente,invito_acc) values(?,?,?)");
         int zero = 0;
@@ -781,7 +785,7 @@ public class DBManager implements Serializable {
             stm.setInt(1, groupid);
             stm.setInt(2, idutente);
             stm.setInt(3, zero);
-            
+
             int executeUpdate = stm.executeUpdate();
         } catch (Exception e) {
             System.err.println("errore nel inserire l'invito");
