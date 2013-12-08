@@ -272,6 +272,7 @@ public class DBManager implements Serializable {
         
         List<Post> posts = new ArrayList<Post>();
         int id = g.getIdgruppo();
+        String link = "";
         PreparedStatement stm
                 = con.prepareStatement("SELECT * FROM post "
                         + "WHERE idgruppo = ? ORDER BY data_ora DESC");
@@ -288,6 +289,10 @@ public class DBManager implements Serializable {
                     p.setTesto(rs.getString("testo"));
                     p.setData_ora(rs.getDate("data_ora"));
                     p.setWriter(getMoreUtente(rs.getInt("idwriter")));
+                    if( rs.getString("dbname")!=null ){
+                        link = "<a href='fileDownload?fileId="+ rs.getInt("idpost")+"'>"+rs.getString("realname")+"</a>";
+                        p.setLink(link);
+                    };
                     posts.add(p);
                 }
             } finally {

@@ -17,6 +17,17 @@ public class Post {
     private Date data_ora;
     private String testo;
     private Utente writer;
+    private String link;
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+    
+    
 
     public Date getData_ora() {
         return data_ora;
@@ -47,7 +58,7 @@ public class Post {
         out.println("		<li><label id='username'>"+us.getUserName()+"</label>:  <label id=\"Label1\">"+this.getTesto()+"</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">"+this.getData_ora().toString()+
                 "<label id='linkPost'> </label>");
         out.println("		</label>&nbsp;&nbsp;<label id=\"Label1\">"+/*this.getWriter().getUserName()*/""+"</label><br>");
-        out.println("<label> "+ "</label>");
+        out.println("<label> "+this.getLink()+ "</label>");
         out.println("		<br></li>");
     }
 
