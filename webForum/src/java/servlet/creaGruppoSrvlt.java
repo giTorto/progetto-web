@@ -76,7 +76,7 @@ public class creaGruppoSrvlt extends HttpServlet {
                     + "    padding=\"0\";>");
             out.println("  <div class=\"panel-body\">");
             out.println("<h2>Nome gruppo:</h2>");
-            out.println("			<form action=\"/webForum/logg/gruppiSrvlt\" method=\"post\" name=\"myform\">");
+            out.println("			<form action=\""+request.getContextPath()+"/logg/salvagruppo\" method=\"post\" name=\"myform\">");
             out.println("<div class=\"row\">");
             out.println("	<div class=\"col-lg-6\">");
             out.println("		<div class=\"input-group\">");

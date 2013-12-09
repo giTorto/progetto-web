@@ -68,6 +68,14 @@
         <servlet-name>FileDownload</servlet-name>
         <servlet-class>servlet.FileDownload</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SalvaNuovoGruppo</servlet-name>
+        <servlet-class>servlet.SalvaNuovoGruppo</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>salvaModificheGruppo</servlet-name>
+        <servlet-class>servlet.salvaModificheGruppo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>myServlet</servlet-name>
         <url-pattern>/myServlet</url-pattern>
@@ -128,6 +136,14 @@
         <servlet-name>FileDownload</servlet-name>
         <url-pattern>/logg/fileDownload</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>SalvaNuovoGruppo</servlet-name>
+        <url-pattern>/logg/salvagruppo</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>salvaModificheGruppo</servlet-name>
+        <url-pattern>/logg/salvamodifiche</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             30
@@ -149,10 +165,6 @@
         <filter-name>FileDownloadFilter</filter-name>
         <filter-class>filter.FileDownloadFilter</filter-class>
     </filter>
-    <filter>
-        <filter-name>GroupChangeName</filter-name>
-        <filter-class>filter.GroupChangeName</filter-class>
-    </filter>
     <filter-mapping>
         <filter-name>FileDownloadFilter</filter-name>
         <url-pattern>/logg/fileDownload</url-pattern>
@@ -160,10 +172,6 @@
     <filter-mapping>
         <filter-name>CheckAccessUser2Group</filter-name>
         <url-pattern>/logg/displaygroup</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>GroupChangeName</filter-name>
-        <url-pattern>/logg/gruppiSrvlt</url-pattern>
     </filter-mapping>
     <filter-mapping>
         <filter-name>SessionFilter</filter-name>
