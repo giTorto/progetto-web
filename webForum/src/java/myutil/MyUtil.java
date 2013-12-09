@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package util;
+package myutil;
 
 import db.DBManager;
 import db.Gruppo;
@@ -19,7 +19,7 @@ import servlet.gruppiSrvlt;
  *
  * @author Lorenzo
  */
-public class Util {
+public class MyUtil {
 
     public static void sendinviti(ArrayList<String> usernames, int idgruppo, DBManager manager) {
         for (String username : usernames) {
@@ -56,6 +56,19 @@ public class Util {
         retval.addAll(Arrays.asList(tokens));
         return retval;
 
+    }
+
+    public static String getExtension(String fileName) {
+        int index = fileName.lastIndexOf(".");
+        return (index >= 0) ? fileName.substring(index) : "";
+    }
+
+    public static String formatName(String fileName) {
+        int index = fileName.lastIndexOf("\\");
+        if (index > 0) {
+            return fileName.substring(index + 1);
+        }
+        return fileName;
     }
 
 }

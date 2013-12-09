@@ -32,8 +32,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.util.Streams;
-import static util.Util.formatName;
-import static util.Util.getExtension;
+import myutil.MyUtil;
 
 /**
  *
@@ -157,12 +156,12 @@ public class aggiungiPost extends HttpServlet {
                             makeDir(path);
                             path += "\\" + idgruppo;
                             makeDir(path);
-                            fileName = formatName(item.getName());
+                            fileName = MyUtil.formatName(item.getName());
                             //seed è il seme per l'algoritmo di hashing, per renderlo unico è composto dal nome del file, l'id utente e il tempo preciso al millisecondo (che garantisce)
 
                             String seed = fileName + user.getId() + new Timestamp(new java.util.Date().getTime()).toString();
                             tmp = md5(seed);
-                            tmp = tmp + getExtension(fileName);
+                            tmp = tmp + MyUtil.getExtension(fileName);
                             path += "\\" + tmp;
                             relPath += "\\" + (idgruppo + "\\" + tmp);
 
@@ -191,7 +190,7 @@ public class aggiungiPost extends HttpServlet {
                     }
                 }
             }
-            String resultament = checkText(messaggio, fileName, tmp,idgruppo);
+            String resultament = checkText(messaggio, fileName, tmp, idgruppo);
             manager.addPostFile(user, idgruppo, fileName, tmp, resultament);
 
         } catch (FileUploadException ex) {
@@ -240,10 +239,6 @@ public class aggiungiPost extends HttpServlet {
 
         return sb.toString();
     }
-
- 
-
-
 
     /**
      * Controlla il testo sistemando eventuali link
@@ -298,10 +293,9 @@ public class aggiungiPost extends HttpServlet {
                 nameFound = names.get(i);
                 textFound = parts.get(i);
                 if (null != nameFound) {
-                
-                        String tmp = createLink(textFound, nameFound, fileId,idgruppo);
-                        retVal += tmp;
-                    
+
+                    String tmp = createLink(textFound, nameFound, fileId, idgruppo);
+                    retVal += tmp;
 
                 } else {
                     retVal += textFound;
@@ -330,15 +324,15 @@ public class aggiungiPost extends HttpServlet {
 
         int tmp;
         if ("-1".equals(id) || id == null) {
-            if (! (name.equals("") || name.equals(" ")) ) {
+            if (!(name.equals("") || name.equals(" "))) {
                 if (name.contains("http")) {
                     tmp = 0;
                 } else {
-                    tmp = manager.getLinkByName(text, name,idgruppo);
+                    tmp = manager.getLinkByName(text, name, idgruppo);
                 }
 
             } else {
-                tmp = manager.getLRULink(text,idgruppo);
+                tmp = manager.getLRULink(text, idgruppo);
             }
         } else {
             tmp = idt;

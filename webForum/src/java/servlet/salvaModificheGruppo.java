@@ -16,7 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import util.Util;
+import myutil.MyUtil;
 
 /**
  *
@@ -88,8 +88,8 @@ public class salvaModificheGruppo extends HttpServlet {
 
         if (ok_inviti && !"".equals(inviti2parse) && inviti2parse != null && groupid != -1) {
             try {
-                ArrayList<String> username_invitati = Util.parseFromString(inviti2parse);
-                Util.sendinviti(username_invitati, groupid, manager);
+                ArrayList<String> username_invitati = MyUtil.parseFromString(inviti2parse);
+                MyUtil.sendinviti(username_invitati, groupid, manager);
             } catch (Exception e) {
                 System.err.println("Errore negli inviti");
             }

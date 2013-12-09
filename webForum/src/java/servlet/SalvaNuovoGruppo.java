@@ -18,7 +18,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import util.Util;
+import myutil.MyUtil;
 
 /**
  *
@@ -78,8 +78,8 @@ public class SalvaNuovoGruppo extends HttpServlet {
                     manager.creaGruppo(ownernewgroup, creazione_gruppoNome);
 
                     Gruppo gruppo_appena_creato = manager.getGruppo(creazione_gruppoNome);
-                    ArrayList<String> username_invitati = Util.parseFromString(inviti2parse);
-                    Util.sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo(), manager);
+                    ArrayList<String> username_invitati = MyUtil.parseFromString(inviti2parse);
+                    MyUtil.sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo(), manager);
                 } catch (SQLException ex) {
                     Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
                 }
