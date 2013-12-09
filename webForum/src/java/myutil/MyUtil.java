@@ -58,11 +58,14 @@ public class MyUtil {
 
     }
 
-    public static String getExtension(String fileName) {
-        int index = fileName.lastIndexOf(".");
-        return (index >= 0) ? fileName.substring(index) : "";
-    }
-
+    
+         /**
+     * Su alcuni browser (IE) il file viene caricato con il path assoluto,
+     * quindi bisogna recuperare il solo nome del file
+     *
+     * @param fileName
+     * @return vero nome del file
+     */
     public static String formatName(String fileName) {
         int index = fileName.lastIndexOf("\\");
         if (index > 0) {
@@ -70,5 +73,19 @@ public class MyUtil {
         }
         return fileName;
     }
+
+
+     /**
+     * Dato un file, trova la sua estensione
+     *
+     * @param fileName nome del file da controllare
+     * @return estensione del file in input
+     */
+    public static String getExtension(String fileName) {
+        int index = fileName.lastIndexOf(".");
+        return (index >= 0) ? fileName.substring(index) : "";
+
+        }
+
 
 }
