@@ -32,6 +32,8 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.util.Streams;
+import static util.Util.formatName;
+import static util.Util.getExtension;
 
 /**
  *
@@ -239,31 +241,9 @@ public class aggiungiPost extends HttpServlet {
         return sb.toString();
     }
 
-    /**
-     * Su alcuni browser (IE) il file viene caricato con il path assoluto,
-     * quindi bisogna recuperare il solo nome del file
-     *
-     * @param fileName
-     * @return vero nome del file
-     */
-    public String formatName(String fileName) {
-        int index = fileName.lastIndexOf("\\");
-        if (index > 0) {
-            return fileName.substring(index + 1);
-        }
-        return fileName;
-    }
+ 
 
-    /**
-     * Dato un file, trova la sua estensione
-     *
-     * @param fileName nome del file da controllare
-     * @return estensione del file in input
-     */
-    public String getExtension(String fileName) {
-        int index = fileName.lastIndexOf(".");
-        return (index >= 0) ? fileName.substring(index) : "";
-    }
+
 
     /**
      * Controlla il testo sistemando eventuali link
@@ -318,13 +298,10 @@ public class aggiungiPost extends HttpServlet {
                 nameFound = names.get(i);
                 textFound = parts.get(i);
                 if (null != nameFound) {
-                    if ((textFound.equals(fileName) && !"".equals(fileName))) {
-                        String tmp = createLink(textFound, nameFound, "-1",idgruppo);
-                        retVal += tmp;
-                    } else {
+                
                         String tmp = createLink(textFound, nameFound, fileId,idgruppo);
                         retVal += tmp;
-                    }
+                    
 
                 } else {
                     retVal += textFound;
