@@ -690,22 +690,23 @@ public class DBManager implements Serializable {
     /**
      * Ricerca l'ID del file basandosi sul nome. Se il file viene trovato, viene
      * impostato un campo per indicarlo come recente
-     *
+     * @param idgruppo id del gruppo in cui si è e lo si sta richiedendo
      * @param fileName Nome del file
-     * @param userName Nome dell'utente da linkare
+     * @param user Nome dell'utente da linkare
      * @return Url del file associato al nome Utente o stringa vuota
      */
-    public int getLinkByName(String fileName, String user) {
+    public int getLinkByName(String fileName, String user, int idgruppo) {
         int retVal = 0;
         try {
 
             ResultSet rs;
 
             PreparedStatement stm
-                    = con.prepareStatement("SELECT * FROM POST p inner join utente u on p.idwriter = u.idutente WHERE u.username = ? AND realname=?");
+                    = con.prepareStatement("SELECT * FROM POST p inner join utente u on p.idwriter = u.idutente WHERE u.username = ? AND realname=? "
+                            + "AND idgruppo = ?");
             stm.setString(1, user);
             stm.setString(2, fileName);
-
+            stm.setInt(3,idgruppo);
             rs = stm.executeQuery();
             rs.next();
             retVal = rs.getInt("idpost");
@@ -725,7 +726,7 @@ public class DBManager implements Serializable {
      * @param fileName Nome del FIlE da cercare
      * @return ID del file o stringa vuota
      */
-    public int getLRULink(String fileName) {
+    public int getLRULink(String fileName,int idgruppo) {
 
         int retVal = 0;
         try {
@@ -733,13 +734,14 @@ public class DBManager implements Serializable {
             ResultSet rs;
 
             PreparedStatement stm
-                    = con.prepareStatement("SELECT idpost FROM POST WHERE realname=? ORDER BY data_ora DESC FETCH FIRST 1 ROWS ONLY");
+                    = con.prepareStatement("SELECT * FROM POST WHERE realname=? "
+                            + "AND idgruppo = ? ORDER BY data_ora DESC FETCH FIRST 1 ROWS ONLY");
             stm.setString(1, fileName);
-
+            stm.setInt(2,idgruppo);
             rs = stm.executeQuery();
-            if (rs.next()) {
-                retVal = rs.getInt("idpost");
-            }
+            rs.next();
+            retVal = rs.getInt("idpost");
+            
 
             stm.close();
         } catch (SQLException ex) {
@@ -793,8 +795,7 @@ public class DBManager implements Serializable {
     /**
      * Trova nel DB i dati di un file basandosi sul suo id
      *
-     * @param id ID del FILE
-     * @param userId
+     * @param idpost id del file
      * @return i dati trovati o un set vuoto
      */
     public HashMap<String, String> getRealAndDBName(int idpost) throws SQLException {

@@ -189,7 +189,7 @@ public class aggiungiPost extends HttpServlet {
                     }
                 }
             }
-            String resultament = checkText(messaggio, fileName, tmp);
+            String resultament = checkText(messaggio, fileName, tmp,idgruppo);
             manager.addPostFile(user, idgruppo, fileName, tmp, resultament);
 
         } catch (FileUploadException ex) {
@@ -273,7 +273,7 @@ public class aggiungiPost extends HttpServlet {
      * @param fileId eventuale id del file caricato dall'utente
      * @return il testo con i link esatti
      */
-    public String checkText(String text, String fileName, String fileId) {
+    public String checkText(String text, String fileName, String fileId, int idgruppo) {
         Boolean found = false;
         ArrayList<String> parts = new ArrayList<String>();
         ArrayList<String> names = new ArrayList<String>();
@@ -319,10 +319,10 @@ public class aggiungiPost extends HttpServlet {
                 textFound = parts.get(i);
                 if (null != nameFound) {
                     if ((textFound.equals(fileName) && !"".equals(fileName))) {
-                        String tmp = createLink(textFound, nameFound, "-1");
+                        String tmp = createLink(textFound, nameFound, "-1",idgruppo);
                         retVal += tmp;
                     } else {
-                        String tmp = createLink(textFound, nameFound, fileId);
+                        String tmp = createLink(textFound, nameFound, fileId,idgruppo);
                         retVal += tmp;
                     }
 
@@ -344,7 +344,7 @@ public class aggiungiPost extends HttpServlet {
      * @param id dell'eventuale file caricato dall'utente
      * @return anchor tag aggiustata oppure il testo in input
      */
-    public String createLink(String text, String name, String id) {
+    public String createLink(String text, String name, String id, int idgruppo) {
         int idt = 0;
 
         if (!(id == null)) {
@@ -353,15 +353,15 @@ public class aggiungiPost extends HttpServlet {
 
         int tmp;
         if ("-1".equals(id) || id == null) {
-            if (!"".equals(name)) {
+            if (! (name.equals("") || name.equals(" ")) ) {
                 if (name.contains("http")) {
                     tmp = 0;
                 } else {
-                    tmp = manager.getLinkByName(text, name);
+                    tmp = manager.getLinkByName(text, name,idgruppo);
                 }
 
             } else {
-                tmp = manager.getLRULink(text);
+                tmp = manager.getLRULink(text,idgruppo);
             }
         } else {
             tmp = idt;
