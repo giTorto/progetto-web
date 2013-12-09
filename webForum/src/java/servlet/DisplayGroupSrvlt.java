@@ -95,10 +95,52 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.println("<title>Senza nome 1</title>");
             out.println("<style type=\"text/css\">");
             out.println("</style>");
+            out.println("<style>");
+            out.println(".bubble \n"
+                    + "{\n"
+                    + "position: relative;\n"
+                    + "width: 250px;\n"
+                    + "height: 120px;\n"
+                    + "padding: 0px;\n"
+                    + "background: #CBD5DD;\n"
+                    + "-webkit-border-radius: 10px;\n"
+                    + "-moz-border-radius: 10px;\n"
+                    + "border-radius: 10px;\n"
+                    + "}\n"
+                    + "\n"
+                    + ".bubble:after \n"
+                    + "{\n"
+                    + "content: '';\n"
+                    + "position: absolute;\n"
+                    + "border-style: solid;\n"
+                    + "border-width: 9px 19px 9px 0;\n"
+                    + "border-color: transparent #CBD5DD;\n"
+                    + "display: block;\n"
+                    + "width: 0;\n"
+                    + "z-index: 1;\n"
+                    + "margin-top: -9px;\n"
+                    + "left: -19px;\n"
+                    + "top: 74%;\n"
+                    + "}");
+            out.println("</style>");
             out.println("</head>");
             out.println("");
             out.println("<body>");
-
+            out.println("<div class=\"panel panel-default\">");
+            out.println("  <div class=\"panel-body\" align=\"right\">");
+            out.println("<a href=\"" + request.getContextPath() + "/logg/gruppiSrvlt" + "\" style=\"background-color:#cbd5dd\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-arrow-left\"></span> Indietro</a>");
+            out.println("<button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/main" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Home</button>");
+            out.println("  <button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/logoutSrvlt" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Logout</button>");
+            out.println("");
+            out.println("  </div>");
+            out.println("</div>");
+            out.println("");
+            out.println("<div class=\"panel panel-default\" margin-left=\"auto\";\n"
+                    + "    margin-right=\"auto\";\n"
+                    + "    margin-top=\"0\";\n"
+                    + "    margin-bottom=\"0\";\n"
+                    + "    padding=\"0\";>");
+            out.println("  <div class=\"panel-body\">");
             out.println("<div>");
             out.println("");
             out.println("<h1>" + gruppo.getNome() + "</h1><br>");
@@ -106,9 +148,10 @@ public class DisplayGroupSrvlt extends HttpServlet {
             out.write("<form action=\"aggiungiPost\" method =\"post\"  enctype=\"multipart/form-data\" >");
             out.println("	<input name=\"idgruppo\" type=\"hidden\" value=\"" + ((Integer) gruppo.getIdgruppo()).toString() + "\" />	"
                     // + "<textarea id=\"txtarea\" cols=\"50\" name=\"messaggio\" rows=\"4\" wrap=\"soft\">scrivi quello che vuoi</textarea><br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-                    + "<textarea name=\"messaggio\" placeholder=\"Cosa stai pensando?\" rows=\"4\" cols=\"50\"> </textarea>");
-            out.write("Select File to Upload:<input type=\"file\" name=\"file\">"
-                    + "<input name=\"submit\" type=\"submit\" value=\"send\" /></form>");
+
+                    + "<textarea class=\"form-control\" name=\"messaggio\" rows=\"3\" cols=\"50\" placeholder=\"Cosa stai pensando?\"></textarea>");
+            out.write("Select File to Upload:<input  type=\"file\" name=\"file\">"
+                    + "<input class=\"btn btn-primary btn-lg\" name=\"submit\" type=\"submit\" value=\"send\" /></form>");
             out.write("<br>");
             //out.write("<input type=\"submit\" value=\"Upload\">");
             //out.write("</form>");
@@ -120,6 +163,9 @@ public class DisplayGroupSrvlt extends HttpServlet {
 
             out.println("	<p></p>");
             out.println("</div>");
+            out.println("  </div>");
+            out.println("</div>");
+
             out.println("<div>");
             out.println("	<ul>");
             for (Post post : postlist) {

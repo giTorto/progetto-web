@@ -53,13 +53,16 @@ public class Post {
 
     public void tohtmlrow(PrintWriter out, Utente u) {
         Utente us = this.getWriter();
-        out.println("		<li><label id='username'>" + us.getUserName() + "</label>:  <label id=\"Label1\">" + this.getTesto() + "</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\">" + this.getData_ora().toString()
-                + "<label id='linkPost'> </label>");
+        out.println("		<li><label id='username'><strong>" + us.getUserName() + "</strong></label>:  <label id=\"Label1\"><em>" + this.getTesto() + "</em></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label id=\"Label1\"><sub>" + this.getData_ora().toString()
+                + "</sub><label id='linkPost'> </label>");
         out.println("		</label>&nbsp;&nbsp;<label id=\"Label1\">" +/*
                  * this.getWriter().getUserName()
                  */ "" + "</label><br>");
-        out.println("<label> " + this.getLink() + "</label>");
+        if (this.getLink() != null) {
+            out.println("<label> " + this.getLink() + "</label>");
+        }
         out.println("		<br></li>");
+
     }
 
 }

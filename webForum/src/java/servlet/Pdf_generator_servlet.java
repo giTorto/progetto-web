@@ -87,7 +87,7 @@ public class Pdf_generator_servlet extends HttpServlet {
                 document.add(new Paragraph("Nome del gruppo: " + gruppo.getNome()));
                 document.add(new Paragraph("Proprietario gruppo: " + gruppo.getOwnerName()));
             } else {
-                document.add(new Paragraph("gruppo era null"));
+                document.add(new Paragraph("Gruppo sconosciuto"));
             }
             document.add(new Paragraph("#######"));
             PdfPTable table = new PdfPTable(1); // Code 1
@@ -104,7 +104,7 @@ public class Pdf_generator_servlet extends HttpServlet {
 
             document.add(table);
             if (datalastpost == null || numpost == -1) {
-                document.add(new Paragraph("something null"));
+                document.add(new Paragraph("Pare che nessuno abbia mai pubblicato un post!"));
             } else {
                 document.add(new Paragraph("Data ultimo post: " + datalastpost.toString()));
                 document.add(new Paragraph("Numero di post inseriti in questo gruppo: " + numpost));

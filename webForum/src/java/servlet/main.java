@@ -78,8 +78,6 @@ public class main extends HttpServlet {
             out.println("</div>");
             out.println("");
 
-            out.write("</body>");
-            out.write("</html>");
             out.println("</body>");
             out.println("</html>");
         } finally {

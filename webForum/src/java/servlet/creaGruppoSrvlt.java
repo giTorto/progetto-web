@@ -81,7 +81,7 @@ public class creaGruppoSrvlt extends HttpServlet {
             out.println("	<div class=\"col-lg-6\">");
             out.println("		<div class=\"input-group\">");
             out.println("				");
-            out.println("				<input class=\"form-control\" name=\"creazione_gruppo_nome\" type=\"text\" value=\"scegli un nome\">");
+            out.println("				<input class=\"form-control\" name=\"creazione_gruppo_nome\" type=\"text\" placeholder=\"scegli un nome\">");
             out.println("				<span class=\"input-group-btn\">");
             out.println("				</span>");
             out.println("		</div>");
@@ -96,7 +96,7 @@ public class creaGruppoSrvlt extends HttpServlet {
             out.println("	<div class=\"col-lg-6\">");
             out.println("		<div class=\"input-group\">");
             out.println("				");
-            out.println("				<input class=\"form-control\" name=\"areainviti\" size=\"50\" type=\"text\" value=\"ad es: username1,username2\">");
+            out.println("				<input class=\"form-control\" name=\"areainviti\" size=\"50\" type=\"text\" placeholder=\"ad es: username1,username2\">");
             out.println("				<span class=\"input-group-btn\">");
             out.println("				");
             out.println("			</span></div>");

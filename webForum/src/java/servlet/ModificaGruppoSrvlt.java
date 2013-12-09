@@ -70,13 +70,24 @@ public class ModificaGruppoSrvlt extends HttpServlet {
             out.println("");
             out.println("<body>");
             out.println("");
+
+            out.println("  <div class=\"panel-body\" align=\"right\">");
+            
+            out.println("<a href=\"" + request.getContextPath() + "/logg/gruppiSrvlt" + "\" style=\"background-color:#cbd5dd\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-arrow-left\"></span> Indietro</a>");
+            
+            out.println("<button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/main" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Home</button>");
+            out.println("  <button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/logoutSrvlt" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Logout</button>");
+            out.println("");
+            out.println("  </div>");
+            out.println("</div>");
+            out.println("");
             out.println("<h2>Nome gruppo:</h2>");
             out.println("			<form action=\"" + request.getContextPath() + "/logg/gruppiSrvlt\" method=\"post\" name=\"\">");
             out.println("<div class=\"row\">");
             out.println("	<div class=\"col-lg-6\">");
             out.println("		<div class=\"input-group\">");
             out.println("				<input name=\"groupID\" type=\"hidden\" value=\"" + gruppo.getIdgruppo() + "\" />");
-            out.println("				<input class=\"form-control\" name=\"nuovo_nome_gruppo\" type=\"text\" value=\"" + gruppo.getNome() + "\">");
+            out.println("				<input class=\"form-control\" name=\"nuovo_nome_gruppo\" type=\"text\" placeholder=\"" + gruppo.getNome() + "\">");
             out.println("				<span class=\"input-group-btn\">");
             out.println("				<button class=\"btn btn-default\" type=\"submit\">Salva modifche");
             out.println("				</button></span>");
@@ -94,7 +105,7 @@ public class ModificaGruppoSrvlt extends HttpServlet {
             out.println("	<div class=\"col-lg-6\">");
             out.println("		<div class=\"input-group\">");
             out.println("				<input name=\"groupID\" type=\"hidden\" value=\"" + gruppo.getIdgruppo() + "\" />");
-            out.println("				<input class=\"form-control\" name=\"areainviti\" size=\"50\" type=\"text\" value=\"ad es: username1,username2\">");
+            out.println("				<input class=\"form-control\" name=\"areainviti\" size=\"50\" type=\"text\" placeholder=\"ad es: username1,username2\">");
             out.println("				<span class=\"input-group-btn\">");
             out.println("				<button class=\"btn btn-default\" type=\"submit\">Salva modifche");
             out.println("				</button>");
