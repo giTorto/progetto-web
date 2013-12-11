@@ -21,7 +21,9 @@ import servlet.gruppiSrvlt;
  */
 public class MyUtil {
 
-    public static void sendinviti(ArrayList<String> usernames, int idgruppo, DBManager manager) {
+    public static ArrayList<String> sendinviti(ArrayList<String> usernames, int idgruppo, DBManager manager) {
+        ArrayList<String> utentiNonEsistenti = new ArrayList<String>();
+        boolean noerr = true;
         for (String username : usernames) {
             try {
                 Utente u = new Utente();
@@ -39,13 +41,21 @@ public class MyUtil {
                         }
                     }
                 } else {
-                    System.err.println("Util.sendinviti: Impossibile invitare " + username);
+                    //System.err.println("Util.sendinviti: Impossibile invitare " + username);
+                    utentiNonEsistenti.add(username);
+                    noerr = false;
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
                 System.err.println("Util.sendinviti: Impossibile invitare " + username);
             }
         }
+        if (noerr){
+            return null;
+        }else{
+             return utentiNonEsistenti;
+        }
+       
     }
 
     public static ArrayList<String> parseFromString(String phrase_inviti) {

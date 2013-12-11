@@ -85,15 +85,19 @@ public class salvaModificheGruppo extends HttpServlet {
         } catch (Exception e) {
             ok_inviti = false;
         }
-
+        ArrayList<String> userSbagliati = new ArrayList<String>();
+        
         if (ok_inviti && !"".equals(inviti2parse) && inviti2parse != null && groupid != -1) {
+            
             try {
                 ArrayList<String> username_invitati = MyUtil.parseFromString(inviti2parse);
-                MyUtil.sendinviti(username_invitati, groupid, manager);
+                userSbagliati = MyUtil.sendinviti(username_invitati, groupid, manager);
             } catch (Exception e) {
                 System.err.println("Errore negli inviti");
             }
         }
+        
+        
         ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getContextPath() + "/logg/gruppiSrvlt");
     }
 

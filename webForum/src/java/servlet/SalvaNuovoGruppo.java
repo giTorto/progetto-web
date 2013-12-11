@@ -47,6 +47,7 @@ public class SalvaNuovoGruppo extends HttpServlet {
             throws ServletException, IOException {
         String inviti2parse = "";
         String creazione_gruppoNome = "";
+        ArrayList<String> utentiSbagliati = new ArrayList<String>();
         boolean ok_crea_gruppo = true;
         boolean ok_inviti = true;
 
@@ -79,7 +80,7 @@ public class SalvaNuovoGruppo extends HttpServlet {
 
                     Gruppo gruppo_appena_creato = manager.getGruppo(creazione_gruppoNome);
                     ArrayList<String> username_invitati = MyUtil.parseFromString(inviti2parse);
-                    MyUtil.sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo(), manager);
+                    utentiSbagliati = MyUtil.sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo(), manager);
                 } catch (SQLException ex) {
                     Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
                 }
