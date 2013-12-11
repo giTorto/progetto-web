@@ -62,7 +62,7 @@ public class SalvaNuovoGruppo extends HttpServlet {
         } catch (Exception e) {
             ok_crea_gruppo = false;
         }
-        
+
         try {
             inviti2parse = request.getParameter("areainviti");
             if (inviti2parse == null) {
@@ -81,12 +81,47 @@ public class SalvaNuovoGruppo extends HttpServlet {
                     Gruppo gruppo_appena_creato = manager.getGruppo(creazione_gruppoNome);
                     ArrayList<String> username_invitati = MyUtil.parseFromString(inviti2parse);
                     utentiSbagliati = MyUtil.sendinviti(username_invitati, gruppo_appena_creato.getIdgruppo(), manager);
+                    if (!utentiSbagliati.isEmpty()) {
+                        response.setContentType("text/html;charset=UTF-8");
+                        PrintWriter out = response.getWriter();
+                        try {
+
+                            out.println("<!DOCTYPE html>");
+                            out.println("<html>");
+                            out.println("<head>");
+                            out.println("<title>Servlet loginSrvlt</title>");
+                            out.println("<link href=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css\" rel=\"stylesheet\" media=\"screen\">");
+                            out.println("<script src=\"http://code.jquery.com/jquery-latest.js\"></script>");
+                            out.println("<script src=\"//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js\"></script>");
+                            out.println("</head>");
+                            out.println("<body>");
+                            out.println("");
+                            out.println("  <div class=\"panel-body\" align=\"right\">");
+
+                            out.println("<a href=\"" + request.getContextPath() + "/logg/creaGruppoSrvlt" + "\" style=\"background-color:#cbd5dd\" class=\"btn btn-default\"><span class=\"glyphicon glyphicon-arrow-left\"></span> Indietro</a>");
+
+                            out.println("<button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/main" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Home</button>");
+                            out.println("  <button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/logoutSrvlt" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Logout</button>");
+                            out.println("");
+                            out.println("  </div>");
+                            out.println("</div>");
+                            out.println("");
+                            for (String username : utentiSbagliati) {
+                                out.println("<h2>Impossibile invitare: " + username + "</2><br>");
+                            }
+                            out.println("</body>");
+                            out.println("</html>");
+
+                        } finally {
+                            out.close();
+                        }
+                    }
                 } catch (SQLException ex) {
                     Logger.getLogger(gruppiSrvlt.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
             } catch (Exception e) {
-                System.err.println("Servlet salvanuovogruppo: errore "+e.getMessage());
+                System.err.println("Servlet salvanuovogruppo: errore " + e.getMessage());
             }
         }
 
