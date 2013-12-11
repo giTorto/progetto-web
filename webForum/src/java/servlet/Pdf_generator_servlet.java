@@ -5,11 +5,13 @@
  */
 package servlet;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 import db.DBManager;
 import db.Gruppo;
 import db.Utente;
@@ -89,7 +91,13 @@ public class Pdf_generator_servlet extends HttpServlet {
             } else {
                 document.add(new Paragraph("Gruppo sconosciuto"));
             }
-            document.add(new Paragraph("#######"));
+            
+            Paragraph p = new Paragraph("I partecipanti al gruppo sono stati diversi, qui sotto è riportata una tabella con i loro username");
+            p.setSpacingAfter(25);
+            document.add(p);
+
+            
+         
             PdfPTable table = new PdfPTable(1); // Code 1
 
             // Code 2

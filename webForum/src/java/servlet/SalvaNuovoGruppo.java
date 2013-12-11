@@ -106,9 +106,16 @@ public class SalvaNuovoGruppo extends HttpServlet {
                             out.println("  </div>");
                             out.println("</div>");
                             out.println("");
+                            out.println("<h1>Gruppo creato correttamente</h1>");
+                            out.println("<h2>E' stato impossibile invitare: ");
+                            out.println("<ul> ");
+                            
                             for (String username : utentiSbagliati) {
-                                out.println("<h2>Impossibile invitare: " + username + "</2><br>");
+                                out.println("<li>" + username + "</li>");
                             }
+                            out.println("</ul>");
+                
+                            out.println("  <button style=\"background-color:#cbd5dd\" onclick=\"location.href='" + request.getContextPath() + "/logg/gruppiSrvlt" + "'\" type=\"button\" class=\"btn btn-default\" align=\"right\">Vai ai tuoi gruppi</button>");
                             out.println("</body>");
                             out.println("</html>");
 
