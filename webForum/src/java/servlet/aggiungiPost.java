@@ -109,26 +109,11 @@ public class aggiungiPost extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        int ingruppo;
+  
         Integer idgruppo = 0;
         String messaggio = "";
-        try {
-            ingruppo = Integer.parseInt(request.getParameter("idgruppo"));
-        } catch (Exception e) {
-            System.err.println("Fileupload: errore con idgruppo");
-            ingruppo = -1;
-        }
-
-        if (ingruppo != -1) {
-            idgruppo = ingruppo;
-        }
-
-        try {
-            messaggio = (request.getParameter("messaggio"));
-        } catch (Exception e) {
-            System.err.println("Fileupload: errore con messaggio inviato");
-            messaggio = "";
-        }
+       
+ 
 
         String fileName, relPath;
         String path;
