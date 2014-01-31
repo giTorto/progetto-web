@@ -175,7 +175,7 @@ public class aggiungiPost extends HttpServlet {
                     }
                 }
             }
-            String resultament = checkText(messaggio, fileName, tmp, idgruppo);
+            String resultament = checkText(messaggio, fileName, null, idgruppo);
             manager.addPostFile(user, idgruppo, fileName, tmp, resultament);
 
         } catch (FileUploadException ex) {
